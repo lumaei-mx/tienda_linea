@@ -6,7 +6,7 @@ import { FreeShippingBar } from "@/components/FreeShippingBar";
 import { LangHydrate } from "@/components/LangHydrate";
 import { TikTokPixel } from "@/components/TikTokPixel";
 import { EmailCapturePopup } from "@/components/EmailCapturePopup";
-import { Script } from "next/script";
+import Script from "next/script";
 import { settings } from "@/lib/settings";
 import { STORE_IDENTITY } from "@/lib/identity";
 import { readStoreSettings } from "@/lib/settings-db";
