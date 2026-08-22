@@ -252,7 +252,7 @@ const dict = {
   // Footer
   footerMarkets: { es: "Mercados", en: "Markets" },
   footerMarkets1: {
-    es: "Precios en dólares (USD) · tu banco convierte al pagar",
+    es: "Precios mostrados en pesos (MXN) · el cobro es en USD y tu banco convierte al pagar",
     en: "Prices in USD · your bank converts at checkout",
   },
   footerMarkets2: {
@@ -321,7 +321,7 @@ const dict = {
 
   // Barra superior envío gratis (full)
   freeShipBar: {
-    es: "Envío GRATIS desde 2 piezas · o desde {mx} MX / {us} US · Precios en USD · Código LUMAI10 = 10%",
+    es: "Envío GRATIS desde 2 piezas · o desde {mx} MX / {us} US · Precios en pesos MXN · Código LUMAI10 = 10%",
     en: "FREE shipping from 2 items · or from {mx} MX / {us} US · Prices in USD · Code LUMAI10 = 10% off",
   },
 
@@ -449,7 +449,7 @@ const dict = {
   },
   termsBuyT: { es: "Términos de compra", en: "Purchase terms" },
   termsBuy1: {
-    es: "Los precios se muestran en dólares (USD); tu banco convierte el cargo a tu moneda al momento del pago.",
+    es: "Los precios se muestran en pesos mexicanos (MXN); el cobro se hace en dólares (USD) y tu banco lo convierte a pesos al pagar.",
     en: "Prices are shown in US dollars (USD); your bank converts the charge to your currency at payment time.",
   },
   termsBuy2: {
