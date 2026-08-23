@@ -56,8 +56,33 @@ export default async function ProductPage({
   const product = await getProductBySlugAsync(slug);
   if (!product) notFound();
 
+  // JSON-LD Product: mejora descubrimiento orgánico (SEO) sin costo.
+  // Solo datos públicos: precio de venta, nunca costo/SKU internos.
+  const productLd = {
+    "@context": "https://schema.org",
+    "@type": "Product",
+    name: product.name,
+    image: product.images,
+    description: product.description,
+    brand: { "@type": "Brand", name: "Lumaei" },
+    offers: {
+      "@type": "Offer",
+      url: `https://www.lumaei.com/productos/${slug}`,
+      priceCurrency: "USD",
+      price: product.priceUsd,
+      availability: product.active
+        ? "https://schema.org/InStock"
+        : "https://schema.org/OutOfStock",
+      itemCondition: "https://schema.org/NewCondition",
+    },
+  };
+
   return (
     <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(productLd) }}
+      />
       <ProductViewTracker
         id={product.id}
         name={product.name}
