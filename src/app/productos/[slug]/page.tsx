@@ -5,7 +5,12 @@ import { normalizeRef, toPublicProduct } from "@/lib/types";
 import { ProductPageView } from "@/components/ProductPageView";
 import { ProductViewTracker } from "@/components/ProductViewTracker";
 import { detectLangServer } from "@/lib/i18n";
-import { productMetaDescription, productName } from "@/lib/copy";
+import {
+  productMetaDescription,
+  productName,
+  getProductCopy,
+  reviewsSummary,
+} from "@/lib/copy";
 
 export const dynamic = "force-dynamic";
 
@@ -58,12 +63,22 @@ export default async function ProductPage({
 
   // JSON-LD Product: mejora descubrimiento orgánico (SEO) sin costo.
   // Solo datos públicos: precio de venta, nunca costo/SKU internos.
+  // Usa nombre/descripción limpios (curated ES/EN) y agrega sku +
+  // aggregateRating solo cuando hay reseñas REALES (regla: cero inventadas).
+  const lang = await detectLangServer();
+  const ldName = productName(product, lang);
+  const ldDescription = productMetaDescription(product, lang);
+  const curated = getProductCopy(product);
+  const rating = curated
+    ? reviewsSummary(curated)
+    : { reviewCount: 0, reviewAvg: 0 };
   const productLd = {
     "@context": "https://schema.org",
     "@type": "Product",
-    name: product.name,
+    name: ldName,
     image: product.images,
-    description: product.description,
+    description: ldDescription,
+    sku: product.cjSku,
     brand: { "@type": "Brand", name: "Lumaei" },
     offers: {
       "@type": "Offer",
@@ -75,6 +90,15 @@ export default async function ProductPage({
         : "https://schema.org/OutOfStock",
       itemCondition: "https://schema.org/NewCondition",
     },
+    ...(rating.reviewCount > 0
+      ? {
+          aggregateRating: {
+            "@type": "AggregateRating",
+            ratingValue: rating.reviewAvg,
+            reviewCount: rating.reviewCount,
+          },
+        }
+      : {}),
   };
 
   return (
