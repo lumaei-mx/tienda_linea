@@ -60,7 +60,7 @@ export function ProductPageView({
     push("Etiquetado NOM-024", "NOM-024 labeling", prov.nom024 ? (esL ? "Sí" : "Yes") : undefined);
     push("Certificación UL", "UL certification", prov.certUl ? (esL ? "Sí" : "Yes") : undefined);
     push("RoHS", "RoHS", prov.rohs ? (esL ? "Sí" : "Yes") : undefined);
-    push("Garantía", "Warranty", prov.garantiaMeses ? `${prov.garantiaMeses} ${esL ? "meses" : "months"}` : undefined);
+    push("Garantía", "Warranty", prov.garantiaMeses ? `${prov.garantiaMeses} ${esL ? "días" : "days"}` : undefined);
     if (prov.manualUrl)
       provRows.push([esL ? "Manual" : "Manual", <a key="m" href={prov.manualUrl} target="_blank" rel="noopener noreferrer" className="text-gold-dark underline">{esL ? "Ver manual" : "View manual"}</a>]);
     if (prov.fichaTecnicaUrl)
