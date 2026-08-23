@@ -1244,7 +1244,7 @@ const COPY_BY_ID: Record<string, ProductCopy> = {
       "El regalo ideal para cumpleaños, bautizos y navidades",
     ],
     description:
-      "Convierte el techo de su cuarto en un cielo estrellado. Este proyector en forma de astronauta proyecta estrellas y nebulosas con rotación suave y modo música, creando un ambiente mágico para dormir.\n\nTiene apagado automático para que se apague solo cuando se duerma, y luz cálida que no interrumpe el descanso. Recargable por USB,无需 cables permanently connected.\n\nEl regalo perfecto para niños y el detalle ideal para cuartos temáticos.",
+      "Convierte el techo de su cuarto en un cielo estrellado. Este proyector en forma de astronauta proyecta estrellas y nebulosas con rotación suave y modo música, creando un ambiente mágico para dormir.\n\nTiene apagado automático para que se apague solo cuando se duerma, y luz cálida que no interrumpe el descanso. Recargable por USB, sin cables permanentemente conectados.\n\nEl regalo perfecto para niños y el detalle ideal para cuartos temáticos.",
     specs: [
       "Tipo: lámpara proyectora de estrellas",
       "Forma: astronauta",
