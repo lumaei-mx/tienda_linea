@@ -1269,6 +1269,18 @@ const COPY_BY_ID: Record<string, ProductCopy> = {
         q: "¿Tiene garantía?",
         a: "Sí, 90 días de garantía Lumaei. Si llega dañado o con falla, te lo reponemos sin costo: escríbenos con foto o video dentro de los primeros 14 días.",
       },
+      {
+        q: "¿Cómo se carga y cuánto dura la batería?",
+        a: "Se carga por USB con el cable incluido: una carga completa rinde varias noches con el apagado automático activado, y varias horas en modo continuo. Lo recargas en cualquier cargador o puerto de computadora.",
+      },
+      {
+        q: "¿Qué tan grande queda la proyección en el techo?",
+        a: "Proyecta estrellas y nebulosas en un área amplia del techo y la pared. En cuarto oscuro se ve nítido a varios metros; para el mejor efecto, úsalo a oscuras y con el astronauta apuntando al centro del techo.",
+      },
+      {
+        q: "¿Sirve como luz ambiental para adultos o solo para niños?",
+        a: "Para cualquier edad. Además del cuarto de los niños, muchos lo usan como luz ambiental y relajante en recámara, sala o para una cita en casa: el modo sin música y la luz cálida crean un ambiente tranquilo. Es también un detalle original para regalar a pareja o amigos.",
+      },
     ],
     // Traducción EN (mercado US secundario): activa copy curado + FAQ JSON-LD en inglés.
     hookEn: "Turn any ceiling into a starry galaxy with rotation and music mode",
@@ -1306,6 +1318,18 @@ const COPY_BY_ID: Record<string, ProductCopy> = {
       {
         qEn: "Is there a warranty?",
         aEn: "Yes — 90 days Lumaei warranty. If it arrives damaged or defective, we replace it at no cost.",
+      },
+      {
+        qEn: "How do I charge it and how long does the battery last?",
+        aEn: "It charges via USB with the included cable: a full charge lasts several nights with auto-off enabled, and several hours in continuous mode. Top it up from any charger or computer port.",
+      },
+      {
+        qEn: "How big is the projection on the ceiling?",
+        aEn: "It casts stars and nebulae across a wide area of the ceiling and wall. In a dark room it reads clearly several meters away; for the best effect, use it in the dark with the astronaut aimed at the center of the ceiling.",
+      },
+      {
+        qEn: "Is it just for kids, or can adults use it as mood lighting?",
+        aEn: "For any age. Beyond kids' rooms, many use it as a calming ambient light in the bedroom or living room, or for a cozy night in — the music-off mode and warm light set a relaxed mood. It also makes a original gift for a partner or friends.",
       },
     ],
     reviews: [],
