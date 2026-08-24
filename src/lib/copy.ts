@@ -1265,6 +1265,48 @@ const COPY_BY_ID: Record<string, ProductCopy> = {
         q: "¿Cuánto tarda el envío a México?",
         a: "México: 14 a 16 días hábiles. Estados Unidos: 4 a 7 días, con rastreo.",
       },
+      {
+        q: "¿Tiene garantía?",
+        a: "Sí, 90 días de garantía Lumaei. Si llega dañado o con falla, te lo reponemos sin costo: escríbenos con foto o video dentro de los primeros 14 días.",
+      },
+    ],
+    // Traducción EN (mercado US secundario): activa copy curado + FAQ JSON-LD en inglés.
+    hookEn: "Turn any ceiling into a starry galaxy with rotation and music mode",
+    subtitleEn:
+      "Astronaut-shaped galaxy night light: projects stars and nebulae across the ceiling with rotation and music mode. The perfect gift for kids.",
+    benefitsEn: [
+      "Projects stars and nebulae across the entire ceiling",
+      "Rotation mode and music mode to set the mood",
+      "Warm light with auto-off so kids fall asleep calmly",
+      "Rechargeable and portable — great for kids' rooms",
+      "The ideal gift for birthdays, baptisms and Christmas",
+    ],
+    descriptionEn:
+      "Turn your child's bedroom ceiling into a starry sky. This astronaut-shaped projector casts stars and nebulae with a soft rotation and music mode, creating a magical sleep atmosphere.\n\nIt has auto-off so it switches off on its own once they fall asleep, and a warm light that doesn't disturb rest. Rechargeable via USB — no permanently connected cables.\n\nThe perfect gift for kids and an ideal detail for themed rooms.",
+    specsEn: [
+      "Type: star projector night light",
+      "Shape: astronaut",
+      "Functions: projection, rotation, music, auto-off",
+      "Power: rechargeable via USB",
+      "Package weight: ~350 g",
+    ],
+    faqsEn: [
+      {
+        qEn: "Can it stay on all night?",
+        aEn: "Yes — it has a programmable auto-off so it won't stay on the whole night.",
+      },
+      {
+        qEn: "Is it safe for newborns?",
+        aEn: "Yes, the light is warm and soft. We recommend using it without music mode for babies.",
+      },
+      {
+        qEn: "How long does shipping to the US take?",
+        aEn: "United States: 4 to 7 business days. Mexico: 14 to 16 business days, with tracking.",
+      },
+      {
+        qEn: "Is there a warranty?",
+        aEn: "Yes — 90 days Lumaei warranty. If it arrives damaged or defective, we replace it at no cost.",
+      },
     ],
     reviews: [],
   },
@@ -1489,6 +1531,14 @@ const COPY_BY_ID: Record<string, ProductCopy> = {
       {
         q: "¿Se pueden reutilizar?",
         a: "No, son de uso único. Cada par se usa una vez y se desecha.",
+      },
+      {
+        q: "¿Cuántas veces por semana puedo usarlos?",
+        a: "Se recomienda 2 a 3 veces por semana, durante 30 minutos, como parte de tu rutina facial. No se aconseja uso diario continuo.",
+      },
+      {
+        q: "¿Son adecuados para piel sensible?",
+        a: "Son de uso tópico externo en el contorno de ojos. Si tu piel es sensible, haz una prueba en una zona pequeña la primera vez y no los apliques sobre piel herida o irritada.",
       },
       {
         q: "¿Cuánto tarda el envío a México?",
