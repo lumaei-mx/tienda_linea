@@ -43,7 +43,38 @@ ciclo (ver `MANDATE.md` sección 8). El loop lee esto para no empezar ciego.
 - Resultado: SEO en producción (orgánico reforzado); proveedor confirmado;
   regla de envío validada; ningún gasto.
 
-## Último ciclo (2026-08-24 — ciclo 3)
+## Último ciclo (2026-08-24 — ciclo 4)
+- Acción de MAYOR valor ejecutada (todo $0 / cliente-paga, sin gasto):
+  1. CONTENIDO ORGÁNICO (tráfico): nueva guía SEO "Regalos para él 2026"
+     publicada y verificada en producción →
+     https://www.lumaei.com/blog/regalos-para-el-2026
+     - 7 productos del catálogo activo enlazados a /productos/[slug] (cargador
+       inalámbrico de auto 15W $49.74, impresora térmica $31.75, picadora
+       $44.54, organizador de especias $33.23, luz LED con sensor $12.92, barra
+       de luz clóset $8.53, proyector de estrellas $13.62). Precios verificados
+       en vivo contra la tienda este ciclo (vigentes).
+     - JSON-LD Article presente (verificado), CTA a lead magnet (/guia/5-gadgets
+       + LUMAI10) y a /productos. FAQ de conversión.
+     - Registrada en índice /blog (hub de guías) y cross-link bidireccional con
+       "Regalos para ella 2026" y "Regalos gadgets hogar" para SEO interno.
+     - Build `next build` OK (ruta prerendered static), commit `2c2a427` rebasado
+       sobre cambios remotos (rebase), push a origin/main (`f768086`), despliegue
+       Vercel READY y URL verificada en vivo (200 + JSON-LD).
+  2. BENCHMARKING continuo (proveedores/plataformas/precios/competencia):
+     - PROVEEDOR: CJ Dropshipping sigue ÓPTIMO para presupuesto $0 ($0/mes, paga
+       por unidad). Precios de las 4 piezas nuevas verificados en vivo contra la
+       tienda (trackables y vigentes). Alternativas (Zendrop/Spocket/AutoDS)
+       exigen $24–40/mo → fuera de presupuesto cero. EPROLO como respaldo
+       gratuito.
+     - PLATAFORMA: riesgo Vercel Hobby no-comercial persiste → AQ-001 sigue
+       PENDIENTE/BLOQUEADA, sin cambio (no ejecutar sin aprobación del dueño).
+     - PRECIOS/COMPETENCIA: nicho gadgets sigue competitivo; modelo cliente-paga
+       sin inversión correcto. Sin cambios de precio este ciclo.
+- Resultado: +1 URL indexable ("regalos para él") + hub /blog con 3 guías
+  interconectadas → más superficie de tráfico orgánico (el cuello real sigue
+  siendo TRÁFICO). Ningún gasto.
+
+## Ciclo previo (2026-08-24 — ciclo 3)
 - Acción de MAYOR valor ejecutada (todo $0 / cliente-paga, sin gasto):
   1. CONTENIDO ORGÁNICO (tráfico): nueva guía SEO "Regalos para ella 2026"
      publicada y verificada en producción →
@@ -87,10 +118,12 @@ ciclo (ver `MANDATE.md` sección 8). El loop lee esto para no empezar ciego.
 - [x] Definir primer vector de captación sin presupuesto (TikTok orgánico).
 - [x] JSON-LD SEO en fichas → DESPLEGADO en producción (ciclo 2).
 - [x] Verificar regla de envío gratis → consistente, sin bug (ciclo 2).
-- [x] Crear 1 pieza de contenido/blog orgánico (tráfico, $0) — PUBLICADA ciclo 3
-      ("Regalos para ella 2026" + índice /blog + link footer). Siguiente pieza
-      sugerida: "Regalos para él / para el hogar" o "Regreso a clases" para
-      ampliar superficie SEO.
+  - [x] Crear 1 pieza de contenido/blog orgánico (tráfico, $0) — PUBLICADA ciclo 3
+       ("Regalos para ella 2026" + índice /blog + link footer).
+  - [x] Crear 2ª pieza de contenido/blog orgánico (tráfico, $0) — PUBLICADA ciclo 4
+       ("Regalos para él 2026" + cross-link desde 'ella' + registro /blog).
+       Siguiente pieza sugerida: "Regreso a clases 2026" o "Regalos para el
+       hogar" para ampliar superficie SEO.
 - [ ] Continuar benchmarking: monitorear precios CJ vs competencia y vigilar
      plataformas alternativas cada ciclo (indefinido).
 - [ ] Detectar clientes/ventas y arrancar mensajería (WA tienda +1 408 422 3904).
