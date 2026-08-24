@@ -5,6 +5,13 @@ export const dynamic = "force-static";
 
 const POSTS = [
   {
+    slug: "/blog/halloween-ambiente-2026",
+    title:
+      "Halloween 2026: iluminación y ambiente para tu casa sin gastar de más",
+    description:
+      "Proyector de galaxia, barras LED, luces con sensor de movimiento y el kit de recuperación para el 1 de noviembre. Precios reales y link directo al catálogo.",
+  },
+  {
     slug: "/blog/regalos-para-ella-2026",
     title:
       "Regalos para ella 2026: detalles bonitos que sí va a usar (y no terminan en el cajón)",

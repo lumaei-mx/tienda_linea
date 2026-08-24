@@ -272,6 +272,16 @@ export default async function GuiaGadgetsHogar() {
           mamá, con precios reales y link directo al catálogo.
         </p>
         <Link
+          href="/blog/halloween-ambiente-2026"
+          className="mt-4 block font-serif text-xl text-brown transition hover:text-gold-dark"
+        >
+          Halloween 2026: iluminación y ambiente para tu casa →
+        </Link>
+        <p className="mt-1 text-sm text-brown-soft">
+          Proyector de galaxia, barras LED y luces con sensor para la fiesta —y
+          para todo el año—.
+        </p>
+        <Link
           href="/blog/regreso-a-clases-2026"
           className="mt-4 block font-serif text-xl text-brown transition hover:text-gold-dark"
         >

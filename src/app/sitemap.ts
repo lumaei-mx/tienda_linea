@@ -19,11 +19,19 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       priority: 0.7,
     },
     { url: `${SITE}/blog`, changeFrequency: "weekly", priority: 0.6 },
-    {
-      url: `${SITE}/blog/regalos-para-ella-2026`,
-      changeFrequency: "weekly",
+    // Guías del blog (todas las rutas estáticas publicadas)
+    ...[
+      "/blog/halloween-ambiente-2026",
+      "/blog/regalos-para-ella-2026",
+      "/blog/regalos-para-el-2026",
+      "/blog/regalos-bienestar-2026",
+      "/blog/regalos-gadgets-hogar",
+      "/blog/regreso-a-clases-2026",
+    ].map((p) => ({
+      url: `${SITE}${p}`,
+      changeFrequency: "weekly" as const,
       priority: 0.6,
-    },
+    })),
     {
       url: `${SITE}/guia/5-gadgets`,
       changeFrequency: "monthly",
