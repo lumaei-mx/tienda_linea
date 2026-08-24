@@ -44,6 +44,7 @@ export function Footer() {
             <li><a href="/devoluciones" className="transition hover:text-gold-light">{t("footerHelp2", lang)}</a></li>
             <li><a href="/privacidad" className="transition hover:text-gold-light">{t("footerHelp3", lang)}</a></li>
             <li><a href="/sobre-nosotros" className="transition hover:text-gold-light">{t("footerHelp4", lang)}</a></li>
+            <li><a href="/blog" className="transition hover:text-gold-light">Guías y regalos</a></li>
           </ul>
         </div>
         <div>
