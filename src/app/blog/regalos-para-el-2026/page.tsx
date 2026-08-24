@@ -79,7 +79,7 @@ const picks: Pick[] = [
       "auto-led-usb-magnetic-wireless-night-light-corridors-porch-lights-pir-motion-sen",
     name: "Luz LED magnética con sensor de movimiento",
     img: "https://cf.cjdropshipping.com/20200703/1455264561787.jpg",
-    price: "$12.92 USD",
+    price: "$14.74 USD",
     pitch:
       "Se enciende sola al pasar. Sin cables, carga USB-C: ideal para pasillo, clóset o garaje. La luz que lo salva a las 3 AM sin buscar el interruptor.",
   },
@@ -88,7 +88,7 @@ const picks: Pick[] = [
       "rechargeable-led-wireless-kitchen-usb-automatic-closet-light-bar-magnetic-cabine",
     name: "Barra de luz LED recargable para clóset y cocina",
     img: "https://cf.cjdropshipping.com/2def7f27-94d7-4ed1-8a24-bab4502728ea.jpg",
-    price: "$8.53 USD",
+    price: "$35.15 USD",
     pitch:
       "Magnética, 3 tonos de luz y se pega donde el foco no llega. Recargable por USB, adiós a los cables. La pieza más barata de la lista y una de las más usadas.",
   },
@@ -97,7 +97,7 @@ const picks: Pick[] = [
       "galaxy-star-projector-starry-sky-night-light-astronaut-lamp-room-decr-gift-child",
     name: "Proyector de estrellas astronauta",
     img: "https://cf.cjdropshipping.com/aed3289e-be07-4bee-be64-b7a7763a6315.jpg",
-    price: "$13.62 USD",
+    price: "$43.68 USD",
     pitch:
       "Convierte cualquier cuarto en galaxia. Lámpara nocturna y regalo infalible para quien ama el ambiente y las fotos. Funciona igual para él que para ella.",
   },
@@ -237,7 +237,7 @@ export default function RegalosParaEl() {
               ¿Son buenos regalos a este precio?
             </summary>
             <p className="mt-2 text-sm leading-relaxed text-brown-soft">
-              Sí. Van de $8.50 a $50 USD porque son piezas pequeñas con propósito
+              Sí. Van de $14.74 a $49.74 USD porque son piezas con propósito
               diario, no aparatos caros. Agrupados, lucen como un detalle
               pensado y no como una compra de impulso.
             </p>

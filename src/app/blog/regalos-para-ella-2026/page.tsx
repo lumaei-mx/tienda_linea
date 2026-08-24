@@ -43,7 +43,7 @@ const picks: Pick[] = [
       "galaxy-star-projector-starry-sky-night-light-astronaut-lamp-room-decr-gift-child",
     name: "Proyector de estrellas astronauta",
     img: "https://cf.cjdropshipping.com/aed3289e-be07-4bee-be64-b7a7763a6315.jpg",
-    price: "$13.62 USD",
+    price: "$43.68 USD",
     pitch:
       "Convierte cualquier cuarto en galaxia. Lámpara nocturna y regalo infalible para quien ama el ambiente y las fotos.",
   },
@@ -52,7 +52,7 @@ const picks: Pick[] = [
       "silicone-ice-face-roller-contour-shrink-pores-remove-dark-circles-massage-skin-b",
     name: "Rodillo de hielo facial de silicona",
     img: "https://cf.cjdropshipping.com/quick/product/bab01418-9540-4b61-bfc9-0b4fea3f1393.jpg",
-    price: "$6.72 USD",
+    price: "$30.45 USD",
     pitch:
       "Masaje frío en 2 minutos para despertar la cara. Reutilizable, libre de químicos: un ritual de spa en casa.",
   },
@@ -61,7 +61,7 @@ const picks: Pick[] = [
       "beauty-gold-crystal-collagen-patches-for-eye-anti-aging-acne-eye-mask-korean-cos",
     name: "Parches de colágeno dorados para contorno de ojo",
     img: "https://cf.cjdropshipping.com/15253056/1842091534140.png",
-    price: "$5.10 USD",
+    price: "$26.23 USD",
     pitch:
       "Parches coreanos de colágeno para contorno de ojo. 2-3 veces por semana, 30 min, y listo el ritual.",
   },
@@ -70,7 +70,7 @@ const picks: Pick[] = [
       "auto-led-usb-magnetic-wireless-night-light-corridors-porch-lights-pir-motion-sen",
     name: "Luz LED magnética con sensor de movimiento",
     img: "https://cf.cjdropshipping.com/20200703/1455264561787.jpg",
-    price: "$12.92 USD",
+    price: "$14.74 USD",
     pitch:
       "Se enciende sola al pasar. Sin cables, carga USB-C: ideal para pasillo, clóset o lectura nocturna.",
   },
@@ -79,7 +79,7 @@ const picks: Pick[] = [
       "rechargeable-led-wireless-kitchen-usb-automatic-closet-light-bar-magnetic-cabine",
     name: "Barra de luz LED recargable para clóset y cocina",
     img: "https://cf.cjdropshipping.com/2def7f27-94d7-4ed1-8a24-bab4502728ea.jpg",
-    price: "$8.53 USD",
+    price: "$35.15 USD",
     pitch:
       "Magnética, 3 tonos de luz y se pega donde el foco no llega. Recargable por USB, adiós a los cables.",
   },
@@ -88,7 +88,7 @@ const picks: Pick[] = [
       "non-contact-automatic-soap-dispenser-liquid-foam-machine-infrared-sensor-electri",
     name: "Dispensador de jabón sin contacto",
     img: "https://cf.cjdropshipping.com/947936eb-a29d-4faf-a63f-257225cb7454.jpg",
-    price: "$21.50 USD",
+    price: "$53.92 USD",
     pitch:
       "Jabón espuma sin tocar nada: recargable, higiénico para baño y cocina. Un detalle que cuida su espacio.",
   },
@@ -227,9 +227,9 @@ export default function RegalosParaElla() {
               ¿Son buenos regalos a este precio?
             </summary>
             <p className="mt-2 text-sm leading-relaxed text-brown-soft">
-              Sí. Todos rondan entre $5 y $22 USD porque son piezas pequeñas con
-              propósito diario, no aparatos caros. Agrupados, lucen como un
-              detalle pensado y no como una compra de impulso.
+              Sí. Van de $14.74 a $53.92 USD porque son piezas con propósito
+              diario, no aparatos caros. Agrupados, lucen como un detalle
+              pensado y no como una compra de impulso.
             </p>
           </details>
           <details className="rounded-xl border border-gold/15 bg-ivory p-4">

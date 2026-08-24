@@ -43,7 +43,7 @@ const picks: Pick[] = [
       "auto-led-usb-magnetic-wireless-night-light-corridors-porch-lights-pir-motion-sen",
     name: "Luz LED magnética con sensor de movimiento",
     img: "https://cf.cjdropshipping.com/20200703/1455264561787.jpg",
-    price: "$12.92 USD",
+    price: "$14.74 USD",
     pitch:
       "Se enciende sola cuando pasas. Sin cables, carga USB-C, ideal para pasillos, clósets y escaleras.",
   },
@@ -52,7 +52,7 @@ const picks: Pick[] = [
       "kitchen-double-tier-spice-rack-multifunctional-rotating-storage-rack-spice-organ",
     name: "Organizador giratorio de especias de 2 niveles",
     img: "https://cf.cjdropshipping.com/f11e0c16-4232-4a98-943c-bfb07031fd99.jpg",
-    price: "$7.79 USD",
+    price: "$33.23 USD",
     pitch:
       "Termina el caos en la cocina en 10 segundos. Gira 360° y aprovecha el espacio vertical.",
   },
@@ -61,7 +61,7 @@ const picks: Pick[] = [
       "rechargeable-led-wireless-kitchen-usb-automatic-closet-light-bar-magnetic-cabine",
     name: "Barra de luz LED recargable para clóset y cocina",
     img: "https://cf.cjdropshipping.com/2def7f27-94d7-4ed1-8a24-bab4502728ea.jpg",
-    price: "$8.53 USD",
+    price: "$35.15 USD",
     pitch:
       "Magnética, 3 tonos de luz y se pega donde el foco no llega. Recargable por USB.",
   },
@@ -70,7 +70,7 @@ const picks: Pick[] = [
       "magnetic-bendable-car-mobile-phone-holder-wireless-charger-phone-holder-15w-car-",
     name: "Soporte magnético con carga inalámbrica 15W para auto",
     img: "https://cf.cjdropshipping.com/c6dd15cd-332f-412d-b04f-3fb361d54afb_trans.jpeg",
-    price: "$18.28 USD",
+    price: "$49.74 USD",
     pitch:
       "Tu celular carga solo al acercarlo. Manos libres y estable mientras manejas.",
   },
@@ -79,7 +79,7 @@ const picks: Pick[] = [
       "galaxy-star-projector-starry-sky-night-light-astronaut-lamp-room-decr-gift-child",
     name: "Proyector de estrellas astronauta",
     img: "https://cf.cjdropshipping.com/aed3289e-be07-4bee-be64-b7a7763a6315.jpg",
-    price: "$13.62 USD",
+    price: "$43.68 USD",
     pitch:
       "Convierte cualquier cuarto en galaxia. Lámpara nocturna y regalo infalible.",
   },
@@ -88,7 +88,7 @@ const picks: Pick[] = [
       "silicone-ice-face-roller-contour-shrink-pores-remove-dark-circles-massage-skin-b",
     name: "Rodillo de hielo facial de silicona",
     img: "https://cf.cjdropshipping.com/quick/product/bab01418-9540-4b61-bfc9-0b4fea3f1393.jpg",
-    price: "$6.72 USD",
+    price: "$30.45 USD",
     pitch:
       "Masaje frío en 2 minutos para despertar la cara. Reutilizable y libre de químicos.",
   },
@@ -110,7 +110,7 @@ const articleLd = {
     "@id": `https://www.lumaei.com${SLUG}`,
   },
   datePublished: "2026-08-23",
-  dateModified: "2026-08-23",
+  dateModified: "2026-08-24",
 };
 
 export default function GuiaGadgetsHogar() {
