@@ -1648,6 +1648,14 @@ const COPY_BY_ID: Record<string, ProductCopy> = {
         a: "Semanas con uso normal. Se carga por USB en 1-2 horas.",
       },
       {
+        q: "¿El sensor se dispara solo o con poca luz?",
+        a: "No. El sensor infrarrojo solo se activa cuando detecta una mano a menos de ~8 cm debajo del dispensador. En la cocina colócalo fuera del chorro directo de agua para evitar activaciones accidentales.",
+      },
+      {
+        q: "¿Es higiénico para toda la familia?",
+        a: "Sí: sin contacto, no hay botellas que todos tocan con las manos sucias. Ideal con niños y adultos mayores — solo acercan la mano y reciben espuma.",
+      },
+      {
         q: "¿Cuánto tarda el envío a México?",
         a: "México: 14 a 16 días hábiles. Estados Unidos: 4 a 7 días, con rastreo.",
       },
