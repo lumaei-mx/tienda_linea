@@ -16,7 +16,78 @@ ciclo (ver `MANDATE.md` sección 8). El loop lee esto para no empezar ciego.
   solo muestran 1 test de afiliado en pending_payment (prod usa otra DB).
 - Afiliados: atribución 15% ganancia neta en producción (?ref / ?affiliateRef).
 - Lead magnet: /guia/5-gadgets + código LUMAI10 (10% MX/US, sin mínimo).
-- 5 reels listos en public/tiktok/ para publicar (BLOQUEADOS, ver gates).
+     - 5 reels listos en public/tiktok/ para publicar (BLOQUEADOS, ver gates).
+
+## Último ciclo (2026-08-24 — ciclo 7)
+- Acción de MAYOR valor ejecutada (todo $0 / cliente-paga, sin gasto):
+  1. FUENTE ÚNICA DE PRECIOS EN BUILD (CRO / cierre de riesgo recurrente): se
+     creó `src/lib/guide-prices.ts`, módulo que resuelve el precio de cada
+     producto en tiempo de build leyendo `/api/products` (Redis = precio vivo
+     que ve el cliente en la PDP), con fallback al valor literal ya correcto de
+     cada guía. Se migraron las 4 guías existentes (ella/él/hogar/regreso) y la
+     nueva a este módulo, de modo que los precios de blog y tienda NUNCA vuelven
+     a desalinearse cuando CJ ajuste listas (riesgo que costó reparar el ciclo
+     6). Las FAQ de rango ("Van de $X a $Y USD") ahora se calculan
+     dinámicamente desde los precios resueltos.
+  2. +1 URL INDEXABLE DE TRÁFICO (el cuello real): nueva guía "Regalos de
+     bienestar y autocuidado 2026" → /blog/regalos-bienestar-2026 (6 picks del
+     catálogo activo enlazados a /productos/[slug], JSON-LD Article, CTA lead
+     magnet + LUMAI10, FAQ dinámica). Registrada en índice /blog y cross-link
+     bidireccional desde 'ella' y 'hogar' (SEO interno). Superficie de tráfico
+     orgánico ampliada.
+  3. BUILD/SEGURIDAD: `next build` OK (5 guías prerendered static, 0 errores de
+     lint en los archivos del cambio). Commit + push a origin/main → despliegue
+     Vercel (pendiente de verificar en vivo este ciclo).
+- Benchmarking continuo (proveedores/plataformas/precios/competencia):
+  - PRECIOS/INTEGRIDAD: verificado en vivo que /api/products devuelve precios
+    vigentes ($43.68 proyector, $30.45 rodillo, $53.92 dispensador) y que el
+    build los inyecta en el HTML estático de las 5 guías (grep de prerendered:
+    rango resuelto "$14.74 → $53.92"). Riesgo CRO de desalineo CERRADO de raíz.
+  - HALLAZGO: `data/products.json` local queda DESACTUALIZADO vs Redis (precios
+    viejos $13.62/$6.72). Por eso el fallback del módulo es el literal de la
+    guía, NO el archivo. Regla: no usar products.json como fuente de precios.
+  - PROVEEDOR: CJ Dropshipping sigue ÓPTIMO para presupuesto $0. EPROLO respaldo
+    gratuito. Zendrop/Spocket/AutoDS $24–40/mo fuera de presupuesto.
+  - PLATAFORMA: riesgo Vercel Hobby no-comercial persiste → AQ-001 sigue
+    PENDIENTE/BLOQUEADA (sin ejecutar sin aprobación del dueño).
+  - COMPETENCIA: nicho gadgets sigue competitivo; modelo cliente-paga sin
+    inversión correcto.
+- Resultado: riesgo CRO recurrente de precios eliminado de raíz en 5 URLs + 1 URL
+  indexable nueva de bienestar → más tráfico orgánico. Ningún gasto.
+- PRÓXIMO PASO RECOMENDADO: continuar benchmarking + publicar 1–2 guías más
+  estacionales (p.ej. "Regalos para mamá 2026") reusando el módulo; y disparar
+  el cron de re-precio/sync para que los builds futuros siempre reflejen CJ vivo.
+
+## Último ciclo (2026-08-24 — ciclo 6)
+- Acción de MAYOR valor ejecutada (todo $0 / cliente-paga, sin gasto):
+  1. INTEGRIDAD DE PRECIOS (CRO): las 3 guías de blog publicadas
+     ('Regalos para ella', 'Regalos para él', 'Regalos y gadgets para el hogar')
+     tenían precios hardcodeados INFERIORES a la tienda en producción (riesgo de
+     ruptura de confianza al hacer clic, detectado en ciclo 5). Se corrigieron
+     TODOS a los valores VIVOS de /api/products (verificados este ciclo), p.ej.:
+     proyector estrellas $13.62 → $43.68 · barra LED clóset $8.53 → $35.15 ·
+     rodillo hielo $6.72 → $30.45 · parches colágeno $5.10 → $26.23 · dispensador
+     jabón $21.50 → $53.92 · luz sensor $12.92 → $14.74 · especias $7.79 → $33.23
+     · cargador auto (hogar) $18.28 → $49.74. También se ajustaron los rangos en
+     las FAQ de 'ella' y 'él' para coincidir con los precios reales.
+  2. BUILD/SEGURIDAD: `next build` OK (blogs prerendered static). Commit
+     `0c133bc` (rebasado sobre main remoto `e66a2ee` → `ee7e8d8`). Push a
+     origin/main → despliegue Vercel. Verificado en VIVO: las 3 URLs muestran los
+     precios nuevos y CERO precios viejos remanentes (grep de producción).
+  3. BENCHMARKING continuo (proveedores/plataformas/precios/competencia):
+     - PRECIOS/COMPETENCIA: spot-check proyector estrellas en Amazon US (2026) →
+       competidores $29.99–$42.99; tramo más competitivo $20–$50 (57% del
+       surtido, prom $33.99). Nuestro $43.68 cae en esa banda → precio sano.
+     - PROVEEDOR: CJ Dropshipping sigue ÓPTIMO para presupuesto $0 ($0/mo, paga
+       por unidad). EPROLO como respaldo gratuito. Zendrop/Spocket/AutoDS $24–40/
+       mo fuera de presupuesto.
+     - HALLAZGO RAÍZ: los precios de blog se hardcodean en estático y se
+       desalinean cuando CJ ajusta listas. Riesgo recurrente.
+  - Resultado: eliminado riesgo CRO de precios desalineados en 3 URLs de tráfico
+    orgánico; posición de precio validada vs competencia; ningún gasto.
+  - PRÓXIMO PASO RECOMENDADO: fuente única de precios en el build (leer
+    /api/products o módulo en tiempo de build) para que las guías no se
+    desalineen otra vez (mejora $0, reversible).
 
 ## Último ciclo (2026-08-23 — ciclo 2)
 - Acción ejecutada (todas $0 / cliente-paga, sin gasto):
@@ -171,11 +242,12 @@ ciclo (ver `MANDATE.md` sección 8). El loop lee esto para no empezar ciego.
         bidireccional desde las 3 guías previas). Siguiente pieza sugerida:
         "Regalos para el hogar 2026" o "Kit de pijama/domingo" para ampliar
         superficie SEO.
-  - [ ] AUDITAR PRECIOS en blogs ciclo 3/4 vs tienda en vivo: products.json
-        local está desactualizado y varios precios hardcodeados (proyector
-        estrellas $13.62, LED clóset $8.53, rodillo $6.72) son MENORES a los que
-        cobra la tienda en producción. Riesgo CRO (el cliente ve un precio y al
-        hacer clic ve otro). Corregir en próximo ciclo con precios vivos.
+   - [x] AUDITAR PRECIOS en blogs ciclo 3/4/5 vs tienda en vivo: HECHO ciclo 6.
+         Se corrigieron las 3 guías a precios vivos de /api/products y se verificó
+         en producción (cero precios viejos). Riesgo CRO cerrado.
+    - [x] FUENTE ÚNICA DE PRECIOS en build: HECHO ciclo 7 — `src/lib/guide-prices.ts`
+          lee /api/products en build con fallback al literal; migradas las 4 guías
+          existentes + la nueva. Riesgo CRO de desalineo cerrado de raíz.
 - [ ] Continuar benchmarking: monitorear precios CJ vs competencia y vigilar
      plataformas alternativas cada ciclo (indefinido).
 - [ ] Detectar clientes/ventas y arrancar mensajería (WA tienda +1 408 422 3904).

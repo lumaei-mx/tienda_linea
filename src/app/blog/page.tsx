@@ -12,6 +12,13 @@ const POSTS = [
       "Proyector de estrellas, rodillo de hielo facial, parches de colágeno, luces con sensor y más. Precios reales y link directo al catálogo Lumaei.",
   },
   {
+    slug: "/blog/regalos-bienestar-2026",
+    title:
+      "Regalos de bienestar y autocuidado 2026: detalles para cuidarse en casa (que sí usa)",
+    description:
+      "Rodillo de hielo facial, parches de colágeno, dispensador de jabón sin contacto, proyector de estrellas, luces con sensor y más. Precios reales y link directo al catálogo Lumaei.",
+  },
+  {
     slug: "/blog/regalos-gadgets-hogar",
     title:
       "Regalos y gadgets prácticos para el hogar en 2026 (lo que realmente funciona)",

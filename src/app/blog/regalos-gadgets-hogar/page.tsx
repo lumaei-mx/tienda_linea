@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { guidePrice } from "@/lib/guide-prices";
 
 export const dynamic = "force-static";
 
@@ -113,7 +114,10 @@ const articleLd = {
   dateModified: "2026-08-24",
 };
 
-export default function GuiaGadgetsHogar() {
+export default async function GuiaGadgetsHogar() {
+  const resolved = await Promise.all(
+    picks.map(async (p) => ({ ...p, price: await guidePrice(p.slug, p.price) }))
+  );
   return (
     <article className="mx-auto max-w-3xl px-4 py-12">
       <script
@@ -151,7 +155,7 @@ export default function GuiaGadgetsHogar() {
       </h2>
 
       <div className="mt-6 space-y-6">
-        {picks.map((p) => (
+        {resolved.map((p) => (
           <div
             key={p.slug}
             className="flex flex-col gap-4 rounded-2xl border border-gold/20 bg-ivory p-4 sm:flex-row sm:items-center"
@@ -276,6 +280,16 @@ export default function GuiaGadgetsHogar() {
         <p className="mt-1 text-sm text-brown-soft">
           Impresora térmica, cargador de auto, luces LED y más para el semestre,
           sin romper el presupuesto.
+        </p>
+        <Link
+          href="/blog/regalos-bienestar-2026"
+          className="mt-4 block font-serif text-xl text-brown transition hover:text-gold-dark"
+        >
+          Regalos de bienestar y autocuidado 2026: detalles para cuidarse en casa →
+        </Link>
+        <p className="mt-1 text-sm text-brown-soft">
+          Rodillo de hielo, parches de colágeno, dispensador de jabón sin
+          contacto y más para cuidarse en casa.
         </p>
       </section>
     </article>

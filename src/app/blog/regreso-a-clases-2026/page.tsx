@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { guidePrice, guidePriceRange } from "@/lib/guide-prices";
 
 export const dynamic = "force-static";
 
@@ -122,7 +123,14 @@ const articleLd = {
   dateModified: "2026-08-24",
 };
 
-export default function RegresoAClases() {
+export default async function RegresoAClases() {
+  const resolved = await Promise.all(
+    picks.map(async (p) => ({ ...p, price: await guidePrice(p.slug, p.price) }))
+  );
+  const range = await guidePriceRange(picks.map((p) => p.slug));
+  const priceRangeText = range
+    ? `Van de ${range.min} a ${range.max} USD`
+    : "Van de $14.74 a $53.92 USD";
   return (
     <article className="mx-auto max-w-3xl px-4 py-12">
       <script
@@ -162,7 +170,7 @@ export default function RegresoAClases() {
       </h2>
 
       <div className="mt-6 space-y-6">
-        {picks.map((p) => (
+        {resolved.map((p) => (
           <div
             key={p.slug}
             className="flex flex-col gap-4 rounded-2xl border border-gold/20 bg-ivory p-4 sm:flex-row sm:items-center"
@@ -241,9 +249,9 @@ export default function RegresoAClases() {
               ¿Son buenos regalos a este precio para un estudiante?
             </summary>
             <p className="mt-2 text-sm leading-relaxed text-brown-soft">
-              Sí. Van de $14.74 a $53.92 USD porque son piezas pequeñas con
-              propósito diario, no aparatos caros. Agrupados, lucen como un kit
-              pensado y no como una compra de impulso de última hora.
+              Sí. {priceRangeText} porque son piezas pequeñas con propósito
+              diario, no aparatos caros. Agrupados, lucen como un kit pensado y
+              no como una compra de impulso de última hora.
             </p>
           </details>
           <details className="rounded-xl border border-gold/15 bg-ivory p-4">
