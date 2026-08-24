@@ -18,6 +18,13 @@ const POSTS = [
     description:
       "Guía honesta de gadgets útiles para el hogar que resuelven problemas reales: luces LED con sensor, organizadores, cargadores y más.",
   },
+  {
+    slug: "/blog/regalos-para-el-2026",
+    title:
+      "Regalos para él 2026: gadgets útiles que sí va a usar (no terminan en el cajón)",
+    description:
+      "Cargador inalámbrico de auto, impresora térmica, picadora, organizador de especias, luces con sensor y más. Precios reales y link directo al catálogo Lumaei.",
+  },
 ];
 
 export const metadata: Metadata = {

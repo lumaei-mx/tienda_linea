@@ -3,11 +3,11 @@ import Link from "next/link";
 
 export const dynamic = "force-static";
 
-const SLUG = "/blog/regalos-para-ella-2026";
+const SLUG = "/blog/regalos-para-el-2026";
 const TITLE =
-  "Regalos para ella 2026: detalles bonitos que sí va a usar (y no terminan en el cajón)";
+  "Regalos para él 2026: gadgets útiles que sí va a usar (no terminan en el cajón)";
 const DESCRIPTION =
-  "Guía honesta de regalos para novia, amiga o mamá: proyector de estrellas, rodillo de hielo facial, parches de colágeno, luces con sensor y más. Precios reales y link directo al catálogo Lumaei.";
+  "Guía honesta de regalos para novio, papá o amigo: cargador inalámbrico de auto, impresora térmica, picadora, organizador de especias, luces con sensor y más. Precios reales y link directo al catálogo Lumaei.";
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://www.lumaei.com"),
@@ -40,30 +40,39 @@ type Pick = {
 const picks: Pick[] = [
   {
     slug:
-      "galaxy-star-projector-starry-sky-night-light-astronaut-lamp-room-decr-gift-child",
-    name: "Proyector de estrellas astronauta",
-    img: "https://cf.cjdropshipping.com/aed3289e-be07-4bee-be64-b7a7763a6315.jpg",
-    price: "$13.62 USD",
+      "magnetic-bendable-car-mobile-phone-holder-wireless-charger-phone-holder-15w-car-",
+    name: "Cargador inalámbrico magnético con soporte para auto 15W",
+    img: "https://cf.cjdropshipping.com/c6dd15cd-332f-412d-b04f-3fb361d54afb_trans.jpeg",
+    price: "$49.74 USD",
     pitch:
-      "Convierte cualquier cuarto en galaxia. Lámpara nocturna y regalo infalible para quien ama el ambiente y las fotos.",
+      "Sostén flexible + carga rápida 15W en el dashboard: el celular siempre cargado y a la vista sin soltar las manos del volante. El regalo para él que usa cada viaje.",
   },
   {
     slug:
-      "silicone-ice-face-roller-contour-shrink-pores-remove-dark-circles-massage-skin-b",
-    name: "Rodillo de hielo facial de silicona",
-    img: "https://cf.cjdropshipping.com/quick/product/bab01418-9540-4b61-bfc9-0b4fea3f1393.jpg",
-    price: "$6.72 USD",
+      "portable-mini-thermal-label-printer-home-photo-printer-student-wrong-question-pr",
+    name: "Impresora térmica portátil (etiquetas y fotos)",
+    img: "https://cf.cjdropshipping.com/853ab40a-f0a9-4ac4-9f53-9a6021788e2b.png",
+    price: "$31.75 USD",
     pitch:
-      "Masaje frío en 2 minutos para despertar la cara. Reutilizable, libre de químicos: un ritual de spa en casa.",
+      "Bluetooth, sin tinta: etiquetas para organizar, notas de estudio y fotos de bolsillo. Para el que le gusta tener las cosas claras y a la vista.",
   },
   {
     slug:
-      "beauty-gold-crystal-collagen-patches-for-eye-anti-aging-acne-eye-mask-korean-cos",
-    name: "Parches de colágeno dorados para contorno de ojo",
-    img: "https://cf.cjdropshipping.com/15253056/1842091534140.png",
-    price: "$5.10 USD",
+      "tenta-kitchen-485ml-manual-food-chopper-meat-grinder-vegetable-slicer-shredder-g",
+    name: "Picadora manual de cocina 485ml",
+    img: "https://cf.cjdropshipping.com/15217632/1443265897390.jpg",
+    price: "$44.54 USD",
     pitch:
-      "Parches coreanos de colágeno para contorno de ojo. 2-3 veces por semana, 30 min, y listo el ritual.",
+      "Pica, troza y ralla en segundos sin enchufe. Para el que cocina rápido entre semana: menos tiempo picando, más tiempo comiendo.",
+  },
+  {
+    slug:
+      "kitchen-double-tier-spice-rack-multifunctional-rotating-storage-rack-spice-organ",
+    name: "Organizador giratorio de dos niveles para especias",
+    img: "https://cf.cjdropshipping.com/f11e0c16-4232-4a98-943c-bfb07031fd99.jpg",
+    price: "$33.23 USD",
+    pitch:
+      "Gira 360° y deja toda la especia a la mano. Orden en el gabinete que se nota cada vez que cocina. Pequeño detalle, gran alivio diario.",
   },
   {
     slug:
@@ -72,7 +81,7 @@ const picks: Pick[] = [
     img: "https://cf.cjdropshipping.com/20200703/1455264561787.jpg",
     price: "$12.92 USD",
     pitch:
-      "Se enciende sola al pasar. Sin cables, carga USB-C: ideal para pasillo, clóset o lectura nocturna.",
+      "Se enciende sola al pasar. Sin cables, carga USB-C: ideal para pasillo, clóset o garaje. La luz que lo salva a las 3 AM sin buscar el interruptor.",
   },
   {
     slug:
@@ -81,16 +90,16 @@ const picks: Pick[] = [
     img: "https://cf.cjdropshipping.com/2def7f27-94d7-4ed1-8a24-bab4502728ea.jpg",
     price: "$8.53 USD",
     pitch:
-      "Magnética, 3 tonos de luz y se pega donde el foco no llega. Recargable por USB, adiós a los cables.",
+      "Magnética, 3 tonos de luz y se pega donde el foco no llega. Recargable por USB, adiós a los cables. La pieza más barata de la lista y una de las más usadas.",
   },
   {
     slug:
-      "non-contact-automatic-soap-dispenser-liquid-foam-machine-infrared-sensor-electri",
-    name: "Dispensador de jabón sin contacto",
-    img: "https://cf.cjdropshipping.com/947936eb-a29d-4faf-a63f-257225cb7454.jpg",
-    price: "$21.50 USD",
+      "galaxy-star-projector-starry-sky-night-light-astronaut-lamp-room-decr-gift-child",
+    name: "Proyector de estrellas astronauta",
+    img: "https://cf.cjdropshipping.com/aed3289e-be07-4bee-be64-b7a7763a6315.jpg",
+    price: "$13.62 USD",
     pitch:
-      "Jabón espuma sin tocar nada: recargable, higiénico para baño y cocina. Un detalle que cuida su espacio.",
+      "Convierte cualquier cuarto en galaxia. Lámpara nocturna y regalo infalible para quien ama el ambiente y las fotos. Funciona igual para él que para ella.",
   },
 ];
 
@@ -113,7 +122,7 @@ const articleLd = {
   dateModified: "2026-08-24",
 };
 
-export default function RegalosParaElla() {
+export default function RegalosParaEl() {
   return (
     <article className="mx-auto max-w-3xl px-4 py-12">
       <script
@@ -128,25 +137,26 @@ export default function RegalosParaElla() {
         {TITLE}
       </h1>
       <p className="mt-4 text-lg leading-relaxed text-brown-soft">
-        El mejor regalo para ella no es el más caro: es el que usa. Por eso esta
-        lista reúne detalles pequeños con propósito —belleza, ambiente y
-        comodidad— que de verdad saca de la caja. Nada de aparatos que terminan
-        en el cajón: cada pieza nace de un “qué bien me vendría…” real.
+        Al hombre práctico no lo consientes con objetos que se olvidan: lo
+        consientes con cosas que usa. Por eso esta lista reúne gadgets con
+        propósito diario —cargar, organizar, cocinar, alumbrar— que de verdad
+        salen de la caja. Nada de aparatos que terminan en el cajón: cada pieza
+        nace de un “qué bien me vendría…” real.
       </p>
 
       <h2 className="mt-10 font-serif text-2xl text-brown">
         Por qué estos regalos funcionan
       </h2>
       <p className="mt-3 leading-relaxed text-brown-soft">
-        Regalamos alivio, no objetos. Un rodillo de hielo que despierta la cara en
-        dos minutos, una luz que se enciende sola al pasar, un proyector que
-        convierte la habitación en galaxia: el cerebro compra la sensación, no la
+        Regalamos alivio, no objetos. Un cargador que siempre está listo en el
+        auto, una luz que se enciende sola al pasar, un organizador que gira
+        para tener la especia a la mano: el cerebro compra la sensación, no la
         feature. Por eso cada pieza de abajo resuelve una molestia o crea un
         momento, y por eso se usan —no se guardan—.
       </p>
 
       <h2 className="mt-10 font-serif text-2xl text-brown">
-        Nuestros 6 detalles favoritos para ella
+        Nuestros 7 gadgets favoritos para él
       </h2>
 
       <div className="mt-6 space-y-6">
@@ -198,14 +208,14 @@ export default function RegalosParaElla() {
         </li>
         <li>
           <strong className="text-brown">Piensa en el ritual.</strong> Los
-          mejores regalos para ella son los que se repiten: el cuidado facial, la
-          luz de noche, el ambiente del cuarto.
+          mejores regalos para él son los que se repiten: cargar en el auto, la
+          luz de noche, el orden en la cocina.
         </li>
       </ul>
 
       <div className="mt-10 rounded-2xl bg-cream-dark p-6 text-center">
         <p className="font-serif text-xl text-brown">
-          ¿Listo para consentirla?
+          ¿Listo para consentirlo?
         </p>
         <p className="mt-2 text-sm text-brown-soft">
           Envío gratis desde 2 piezas o $49 USD · 90 días de garantía · paga el
@@ -227,9 +237,9 @@ export default function RegalosParaElla() {
               ¿Son buenos regalos a este precio?
             </summary>
             <p className="mt-2 text-sm leading-relaxed text-brown-soft">
-              Sí. Todos rondan entre $5 y $22 USD porque son piezas pequeñas con
-              propósito diario, no aparatos caros. Agrupados, lucen como un
-              detalle pensado y no como una compra de impulso.
+              Sí. Van de $8.50 a $50 USD porque son piezas pequeñas con propósito
+              diario, no aparatos caros. Agrupados, lucen como un detalle
+              pensado y no como una compra de impulso.
             </p>
           </details>
           <details className="rounded-xl border border-gold/15 bg-ivory p-4">
@@ -252,30 +262,34 @@ export default function RegalosParaElla() {
         </div>
       </section>
 
-      <section className="mt-12 rounded-2xl border border-gold/15 bg-ivory p-6">
-        <p className="text-xs font-semibold uppercase tracking-[0.2em] text-gold-dark">
-          Lee también
-        </p>
-        <Link
-          href="/blog/regalos-gadgets-hogar"
-          className="mt-2 block font-serif text-xl text-brown transition hover:text-gold-dark"
-        >
-          Regalos y gadgets prácticos para el hogar en 2026 →
-        </Link>
-        <p className="mt-1 text-sm text-brown-soft">
-          La otra guía Lumaei: organización, luces y cargadores que resuelven
-          problemas reales en casa.
-        </p>
-        <Link
-          href="/blog/regalos-para-el-2026"
-          className="mt-4 block font-serif text-xl text-brown transition hover:text-gold-dark"
-        >
-          Regalos para él 2026: gadgets que sí va a usar →
-        </Link>
-        <p className="mt-1 text-sm text-brown-soft">
-          La guía complementaria: cargador de auto, impresora, picadora y más
-          para novio, papá o amigo.
-        </p>
+      <section className="mt-12 space-y-4">
+        <div className="rounded-2xl border border-gold/15 bg-ivory p-6">
+          <p className="text-xs font-semibold uppercase tracking-[0.2em] text-gold-dark">
+            Lee también
+          </p>
+          <Link
+            href="/blog/regalos-para-ella-2026"
+            className="mt-2 block font-serif text-xl text-brown transition hover:text-gold-dark"
+          >
+            Regalos para ella 2026: detalles bonitos que sí va a usar →
+          </Link>
+          <p className="mt-1 text-sm text-brown-soft">
+            La guía complementaria: belleza, ambiente y comodidad para novia,
+            amiga o mamá.
+          </p>
+        </div>
+        <div className="rounded-2xl border border-gold/15 bg-ivory p-6">
+          <Link
+            href="/blog/regalos-gadgets-hogar"
+            className="block font-serif text-xl text-brown transition hover:text-gold-dark"
+          >
+            Regalos y gadgets prácticos para el hogar en 2026 →
+          </Link>
+          <p className="mt-1 text-sm text-brown-soft">
+            Organización, luces y cargadores que resuelven problemas reales en
+            casa.
+          </p>
+        </div>
       </section>
     </article>
   );
