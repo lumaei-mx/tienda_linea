@@ -25,6 +25,13 @@ const POSTS = [
     description:
       "Cargador inalámbrico de auto, impresora térmica, picadora, organizador de especias, luces con sensor y más. Precios reales y link directo al catálogo Lumaei.",
   },
+  {
+    slug: "/blog/regreso-a-clases-2026",
+    title:
+      "Regreso a clases 2026: gadgets para estudiantes que sí usa (y no pesan la mochila ni el presupuesto)",
+    description:
+      "Impresora térmica, cargador de auto, luces LED con sensor, proyector de estrellas y más para estudiante o dormitorio. Precios reales y link directo al catálogo Lumaei.",
+  },
 ];
 
 export const metadata: Metadata = {

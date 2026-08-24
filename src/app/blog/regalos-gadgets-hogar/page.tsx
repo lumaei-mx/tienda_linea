@@ -267,6 +267,16 @@ export default function GuiaGadgetsHogar() {
           Belleza, ambiente y comodidad: la guía de regalos para novia, amiga o
           mamá, con precios reales y link directo al catálogo.
         </p>
+        <Link
+          href="/blog/regreso-a-clases-2026"
+          className="mt-4 block font-serif text-xl text-brown transition hover:text-gold-dark"
+        >
+          Regreso a clases 2026: gadgets para estudiantes que sí usa →
+        </Link>
+        <p className="mt-1 text-sm text-brown-soft">
+          Impresora térmica, cargador de auto, luces LED y más para el semestre,
+          sin romper el presupuesto.
+        </p>
       </section>
     </article>
   );

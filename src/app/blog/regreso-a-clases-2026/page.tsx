@@ -3,11 +3,11 @@ import Link from "next/link";
 
 export const dynamic = "force-static";
 
-const SLUG = "/blog/regalos-para-el-2026";
+const SLUG = "/blog/regreso-a-clases-2026";
 const TITLE =
-  "Regalos para él 2026: gadgets útiles que sí va a usar (no terminan en el cajón)";
+  "Regreso a clases 2026: gadgets para estudiantes que sí usa (y no pesan la mochila ni el presupuesto)";
 const DESCRIPTION =
-  "Guía honesta de regalos para novio, papá o amigo: cargador inalámbrico de auto, impresora térmica, picadora, organizador de especias, luces con sensor y más. Precios reales y link directo al catálogo Lumaei.";
+  "Guía honesta de regreso a clases 2026: impresora térmica, cargador inalámbrico de auto, luces LED con sensor, proyector de estrellas y más para estudiante o dormitorio. Precios reales y link directo al catálogo Lumaei.";
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://www.lumaei.com"),
@@ -40,66 +40,66 @@ type Pick = {
 const picks: Pick[] = [
   {
     slug:
+      "portable-mini-thermal-label-printer-home-photo-printer-student-wrong-question-pr",
+    name: "Impresora térmica portátil (estudio y etiquetas)",
+    img: "https://cf.cjdropshipping.com/853ab40a-f0a9-4ac4-9f53-9a6021788e2b.png",
+    price: "$31.75 USD",
+    pitch:
+      "Sin tinta, Bluetooth: imprime fichas, errores de práctica, etiquetas para organizar cuadernos y notas de bolsillo. El aliado del estudiante que odia perder apuntes; cabe en la mochila y cargo USB.",
+  },
+  {
+    slug:
       "magnetic-bendable-car-mobile-phone-holder-wireless-charger-phone-holder-15w-car-",
     name: "Cargador inalámbrico magnético con soporte para auto 15W",
     img: "https://cf.cjdropshipping.com/c6dd15cd-332f-412d-b04f-3fb361d54afb_trans.jpeg",
     price: "$49.74 USD",
     pitch:
-      "Sostén flexible + carga rápida 15W en el dashboard: el celular siempre cargado y a la vista sin soltar las manos del volante. El regalo para él que usa cada viaje.",
-  },
-  {
-    slug:
-      "portable-mini-thermal-label-printer-home-photo-printer-student-wrong-question-pr",
-    name: "Impresora térmica portátil (etiquetas y fotos)",
-    img: "https://cf.cjdropshipping.com/853ab40a-f0a9-4ac4-9f53-9a6021788e2b.png",
-    price: "$31.75 USD",
-    pitch:
-      "Bluetooth, sin tinta: etiquetas para organizar, notas de estudio y fotos de bolsillo. Para el que le gusta tener las cosas claras y a la vista.",
-  },
-  {
-    slug:
-      "tenta-kitchen-485ml-manual-food-chopper-meat-grinder-vegetable-slicer-shredder-g",
-    name: "Picadora manual de cocina 485ml",
-    img: "https://cf.cjdropshipping.com/15217632/1443265897390.jpg",
-    price: "$44.54 USD",
-    pitch:
-      "Pica, troza y ralla en segundos sin enchufe. Para el que cocina rápido entre semana: menos tiempo picando, más tiempo comiendo.",
-  },
-  {
-    slug:
-      "kitchen-double-tier-spice-rack-multifunctional-rotating-storage-rack-spice-organ",
-    name: "Organizador giratorio de dos niveles para especias",
-    img: "https://cf.cjdropshipping.com/f11e0c16-4232-4a98-943c-bfb07031fd99.jpg",
-    price: "$33.23 USD",
-    pitch:
-      "Gira 360° y deja toda la especia a la mano. Orden en el gabinete que se nota cada vez que cocina. Pequeño detalle, gran alivio diario.",
+      "El celular carga solo al acercarlo y queda a la vista sin soltar el volante. Para el estudiante que va de casa al salón en auto: llega con batería y manos libres. Con una sola pieza ya activa el envío gratis.",
   },
   {
     slug:
       "auto-led-usb-magnetic-wireless-night-light-corridors-porch-lights-pir-motion-sen",
     name: "Luz LED magnética con sensor de movimiento",
     img: "https://cf.cjdropshipping.com/20200703/1455264561787.jpg",
-    price: "$12.92 USD",
+    price: "$14.74 USD",
     pitch:
-      "Se enciende sola al pasar. Sin cables, carga USB-C: ideal para pasillo, clóset o garaje. La luz que lo salva a las 3 AM sin buscar el interruptor.",
+      "Se enciende sola al pasar. Sin cables, carga USB-C: ideal para pasillo del dorm, clóset o escritorio nocturno. La luz que te salva a las 3 AM sin buscar el interruptor (y sin despertar al roomie).",
   },
   {
     slug:
       "rechargeable-led-wireless-kitchen-usb-automatic-closet-light-bar-magnetic-cabine",
-    name: "Barra de luz LED recargable para clóset y cocina",
+    name: "Barra de luz LED recargable para clóset y escritorio",
     img: "https://cf.cjdropshipping.com/2def7f27-94d7-4ed1-8a24-bab4502728ea.jpg",
-    price: "$8.53 USD",
+    price: "$35.15 USD",
     pitch:
-      "Magnética, 3 tonos de luz y se pega donde el foco no llega. Recargable por USB, adiós a los cables. La pieza más barata de la lista y una de las más usadas.",
+      "Magnética, 3 tonos de luz y se pega donde el foco no llega. Recargable por USB: de escritorio a cabecera sin cables colgando. Pequeña, barata de usar y una de las piezas más repetidas del día.",
   },
   {
     slug:
       "galaxy-star-projector-starry-sky-night-light-astronaut-lamp-room-decr-gift-child",
     name: "Proyector de estrellas astronauta",
     img: "https://cf.cjdropshipping.com/aed3289e-be07-4bee-be64-b7a7763a6315.jpg",
-    price: "$13.62 USD",
+    price: "$43.68 USD",
     pitch:
-      "Convierte cualquier cuarto en galaxia. Lámpara nocturna y regalo infalible para quien ama el ambiente y las fotos. Funciona igual para él que para ella.",
+      "Convierte cualquier cuarto en galaxia. Lámpara nocturna y regalo infalible para decorar el dormitorio y las fotos. Ambiente que hace propio un cuarto prestado.",
+  },
+  {
+    slug:
+      "non-contact-automatic-soap-dispenser-liquid-foam-machine-infrared-sensor-electri",
+    name: "Dispensador de jabón automático (manos libres)",
+    img: "https://cf.cjdropshipping.com/947936eb-a29d-4faf-a63f-257225cb7454.jpg",
+    price: "$53.92 USD",
+    pitch:
+      "Sensor infrarrojo, sin tocar: higiene en el baño compartido del dorm. Carga USB, espuma en 0.25s. Un detalle de 'adulto funcional' que todos agradecen en temporada de gripe.",
+  },
+  {
+    slug:
+      "silicone-ice-face-roller-contour-shrink-pores-remove-dark-circles-massage-skin-b",
+    name: "Rodillo de hielo facial de silicona",
+    img: "https://cf.cjdropshipping.com/quick/product/bab01418-9540-4b61-bfc9-0b4fea3f1393.jpg",
+    price: "$30.45 USD",
+    pitch:
+      "Masaje frío en 2 minutos para despertar la cara antes de la clase de 7 AM. Reutilizable, sin químicos, cabe en la bolsa de maquillaje. El ritual matutino que te saca de la cama.",
   },
 ];
 
@@ -122,7 +122,7 @@ const articleLd = {
   dateModified: "2026-08-24",
 };
 
-export default function RegalosParaEl() {
+export default function RegresoAClases() {
   return (
     <article className="mx-auto max-w-3xl px-4 py-12">
       <script
@@ -137,26 +137,28 @@ export default function RegalosParaEl() {
         {TITLE}
       </h1>
       <p className="mt-4 text-lg leading-relaxed text-brown-soft">
-        Al hombre práctico no lo consientes con objetos que se olvidan: lo
-        consientes con cosas que usa. Por eso esta lista reúne gadgets con
-        propósito diario —cargar, organizar, cocinar, alumbrar— que de verdad
-        salen de la caja. Nada de aparatos que terminan en el cajón: cada pieza
-        nace de un “qué bien me vendría…” real.
+        La mochila ya pesa con libros; el presupuesto, con todo lo demás. Por eso
+        esta lista de regreso a clases 2026 reúne gadgets pequeños que el
+        estudiante usa todos los días —imprimir, cargar, alumbrar, organizar—
+        sin romper la hacienda. Nada de aparatos de $300 que terminan en el
+        cajón: cada pieza nace de un “me vendría bien para…” real de la vida
+        escolar.
       </p>
 
       <h2 className="mt-10 font-serif text-2xl text-brown">
-        Por qué estos regalos funcionan
+        Por qué estos regalos funcionan en el colegio
       </h2>
       <p className="mt-3 leading-relaxed text-brown-soft">
-        Regalamos alivio, no objetos. Un cargador que siempre está listo en el
-        auto, una luz que se enciende sola al pasar, un organizador que gira
-        para tener la especia a la mano: el cerebro compra la sensación, no la
-        feature. Por eso cada pieza de abajo resuelve una molestia o crea un
-        momento, y por eso se usan —no se guardan—.
+        El estudiante compra alivio, no features. Una impresora que saca la
+        ficha de error en segundos, una luz que se enciende sola al entrar al
+        cuarto oscuro, un cargador que siempre está listo en el auto: el cerebro
+        premia la sensación de “listo”, no la hoja de especificaciones. Por eso
+        cada pieza de abajo resuelve una molestia repetida y por eso se usan —
+        no se guardan—.
       </p>
 
       <h2 className="mt-10 font-serif text-2xl text-brown">
-        Nuestros 7 gadgets favoritos para él
+        Nuestros 7 gadgets favoritos para regreso a clases
       </h2>
 
       <div className="mt-6 space-y-6">
@@ -194,28 +196,30 @@ export default function RegalosParaEl() {
       </div>
 
       <h2 className="mt-10 font-serif text-2xl text-brown">
-        Cómo armar el regalo sin pasarte
+        Cómo armar el kit sin pasarte
       </h2>
       <ul className="mt-3 list-disc space-y-2 pl-5 leading-relaxed text-brown-soft">
         <li>
           <strong className="text-brown">Agrupa 2 piezas.</strong> El envío es
-          gratis desde 2 piezas o desde $49 USD: dos detalles pequeños salen
-          mejor que uno solo y ya llevan el sobre de regalo resuelto.
+          gratis desde 2 piezas o desde $49 USD: un par de detalles pequeños
+          sale mejor que uno solo y ya lleva el detalle de regreso a clases
+          resuelto.
         </li>
         <li>
           <strong className="text-brown">Prioriza lo recargable.</strong> Un
-          cable menos es un cajón menos lleno, y un regalo que dura.
+          cable menos es una mochila menos llena, y un regalo que dura todo el
+          semestre.
         </li>
         <li>
           <strong className="text-brown">Piensa en el ritual.</strong> Los
-          mejores regalos para él son los que se repiten: cargar en el auto, la
-          luz de noche, el orden en la cocina.
+          mejores regalos escolares son los que se repiten: imprimir la ficha,
+          la luz de noche, el orden en el baño compartido.
         </li>
       </ul>
 
       <div className="mt-10 rounded-2xl bg-cream-dark p-6 text-center">
         <p className="font-serif text-xl text-brown">
-          ¿Listo para consentirlo?
+          ¿Listo para el semestre?
         </p>
         <p className="mt-2 text-sm text-brown-soft">
           Envío gratis desde 2 piezas o $49 USD · 90 días de garantía · paga el
@@ -234,12 +238,12 @@ export default function RegalosParaEl() {
         <div className="mt-4 space-y-4">
           <details className="rounded-xl border border-gold/15 bg-ivory p-4">
             <summary className="cursor-pointer font-medium text-brown">
-              ¿Son buenos regalos a este precio?
+              ¿Son buenos regalos a este precio para un estudiante?
             </summary>
             <p className="mt-2 text-sm leading-relaxed text-brown-soft">
-              Sí. Van de $8.50 a $50 USD porque son piezas pequeñas con propósito
-              diario, no aparatos caros. Agrupados, lucen como un detalle
-              pensado y no como una compra de impulso.
+              Sí. Van de $14.74 a $53.92 USD porque son piezas pequeñas con
+              propósito diario, no aparatos caros. Agrupados, lucen como un kit
+              pensado y no como una compra de impulso de última hora.
             </p>
           </details>
           <details className="rounded-xl border border-gold/15 bg-ivory p-4">
@@ -249,6 +253,16 @@ export default function RegalosParaEl() {
             <p className="mt-2 text-sm leading-relaxed text-brown-soft">
               Sí. Lumaei envía a ambos países con fulfillment automatizado; el
               envío es gratis desde 2 piezas o desde $49 USD.
+            </p>
+          </details>
+          <details className="rounded-xl border border-gold/15 bg-ivory p-4">
+            <summary className="cursor-pointer font-medium text-brown">
+              ¿La impresora térmica sirve para estudiar de verdad?
+            </summary>
+            <p className="mt-2 text-sm leading-relaxed text-brown-soft">
+              Sí: sin tinta, Bluetooth y app con banco de ejercicios. Imprime
+              fichas, errores de práctica y etiquetas para separar materias.
+              cabe en la mochila y carga por USB.
             </p>
           </details>
           <details className="rounded-xl border border-gold/15 bg-ivory p-4">
@@ -268,14 +282,25 @@ export default function RegalosParaEl() {
             Lee también
           </p>
           <Link
-            href="/blog/regalos-para-ella-2026"
+            href="/blog/regalos-para-el-2026"
             className="mt-2 block font-serif text-xl text-brown transition hover:text-gold-dark"
+          >
+            Regalos para él 2026: gadgets útiles que sí va a usar →
+          </Link>
+          <p className="mt-1 text-sm text-brown-soft">
+            Cargador de auto, impresora térmica, organizadores y luces para el
+            día a día.
+          </p>
+        </div>
+        <div className="rounded-2xl border border-gold/15 bg-ivory p-6">
+          <Link
+            href="/blog/regalos-para-ella-2026"
+            className="block font-serif text-xl text-brown transition hover:text-gold-dark"
           >
             Regalos para ella 2026: detalles bonitos que sí va a usar →
           </Link>
           <p className="mt-1 text-sm text-brown-soft">
-            La guía complementaria: belleza, ambiente y comodidad para novia,
-            amiga o mamá.
+            Belleza, ambiente y comodidad para novia, amiga o mamá.
           </p>
         </div>
         <div className="rounded-2xl border border-gold/15 bg-ivory p-6">
@@ -288,18 +313,6 @@ export default function RegalosParaEl() {
           <p className="mt-1 text-sm text-brown-soft">
             Organización, luces y cargadores que resuelven problemas reales en
             casa.
-          </p>
-        </div>
-        <div className="rounded-2xl border border-gold/15 bg-ivory p-6">
-          <Link
-            href="/blog/regreso-a-clases-2026"
-            className="mt-2 block font-serif text-xl text-brown transition hover:text-gold-dark"
-          >
-            Regreso a clases 2026: gadgets para estudiantes que sí usa →
-          </Link>
-          <p className="mt-1 text-sm text-brown-soft">
-            Impresora térmica, cargador de auto, luces LED y más para el
-            semestre, sin romper el presupuesto.
           </p>
         </div>
       </section>
