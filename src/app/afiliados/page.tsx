@@ -3,7 +3,7 @@
 import { useState } from "react";
 
 export default function AfiliadosPage() {
-  const [tab, setTab] = useState<"join" | "stats">("join");
+  const [tab, setTab] = useState<"join" | "stats" | "waitlist">("join");
   const [form, setForm] = useState({ handle: "", name: "", email: "" });
   const [result, setResult] = useState<string>("");
   const [link, setLink] = useState<string>("");
@@ -54,6 +54,31 @@ export default function AfiliadosPage() {
     }
   }
 
+  const [wl, setWl] = useState({ email: "", handle: "" });
+  const [wlResult, setWlResult] = useState("");
+  const [wlBusy, setWlBusy] = useState(false);
+
+  async function joinWaitlist(e: React.FormEvent) {
+    e.preventDefault();
+    setWlBusy(true);
+    setWlResult("");
+    try {
+      const res = await fetch("/api/affiliates/waitlist", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(wl),
+      });
+      const data = await res.json();
+      setWlResult(
+        data.ok ? data.message || "Inscrito ✓" : data.error || "No se pudo inscribir."
+      );
+    } catch {
+      setWlResult("Error de red.");
+    } finally {
+      setWlBusy(false);
+    }
+  }
+
   return (
     <main className="mx-auto max-w-2xl px-5 py-12 text-[#3a2e22]">
       <h1 className="text-3xl font-bold mb-2">Programa de Afiliados Lumaei</h1>
@@ -79,6 +104,14 @@ export default function AfiliadosPage() {
           }`}
         >
           Mis datos
+        </button>
+        <button
+          onClick={() => setTab("waitlist")}
+          className={`px-4 py-2 rounded-full text-sm ${
+            tab === "waitlist" ? "bg-[#c9a24b] text-white" : "bg-[#efe6d8]"
+          }`}
+        >
+          Lista de espera
         </button>
       </div>
 
@@ -119,7 +152,7 @@ export default function AfiliadosPage() {
             </p>
           )}
         </form>
-      ) : (
+      ) : tab === "stats" ? (
         <form onSubmit={find} className="space-y-3">
           <input
             required
@@ -148,6 +181,34 @@ export default function AfiliadosPage() {
               </p>
             </div>
           )}
+        </form>
+      ) : (
+        <form onSubmit={joinWaitlist} className="space-y-3">
+          <p className="text-sm text-[#6b5b45]">
+            ¿Aún no listo para crear tu enlace? Déjame tu email y te aviso cuando
+            abramos la siguiente convocatoria de afiliados.
+          </p>
+          <input
+            required
+            type="email"
+            placeholder="Tu email"
+            value={wl.email}
+            onChange={(e) => setWl({ ...wl, email: e.target.value })}
+            className="w-full border border-[#d8c9b0] rounded-lg px-3 py-2"
+          />
+          <input
+            placeholder="@tuHandle (opcional)"
+            value={wl.handle}
+            onChange={(e) => setWl({ ...wl, handle: e.target.value })}
+            className="w-full border border-[#d8c9b0] rounded-lg px-3 py-2"
+          />
+          <button
+            disabled={wlBusy}
+            className="bg-[#c9a24b] text-white px-5 py-2 rounded-lg disabled:opacity-50"
+          >
+            {wlBusy ? "..." : "Unirme a la lista"}
+          </button>
+          {wlResult && <p className="text-sm mt-2">{wlResult}</p>}
         </form>
       )}
     </main>
