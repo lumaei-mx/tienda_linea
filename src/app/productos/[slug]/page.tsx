@@ -10,6 +10,8 @@ import {
   productName,
   getProductCopy,
   reviewsSummary,
+  buildFallbackCopy,
+  pickCopy,
 } from "@/lib/copy";
 
 export const dynamic = "force-dynamic";
@@ -72,6 +74,27 @@ export default async function ProductPage({
   const rating = curated
     ? reviewsSummary(curated)
     : { reviewCount: 0, reviewAvg: 0 };
+
+  // FAQPage JSON-LD: espejo del FAQ on-page (copy.faqs) para reforzar SEO
+  // sin costo. Solo se emite si hay preguntas reales (nunca inventadas).
+  const pp = toPublicProduct(product);
+  const baseCopy =
+    curated && (lang === "es" || curated.hookEn)
+      ? curated
+      : buildFallbackCopy(pp, lang);
+  const pageCopy = pickCopy(baseCopy, lang);
+  const faqLd =
+    pageCopy.faqs && pageCopy.faqs.length > 0
+      ? {
+          "@context": "https://schema.org",
+          "@type": "FAQPage",
+          mainEntity: pageCopy.faqs.map((f) => ({
+            "@type": "Question",
+            name: f.q,
+            acceptedAnswer: { "@type": "Answer", text: f.a },
+          })),
+        }
+      : null;
   const productLd = {
     "@context": "https://schema.org",
     "@type": "Product",
@@ -107,6 +130,12 @@ export default async function ProductPage({
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(productLd) }}
       />
+      {faqLd && (
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(faqLd) }}
+        />
+      )}
       <ProductViewTracker
         id={product.id}
         name={product.name}
