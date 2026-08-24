@@ -92,6 +92,7 @@ export function reviewsSummary(copy: Pick<ProductCopy, "reviews">): {
 /** Nombre visible del producto según idioma (overrides EN para productos curados en ES). */
 const NAME_EN: Record<string, string> = {
   "cj-1602564551227224064": "Automatic Gravity Pet Feeder with Stainless Steel Bowl",
+  "cj-1815302080471912448": "3-in-1 Steam Pet Brush for Cats & Dogs",
 };
 
 /**
@@ -118,6 +119,8 @@ const FALLBACK_NAME_ES: Record<string, string> = {
 const DESCRIPTION_EN: Record<string, string> = {
   "cj-1602564551227224064":
     "Running late to work while your cat stares from the door? This gravity feeder solves the root problem: it stores dry food in its upper reservoir and releases it automatically into the bowl as your pet eats. No internet, no batteries, no apps. Just fill the reservoir when it empties and your pet has food available all day.\n\nThe bowl is stainless steel, which prevents odors, stains and the bacteria buildup you get with low-quality plastics. It's easy to take apart and clean. Its base is stable and non-slip: your pet eats calmly without the feeder moving.\n\nIdeal for dry food (kibble) for dogs and cats. Available in several sizes and colors.",
+  "cj-1815302080471912448":
+    "Brushing your pet no longer has to be a battle. This 3-in-1 brush combines gentle steam, detangling bristles and massage in a single pass: steam helps loosen mats, bristles trap loose hair and the silicone pad massages the skin without irritating it.\n\nIt's especially useful during shedding season, when loose hair takes over the whole house. The self-cleaning feature removes accumulated hair from the bristles at the press of a button.\n\nUSB rechargeable, compact and easy to store. Suitable for medium and long-haired cats and dogs.",
 };
 
 export function productName(p: PublicProduct, lang: Lang): string {
@@ -1189,6 +1192,48 @@ const COPY_BY_ID: Record<string, ProductCopy> = {
       },
     ],
     reviews: [],
+    // Copy EN (mercado US): activa la PDP curada en inglés (pickCopy exige hookEn).
+    hookEn: "A steam brush that detangles, cleans and massages in one pass",
+    subtitleEn:
+      "3-in-1 steam brush for pets: gently loosens mats, lifts loose hair and massages the skin. Perfect for shedding season.",
+    benefitsEn: [
+      "Gentle steam loosens tangles without pulling or hurting your pet",
+      "Lifts loose hair and reduces shedding around the house",
+      "Massages the skin and leaves the coat soft and shiny",
+      "Self-cleaning feature removes hair from the bristles effortlessly",
+      "Rechargeable and compact — ideal for medium and long-haired cats and dogs",
+    ],
+    descriptionEn:
+      "Brushing your pet no longer has to be a battle. This 3-in-1 brush combines gentle steam, detangling bristles and massage in a single pass: steam helps loosen mats, bristles trap loose hair and the silicone pad massages the skin without irritating it.\n\nIt's especially useful during shedding season, when loose hair takes over the whole house. The self-cleaning feature removes accumulated hair from the bristles at the press of a button.\n\nUSB rechargeable, compact and easy to store. Suitable for medium and long-haired cats and dogs.",
+    specsEn: [
+      "Type: 3-in-1 steam brush for pets",
+      "Functions: steam + grooming + self-cleaning",
+      "Power: USB rechargeable",
+      "Package weight: ~285 g",
+      "Use: medium and long-haired cats and dogs",
+    ],
+    faqsEn: [
+      {
+        qEn: "Does the steam burn my pet?",
+        aEn:
+          "No. The steam is gentle and low-temperature, designed for safe use on pets. Try it on a small area first.",
+      },
+      {
+        qEn: "Does it work on short hair?",
+        aEn:
+          "It works best on medium and long coats. For short hair, a silicone bath glove is more practical.",
+      },
+      {
+        qEn: "How do I clean the brush?",
+        aEn:
+          "Use the self-cleaning feature or remove the bristle plate and rinse it with warm water.",
+      },
+      {
+        qEn: "How long does shipping take?",
+        aEn:
+          "Mexico: 14 to 16 business days. United States: 4 to 7 days, tracked.",
+      },
+    ],
   },
 
   // PRIORIDAD 2: Featured en homepage, copy CJ con leak de referencia interna
