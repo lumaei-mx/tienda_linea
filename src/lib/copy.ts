@@ -1614,6 +1614,33 @@ const COPY_BY_ID: Record<string, ProductCopy> = {
         a: "México: 14 a 16 días hábiles. Estados Unidos: 4 a 7 días, con rastreo.",
       },
     ],
+    faqsEn: [
+      {
+        qEn: "Do these patches remove dark circles?",
+        aEn:
+          "They hydrate the under-eye area and give it a firmer-looking appearance. Results vary from person to person — think of them as a refresh for tired eyes, not an eraser.",
+      },
+      {
+        qEn: "Can I reuse them?",
+        aEn:
+          "No. They're single-use: the collagen dissolves with your skin's warmth during the 20-30 minute session. Each pair is used once and then discarded.",
+      },
+      {
+        qEn: "How often should I use them?",
+        aEn:
+          "2 to 3 times a week for about 30 minutes, ideally as part of your evening routine on clean, dry skin. Continuous daily use is not recommended.",
+      },
+      {
+        qEn: "Are they safe for sensitive skin?",
+        aEn:
+          "They're for external use around the eye area only. If your skin is sensitive, do a patch test on a small area first, and don't apply them over broken or irritated skin.",
+      },
+      {
+        qEn: "How long does shipping take?",
+        aEn:
+          "United States: 4 to 7 business days with tracking. Mexico: 14 to 16 business days. You'll receive a tracking number once your order ships.",
+      },
+    ],
     reviews: [],
   },
 
