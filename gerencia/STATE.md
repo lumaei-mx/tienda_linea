@@ -43,6 +43,37 @@ ciclo (ver `MANDATE.md` sección 8). El loop lee esto para no empezar ciego.
 - Resultado: SEO en producción (orgánico reforzado); proveedor confirmado;
   regla de envío validada; ningún gasto.
 
+## Último ciclo (2026-08-24 — ciclo 3)
+- Acción de MAYOR valor ejecutada (todo $0 / cliente-paga, sin gasto):
+  1. CONTENIDO ORGÁNICO (tráfico): nueva guía SEO "Regalos para ella 2026"
+     publicada y verificada en producción →
+     https://www.lumaei.com/blog/regalos-para-ella-2026
+     - 6 productos del catálogo activo enlazados a /productos/[slug] (proyector
+       de estrellas, rodillo de hielo facial, parches de colágeno, luz LED con
+       sensor, barra LED clóset, dispensador de jabón).
+     - JSON-LD Article presente (verificado), CTA a lead magnet (/guia/5-gadgets
+       + LUMAI10) y a /productos. FAQ de conversión.
+     - Creado índice /blog (hub de guías) y link "Guías y regalos" en el footer
+       para descubribilidad + SEO interno.
+     - Cross-link bidireccional entre las 2 guías.
+  2. BUILD/SEGURIDAD: `next build` OK, `eslint` en mis archivos 0 errores
+     (los 17 errores de lint son deuda previa ajena al cambio). Commit
+     58e7abe en main, push a origin, despliegue Vercel READY y alias
+     www.lumaei.com verificado en vivo (200 + JSON-LD).
+- Benchmarking continuo (proveedores/plataformas/precios/competencia):
+  - PLATAFORMA (HALLAZGO CRÍTICO): el equipo Vercel "lumaei" está en plan
+    **Hobby**, que es NO COMERCIAL. La tienda ya vende → riesgo de suspensión
+    del despliegue por ToS (cierre sin aviso). Requiere Pro ($20/mo) → ver
+    AQ-001 en AUTHORIZATION_QUEUE (BLOQUEADA, pendiente de aprobación).
+  - PROVEEDOR: CJ Dropshipping sigue óPTIMO para presupuesto $0 ($0/mes, paga
+    por unidad). Alternativas (Zendrop/Spocket/AutoDS) exigen $24–40/mo →
+    fuera de presupuesto cero. EPROLO como respaldo gratuito.
+  - PRECIOS/COMPETENCIA: nicho gadgets sigue competitivo; nuestro modelo
+    cliente-paga sin inversión es correcto. Sin cambios de precio este ciclo.
+- Resultado: +1 URL indexable de alto volumen ("regalos para ella") + hub de
+  blog + link footer → más superficie de tráfico orgánico. Riesgo de
+  plataforma identificado y escalado a autorización económica.
+
 ## Gates del dueño (NO económicos, pero BLOQUEAN progreso real)
 - [ ] PUBLICAR REELS: pasar @lumaei.mx a Business + 2FA en teléfono del dueño
       para subir los 5 reels listos en public/tiktok/. (Solicitado en Avances 4–6.)
@@ -56,8 +87,10 @@ ciclo (ver `MANDATE.md` sección 8). El loop lee esto para no empezar ciego.
 - [x] Definir primer vector de captación sin presupuesto (TikTok orgánico).
 - [x] JSON-LD SEO en fichas → DESPLEGADO en producción (ciclo 2).
 - [x] Verificar regla de envío gratis → consistente, sin bug (ciclo 2).
-- [ ] Crear 1 pieza de contenido/blog orgánico (tráfico, $0) apalancando
-     SALES_BOOKS_OPERATIONAL_KNOWLEDGE.md (ganchos CRO, $100M Leads/Offers).
+- [x] Crear 1 pieza de contenido/blog orgánico (tráfico, $0) — PUBLICADA ciclo 3
+      ("Regalos para ella 2026" + índice /blog + link footer). Siguiente pieza
+      sugerida: "Regalos para él / para el hogar" o "Regreso a clases" para
+      ampliar superficie SEO.
 - [ ] Continuar benchmarking: monitorear precios CJ vs competencia y vigilar
      plataformas alternativas cada ciclo (indefinido).
 - [ ] Detectar clientes/ventas y arrancar mensajería (WA tienda +1 408 422 3904).
@@ -66,7 +99,9 @@ ciclo (ver `MANDATE.md` sección 8). El loop lee esto para no empezar ciego.
      AUTHORIZATION_QUEUE como solicitud económica (no ejecutar sin aprobación).
 
 ## Pendientes de autorización económica
-- (ninguno — todo este ciclo es $0 / modelo cliente-paga CJ Dropshipping)
+- [AQ-001] Vercel Hobby → Pro ($20/mo): PENDIENTE / BLOQUEADA. Riesgo ToS
+  comercial detectado en benchmarking. Solicitud enviada al dueño vía Telegram.
+  No ejecutar sin aprobación.
 
 ## Notas
 - Presupuesto: CERO. Solo modelo cliente-paga (CJ Dropshipping) autorizado.
