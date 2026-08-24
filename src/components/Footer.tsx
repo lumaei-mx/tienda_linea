@@ -45,6 +45,11 @@ export function Footer() {
             <li><a href="/privacidad" className="transition hover:text-gold-light">{t("footerHelp3", lang)}</a></li>
             <li><a href="/sobre-nosotros" className="transition hover:text-gold-light">{t("footerHelp4", lang)}</a></li>
             <li><a href="/blog" className="transition hover:text-gold-light">Guías y regalos</a></li>
+            <li>
+              <a href="/afiliados" className="font-semibold text-gold-light transition hover:text-ivory">
+                💸 Conviértete en afiliado (12–22%)
+              </a>
+            </li>
           </ul>
         </div>
         <div>
