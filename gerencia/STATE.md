@@ -43,6 +43,50 @@ ciclo (ver `MANDATE.md` sección 8). El loop lee esto para no empezar ciego.
 - Resultado: SEO en producción (orgánico reforzado); proveedor confirmado;
   regla de envío validada; ningún gasto.
 
+## Último ciclo (2026-08-24 — ciclo 5)
+- Acción de MAYOR valor ejecutada (todo $0 / cliente-paga, sin gasto):
+  1. CONTENIDO ORGÁNICO ESTACIONAL (tráfico): nueva guía SEO "Regreso a clases
+     2026" publicada y verificada en producción →
+     https://www.lumaei.com/blog/regreso-a-clases-2026
+     - 7 productos del catálogo activo enlazados a /productos/[slug] (impresora
+       térmica $31.75, cargador auto 15W $49.74, luz LED sensor $14.74, barra
+       LED $35.15, proyector estrellas $43.68, dispensador jabón $53.92, rodillo
+       hielo facial $30.45). Precios VERIFICADOS EN VIVO contra /api/products de
+       producción este ciclo (NO contra products.json local, que está
+       desactualizado respecto a la tienda).
+     - JSON-LD Article presente (verificado), CTA a lead magnet (/guia/5-gadgets
+       + LUMAI10) y a /productos. FAQ de conversión (incl. pregunta sobre
+       impresora térmica escolar).
+     - Registrada en índice /blog (hub de guías) y cross-link BIDIRECCIONAL con
+       'Regalos para ella', 'Regalos para él' y 'Regalos gadgets hogar' (SEO
+       interno).
+     - Build `next build` OK (ruta prerendered static), commit `083ebbb` (rebase
+       sobre main remoto f9c4bc1), push a origin/main, despliegue Vercel READY y
+       URL verificada en vivo (200 + JSON-LD + canonical + enlace recíproco vivo
+       + PDP destino 200).
+  2. BENCHMARKING continuo (proveedores/plataformas/precios/competencia):
+     - COMPETENCIA/TENDENCIA: back-to-school 2026 es temporada peak; NRF reporta
+       ~$1,400 USD/hogar (+8% vs 2025), electrónicos y accesorios son la
+       categoría #1. La competencia (The Verge, Wired, PopSci) empuja gear de
+       $100–$1,200; nuestro ángulo cliente-paga de $14–$54 es la diferenciación
+       clara (kit escolar accesible, sin romper el presupuesto).
+     - PRECIOS (HALLAZGO DE INTEGRIDAD): los precios EN VIVO de /api/products son
+       MÁS ALTOS que products.json local y que varios blogs previos. Ej.
+       proyector de estrellas: blog 'hogar' muestra $13.62 pero la tienda cobra
+       $43.68; LED clóset blog 'hogar' $8.53 vs vivo $35.15; rodillo 'ella'/
+       'hogar' $6.72 vs vivo $30.45. La nueva guía usa precios VIVOS para no
+       romper la confianza al hacer clic. PENDIENTE: auditar/precisar precios en
+       blogs ciclo 3/4 (riesgo CRO). Ver próximas acciones.
+     - PROVEEDOR: CJ Dropshipping sigue ÓPTIMO para presupuesto $0 ($0/mes, paga
+       por unidad). Alternativas (Zendrop/Spocket/AutoDS) exigen $24–40/mo →
+       fuera de presupuesto cero. EPROLO como respaldo gratuito.
+     - PLATAFORMA: riesgo Vercel Hobby no-comercial persiste → AQ-001 sigue
+       PENDIENTE/BLOQUEADA, sin cambio.
+- Resultado: +1 URL indexable estacional ("regreso a clases 2026", alta
+  intención de búsqueda) + hub /blog con 4 guías interconectadas → más
+  superficie de tráfico orgánico (el cuello real sigue siendo TRÁFICO).
+  Ningún gasto.
+
 ## Último ciclo (2026-08-24 — ciclo 4)
 - Acción de MAYOR valor ejecutada (todo $0 / cliente-paga, sin gasto):
   1. CONTENIDO ORGÁNICO (tráfico): nueva guía SEO "Regalos para él 2026"
@@ -121,9 +165,17 @@ ciclo (ver `MANDATE.md` sección 8). El loop lee esto para no empezar ciego.
   - [x] Crear 1 pieza de contenido/blog orgánico (tráfico, $0) — PUBLICADA ciclo 3
        ("Regalos para ella 2026" + índice /blog + link footer).
   - [x] Crear 2ª pieza de contenido/blog orgánico (tráfico, $0) — PUBLICADA ciclo 4
-       ("Regalos para él 2026" + cross-link desde 'ella' + registro /blog).
-       Siguiente pieza sugerida: "Regreso a clases 2026" o "Regalos para el
-       hogar" para ampliar superficie SEO.
+        ("Regalos para él 2026" + cross-link desde 'ella' + registro /blog).
+  - [x] Crear 3ª pieza de contenido/blog orgánico estacional (tráfico, $0) —
+        PUBLICADA ciclo 5 ("Regreso a clases 2026" + registro /blog + cross-link
+        bidireccional desde las 3 guías previas). Siguiente pieza sugerida:
+        "Regalos para el hogar 2026" o "Kit de pijama/domingo" para ampliar
+        superficie SEO.
+  - [ ] AUDITAR PRECIOS en blogs ciclo 3/4 vs tienda en vivo: products.json
+        local está desactualizado y varios precios hardcodeados (proyector
+        estrellas $13.62, LED clóset $8.53, rodillo $6.72) son MENORES a los que
+        cobra la tienda en producción. Riesgo CRO (el cliente ve un precio y al
+        hacer clic ve otro). Corregir en próximo ciclo con precios vivos.
 - [ ] Continuar benchmarking: monitorear precios CJ vs competencia y vigilar
      plataformas alternativas cada ciclo (indefinido).
 - [ ] Detectar clientes/ventas y arrancar mensajería (WA tienda +1 408 422 3904).
