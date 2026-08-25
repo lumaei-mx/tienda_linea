@@ -276,6 +276,19 @@ export default async function RegalosParaEl() {
             Lee también
           </p>
           <Link
+            href="/blog/navidad-regalos-2026"
+            className="mt-2 block font-serif text-xl text-brown transition hover:text-gold-dark"
+          >
+            Regalos de Navidad 2026: presentes prácticos que se usan todo el
+            año →
+          </Link>
+          <p className="mt-1 text-sm text-brown-soft">
+            La lista completa de diciembre: para quien ama su gato, para ella,
+            para él y para la casa.
+          </p>
+        </div>
+        <div className="rounded-2xl border border-gold/15 bg-ivory p-6">
+          <Link
             href="/blog/regalos-para-ella-2026"
             className="mt-2 block font-serif text-xl text-brown transition hover:text-gold-dark"
           >

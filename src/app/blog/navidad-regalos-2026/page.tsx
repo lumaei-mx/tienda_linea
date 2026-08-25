@@ -4,11 +4,11 @@ import { guidePrice, guidePriceRange } from "@/lib/guide-prices";
 
 export const dynamic = "force-static";
 
-const SLUG = "/blog/regalos-bienestar-2026";
+const SLUG = "/blog/navidad-regalos-2026";
 const TITLE =
-  "Regalos de bienestar y autocuidado 2026: detalles para cuidarse en casa (que sí usa)";
+  "Regalos de Navidad 2026: presentes prácticos que se usan todo el año";
 const DESCRIPTION =
-  "Guía de autocuidado Lumaei: rodillo de hielo facial, parches de colágeno, dispensador de jabón sin contacto, proyector de estrellas, luces con sensor y más. Precios reales y link directo al catálogo.";
+  "Guía Lumaei de Navidad 2026: regalos para quien ama su gato, para ella, para él y para la casa —piezas que se usan en enero y no terminan en el cajón—. Precios reales y link directo.";
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://www.lumaei.com"),
@@ -41,57 +41,66 @@ type Pick = {
 const picks: Pick[] = [
   {
     slug:
+      "whale-cat-steam-brush-3-in-1-steamy-cat-brush-rechargeable-steamy-pet-brush-self",
+    name: "Cepillo de vapor 3 en 1 para gato (recargable)",
+    img: "https://cf.cjdropshipping.com/c67dc541-4084-46e6-b1e9-9ab0c3a1b627.jpg",
+    price: "$23.53 USD",
+    pitch:
+      "Para quien ama a su gato: cepilla, aplica vapor suave y se limpia solo con un clic. Quita el pelo muerto antes de que termine en el sofá —y el michi lo recibe como masaje—.",
+  },
+  {
+    slug:
       "silicone-ice-face-roller-contour-shrink-pores-remove-dark-circles-massage-skin-b",
-    name: "Rodillo de hielo facial de silicona",
+    name: "Rodillo de hielo facial de silicón",
     img: "https://cf.cjdropshipping.com/quick/product/bab01418-9540-4b61-bfc9-0b4fea3f1393.jpg",
-    price: "$30.45 USD",
+    price: "$19.71 USD",
     pitch:
-      "Masaje frío en 2 minutos para despertar la cara. Reutilizable, libre de químicos: el ritual de spa en casa que se repite todas las mañanas.",
+      "Para ella (o para ti): la cara despierta sin hinchazón después de las cenas y posadas de diciembre. Se llena con agua, se congela y dura toda la temporada de fiestas.",
   },
   {
     slug:
-      "beauty-gold-crystal-collagen-patches-for-eye-anti-aging-acne-eye-mask-korean-cos",
-    name: "Parches de colágeno dorados para contorno de ojo",
-    img: "https://cf.cjdropshipping.com/15253056/1842091534140.png",
-    price: "$26.23 USD",
+      "magnetic-bendable-car-mobile-phone-holder-wireless-charger-phone-holder-15w-car-",
+    name: "Cargador inalámbrico magnético de auto 15W",
+    img: "https://cf.cjdropshipping.com/c6dd15cd-332f-412d-b04f-3fb361d54afb_trans.jpeg",
+    price: "$43.08 USD",
     pitch:
-      "Parches coreanos de colágeno. 2-3 veces por semana, 30 min, y listo el momento de cuidarse. Pequeño lujo que no ocupa lugar.",
-  },
-  {
-    slug:
-      "non-contact-automatic-soap-dispenser-liquid-foam-machine-infrared-sensor-electri",
-    name: "Dispensador de jabón sin contacto",
-    img: "https://cf.cjdropshipping.com/947936eb-a29d-4faf-a63f-257225cb7454.jpg",
-    price: "$53.92 USD",
-    pitch:
-      "Jabón espuma sin tocar nada: recargable, higiénico para baño y cocina. Cuida el espacio y la piel sin fricción.",
+      "Para él o la persona que vive en la carretera: los viajes decembrinos con GPS puesto y el teléfono cargando, sin cables enredados en la palanca.",
   },
   {
     slug:
       "galaxy-star-projector-starry-sky-night-light-astronaut-lamp-room-decr-gift-child",
     name: "Proyector de estrellas astronauta",
     img: "https://cf.cjdropshipping.com/aed3289e-be07-4bee-be64-b7a7763a6315.jpg",
-    price: "$43.68 USD",
+    price: "$41.78 USD",
     pitch:
-      "Convierte cualquier cuarto en galaxia. Ambiente que invita a bajar la velocidad y descansar de verdad, no solo a dormir.",
-  },
-  {
-    slug:
-      "auto-led-usb-magnetic-wireless-night-light-corridors-porch-lights-pir-motion-sen",
-    name: "Luz LED magnética con sensor de movimiento",
-    img: "https://cf.cjdropshipping.com/20200703/1455264561787.jpg",
-    price: "$14.74 USD",
-    pitch:
-      "Se enciende sola al pasar. Sin cables, carga USB-C: ideal para pasillo, clóset o lectura nocturna sin buscar el interruptor.",
+      "Para la casa (y los niños): un cielo de invierno en el techo toda la nochebuena. En enero sigue siendo la luz de noche favorita —regalo que no se guarda, se usa.",
   },
   {
     slug:
       "rechargeable-led-wireless-kitchen-usb-automatic-closet-light-bar-magnetic-cabine",
-    name: "Barra de luz LED recargable para clóset y cocina",
+    name: "Barra de luz LED recargable (3 tonos)",
     img: "https://cf.cjdropshipping.com/2def7f27-94d7-4ed1-8a24-bab4502728ea.jpg",
-    price: "$35.15 USD",
+    price: "$26.81 USD",
     pitch:
-      "Magnética, 3 tonos de luz y se pega donde el foco no llega. Recargable por USB: bienestar sin cables colgando.",
+      "Para quien cocina las cenas: luz cálida donde no hay contacto, magnética y sin cables —clóset, alacena o el mostrador donde se arma la cena de Nochebuena—.",
+  },
+  {
+    slug:
+      "auto-led-usb-magnetic-wireless-night-light-corridors-porch-lights-pir-motion-sen",
+    name: "Luz LED con sensor de movimiento",
+    img: "https://cf.cjdropshipping.com/20200703/1455264561787.jpg",
+    price: "$25.61 USD",
+    pitch:
+      "Para la llegada de las visitas: se enciende sola cuando alguien pasa por entrada o pasillo. Las fiestas terminan y queda como luz práctica de toda la casa.",
+  },
+  {
+    slug:
+      "portable-mini-thermal-label-printer-home-photo-printer-student-wrong-question-pr",
+    name: "Impresora térmica portátil (fotos y etiquetas)",
+    img: "https://cf.cjdropshipping.com/853ab40a-f0a9-4ac4-9f53-9a6021788e2b.png",
+    price: "$21.63 USD",
+    pitch:
+      "Para quien guarda recuerdos: etiquetas de regalo hechas en casa esa tarde, y después fotos del intercambio impresas al momento. Sin tinta, sin correr a la papelería.",
   },
 ];
 
@@ -110,18 +119,23 @@ const articleLd = {
     "@type": "WebPage",
     "@id": `https://www.lumaei.com${SLUG}`,
   },
-  datePublished: "2026-08-24",
-  dateModified: "2026-08-24",
+  datePublished: "2026-08-25",
+  dateModified: "2026-08-25",
 };
 
-export default async function RegalosBienestar() {
+export default function NavidadRegalos() {
+  return <GuideBody />;
+}
+
+async function GuideBody() {
   const resolved = await Promise.all(
     picks.map(async (p) => ({ ...p, price: await guidePrice(p.slug, p.price) }))
   );
   const range = await guidePriceRange(picks.map((p) => p.slug));
   const priceRangeText = range
     ? `Van de ${range.min} a ${range.max}`
-    : "Van de $14.74 a $53.92 USD";
+    : "Van de $19.71 a $43.08 USD";
+
   return (
     <article className="mx-auto max-w-3xl px-4 py-12">
       <script
@@ -136,26 +150,25 @@ export default async function RegalosBienestar() {
         {TITLE}
       </h1>
       <p className="mt-4 text-lg leading-relaxed text-brown-soft">
-        Cuidarse no es gastar en cremas caras: es tener a la mano lo que usas cada
-        día. Esta guía de bienestar 2026 reúne detalles pequeños de autocuidado —
-        frío facial, colágeno, luz, ambiente— que de verdad entran en la rutina.
-        Nada de aparatos que terminan en el cajón: cada pieza nace de un “me
-        haría bien…” real.
+        El mejor regalo de Navidad no es el que más brilla bajo el árbol: es el
+        que en marzo sigue trabajando. Estas 7 piezas cubren a toda la lista —
+        la persona con gato, ella, él, la casa y quien colecciona recuerdos —
+        con precios accesibles y ninguna decoración desechable.
       </p>
 
       <h2 className="mt-10 font-serif text-2xl text-brown">
-        Por qué el autocuidado se sostiene con piezas pequeñas
+        La regla: regalar uso, no decoración
       </h2>
       <p className="mt-3 leading-relaxed text-brown-soft">
-        El bienestar es un ritual, no un producto. Un rodillo que despierta la
-        cara en dos minutos, una luz que se enciende sola al pasar, un proyector
-        que convierte la habitación en galaxia: el cerebro premia la sensación de
-        “me cuidé”, no la hoja de especificaciones. Por eso cada pieza de abajo
-        resuelve una molestia repetida y por eso se usan —no se guardan—.
+        Cada diciembre termina igual: adornos guardados en cajas y gadgets que
+        nadie volvió a encender. Esta guía va al revés. Todas las piezas resuelven
+        algo de todos los días —el pelo del gato en el sofá, la cara hinchada al
+        despertar, el pasillo a oscuras, el teléfono sin batería en la carretera —
+        así que el regalo se agradece cada semana del año, no solo la nochebuena.
       </p>
 
       <h2 className="mt-10 font-serif text-2xl text-brown">
-        Nuestros 6 favoritos para cuidarse en casa
+        Los 7 regalos de Navidad 2026
       </h2>
 
       <div className="mt-6 space-y-6">
@@ -193,32 +206,34 @@ export default async function RegalosBienestar() {
       </div>
 
       <h2 className="mt-10 font-serif text-2xl text-brown">
-        Cómo armar el ritual sin pasarte
+        Cómo repartir la lista sin romper el presupuesto
       </h2>
       <ul className="mt-3 list-disc space-y-2 pl-5 leading-relaxed text-brown-soft">
         <li>
+          <strong className="text-brown">Un destinatario, una pieza.</strong>{" "}
+          Gato-lover: cepillo de vapor. Ella: rodillo de hielo. Él: cargador de
+          auto. La casa: proyector o barra LED. Quien documenta todo:
+          impresora térmica.
+        </li>
+        <li>
           <strong className="text-brown">Agrupa 2 piezas.</strong> El envío es
-          gratis desde 2 piezas o desde $49 USD: un par de detalles pequeños sale
-          mejor que uno solo y ya lleva el detalle de bienestar resuelto.
+          gratis desde 2 piezas o desde $49 USD: rodillo + parches, o barra LED +
+          luz con sensor, ya viajan sin costo extra.
         </li>
         <li>
-          <strong className="text-brown">Prioriza lo recargable.</strong> Un
-          cable menos es un cajón menos lleno, y un ritual que dura.
-        </li>
-        <li>
-          <strong className="text-brown">Piensa en el momento.</strong> Los
-          mejores regalos de bienestar son los que se repiten: el cuidado facial,
-          la luz de noche, el ambiente del cuarto.
+          <strong className="text-brown">Regala temprano.</strong> Entre antes
+          ordenes, más margen hay para que todo llegue antes del 24 —y tú
+          disfrutas las fiestas sin correos de última hora.
         </li>
       </ul>
 
       <div className="mt-10 rounded-2xl bg-cream-dark p-6 text-center">
         <p className="font-serif text-xl text-brown">
-          ¿Listo para cuidarte (o consentirla)?
+          ¿Ya tienes tu lista de Navidad?
         </p>
         <p className="mt-2 text-sm text-brown-soft">
-          Envío gratis desde 2 piezas o $49 USD · 90 días de garantía · paga el
-          cliente, nosotros solo curamos.
+          Envío gratis desde 2 piezas o $49 USD · 90 días de garantía · envíos
+          a México y Estados Unidos.
         </p>
         <Link
           href="/guia/5-gadgets"
@@ -233,21 +248,41 @@ export default async function RegalosBienestar() {
         <div className="mt-4 space-y-4">
           <details className="rounded-xl border border-gold/15 bg-ivory p-4">
             <summary className="cursor-pointer font-medium text-brown">
-              ¿Son buenos regalos de bienestar a este precio?
+              ¿Cuánto cuesta un buen regalo de Navidad aquí?
             </summary>
             <p className="mt-2 text-sm leading-relaxed text-brown-soft">
-              Sí. {priceRangeText} porque son piezas con propósito diario, no
-              aparatos caros. Agrupados, lucen como un detalle pensado y no como
-              una compra de impulso.
+              {priceRangeText}. Un solo detalle bien elegido —con envío gratis
+              al juntar 2 piezas o $49 USD— resuelve a alguien de tu lista.
             </p>
           </details>
           <details className="rounded-xl border border-gold/15 bg-ivory p-4">
             <summary className="cursor-pointer font-medium text-brown">
-              ¿Hacen envíos a México y Estados Unidos?
+              ¿Llegan a tiempo para el 24 de diciembre?
             </summary>
             <p className="mt-2 text-sm leading-relaxed text-brown-soft">
-              Sí. Lumaei envía a ambos países con fulfillment automatizado; el
-              envío es gratis desde 2 piezas o desde $49 USD.
+              Enviamos a México y Estados Unidos con fulfillment automatizado y
+              seguimiento. Cuanto antes ordenes, más margen de entrega tienes
+              antes de Nochebuena: empieza tu compra en octubre o noviembre.
+            </p>
+          </details>
+          <details className="rounded-xl border border-gold/15 bg-ivory p-4">
+            <summary className="cursor-pointer font-medium text-brown">
+              ¿Tienen descuentos navideños?
+            </summary>
+            <p className="mt-2 text-sm leading-relaxed text-brown-soft">
+              Nuestros precios son estables todo el año —sin inflar para luego
+              «descontar»— y el código LUMAI10 te da 10% desde hoy, sin
+              esperar a diciembre.
+            </p>
+          </details>
+          <details className="rounded-xl border border-gold/15 bg-ivory p-4">
+            <summary className="cursor-pointer font-medium text-brown">
+              ¿Qué le regalo a alguien que ya tiene de todo?
+            </summary>
+            <p className="mt-2 text-sm leading-relaxed text-brown-soft">
+              Algo que use a diario sin pensarlo: la luz con sensor del pasillo,
+              la impresora de fotos instantáneas o el cepillo para su gato.
+              Los regalos útiles son los que nunca se olvidan.
             </p>
           </details>
           <details className="rounded-xl border border-gold/15 bg-ivory p-4">
@@ -255,7 +290,8 @@ export default async function RegalosBienestar() {
               ¿Tienen garantía?
             </summary>
             <p className="mt-2 text-sm leading-relaxed text-brown-soft">
-              Sí, 90 días en las piezas seleccionadas. Escríbenos y te ayudamos.
+              Sí, 90 días en las piezas seleccionadas. Escríbenos y te
+              ayudamos.
             </p>
           </details>
         </div>
@@ -266,19 +302,6 @@ export default async function RegalosBienestar() {
           <p className="text-xs font-semibold uppercase tracking-[0.2em] text-gold-dark">
             Lee también
           </p>
-          <Link
-            href="/blog/navidad-regalos-2026"
-            className="mt-2 block font-serif text-xl text-brown transition hover:text-gold-dark"
-          >
-            Regalos de Navidad 2026: presentes prácticos que se usan todo el
-            año →
-          </Link>
-          <p className="mt-1 text-sm text-brown-soft">
-            La lista completa de diciembre: para quien ama su gato, para ella,
-            para él y para la casa.
-          </p>
-        </div>
-        <div className="rounded-2xl border border-gold/15 bg-ivory p-6">
           <Link
             href="/blog/regalos-para-ella-2026"
             className="mt-2 block font-serif text-xl text-brown transition hover:text-gold-dark"
@@ -291,38 +314,26 @@ export default async function RegalosBienestar() {
         </div>
         <div className="rounded-2xl border border-gold/15 bg-ivory p-6">
           <Link
+            href="/blog/regalos-para-el-2026"
+            className="block font-serif text-xl text-brown transition hover:text-gold-dark"
+          >
+            Regalos para él 2026: gadgets útiles que sí va a usar →
+          </Link>
+          <p className="mt-1 text-sm text-brown-soft">
+            Cargador de auto, impresora térmica, picadora y más para novio,
+            papá o amigo.
+          </p>
+        </div>
+        <div className="rounded-2xl border border-gold/15 bg-ivory p-6">
+          <Link
             href="/blog/regalos-gadgets-hogar"
             className="block font-serif text-xl text-brown transition hover:text-gold-dark"
           >
             Regalos y gadgets prácticos para el hogar en 2026 →
           </Link>
           <p className="mt-1 text-sm text-brown-soft">
-            Organización, luces y cargadores que resuelven problemas reales en
-            casa.
-          </p>
-        </div>
-        <div className="rounded-2xl border border-gold/15 bg-ivory p-6">
-          <Link
-            href="/blog/regreso-a-clases-2026"
-            className="mt-2 block font-serif text-xl text-brown transition hover:text-gold-dark"
-          >
-            Regreso a clases 2026: gadgets para estudiantes que sí usa →
-          </Link>
-          <p className="mt-1 text-sm text-brown-soft">
-            Impresora térmica, cargador de auto, luces LED y más para el
-            semestre, sin romper el presupuesto.
-          </p>
-        </div>
-        <div className="rounded-2xl border border-gold/15 bg-ivory p-6">
-          <Link
-            href="/blog/ofrenda-moderna-dia-de-muertos-2026"
-            className="block font-serif text-xl text-brown transition hover:text-gold-dark"
-          >
-            Ofrenda moderna 2026: luz y tecnología para tu altar →
-          </Link>
-          <p className="mt-1 text-sm text-brown-soft">
-            Para la temporada que viene: fotos del altar impresas en casa y
-            luz segura para cada nivel de la ofrenda.
+            Luces, organizadores y cargadores que resuelven problemas reales
+            todo el año.
           </p>
         </div>
       </section>

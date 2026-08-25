@@ -5,6 +5,13 @@ export const dynamic = "force-static";
 
 const POSTS = [
   {
+    slug: "/blog/navidad-regalos-2026",
+    title:
+      "Regalos de Navidad 2026: presentes prácticos que se usan todo el año",
+    description:
+      "Para quien ama su gato, para ella, para él y para la casa: 7 piezas que se agradecen en marzo, no solo en Nochebuena. Precios reales y link directo al catálogo.",
+  },
+  {
     slug: "/blog/ofrenda-moderna-dia-de-muertos-2026",
     title:
       "Ofrenda moderna 2026: luz y tecnología para tu altar de Día de Muertos",

@@ -262,8 +262,18 @@ export default async function GuiaGadgetsHogar() {
           Lee también
         </p>
         <Link
-          href="/blog/regalos-para-ella-2026"
+          href="/blog/navidad-regalos-2026"
           className="mt-2 block font-serif text-xl text-brown transition hover:text-gold-dark"
+        >
+          Regalos de Navidad 2026: presentes prácticos que se usan todo el año →
+        </Link>
+        <p className="mt-1 text-sm text-brown-soft">
+          La lista completa de diciembre: para quien ama su gato, para ella,
+          para él y para la casa.
+        </p>
+        <Link
+          href="/blog/regalos-para-ella-2026"
+          className="mt-4 block font-serif text-xl text-brown transition hover:text-gold-dark"
         >
           Regalos para ella 2026: detalles bonitos que sí va a usar →
         </Link>
