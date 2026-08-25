@@ -17,6 +17,92 @@ ciclo (ver `MANDATE.md` sección 8). El loop lee esto para no empezar ciego.
 - Afiliados: atribución 15% ganancia neta en producción (?ref / ?affiliateRef).
 - Lead magnet: /guia/5-gadgets + código LUMAI10 (10% MX/US, sin mínimo).
      - 5 reels listos en public/tiktok/ para publicar (BLOQUEADOS, ver gates).
+- Blog SEO: hub /blog + 7 guías interconectadas (ofrenda-ddm / ella / él /
+  hogar / regreso-a-clases / bienestar / halloween), todas con precios vivos
+  vía `guide-prices.ts` y TODAS listadas en sitemap.xml.
+
+## Último ciclo (2026-08-25 — ciclo 9)
+- Acción de MAYOR valor ejecutada (todo $0 / cliente-paga, sin gasto):
+  1. PUBLICACIÓN GUÍA DÍA DE MUERTOS 2026 (siguiente paso recomendado en
+     ciclo 8): el draft `src/app/blog/ofrenda-moderna-dia-de-muertos-2026/`
+     existía SIN commitear ni integrar (huérfano). Se completó e integró:
+     sitemap.ts + índice /blog + cross-links RECÍPROCOS desde halloween,
+     hogar y bienestar. Precios VIVOS verificados contra /api/products de
+     producción ANTES del build ($31.75 impresora, $43.68 proyector,
+     $35.15 barra LED, $14.74 sensor, $44.54 picadora, $33.23 especias —
+     los 6 slugs existen y coinciden). JSON-LD Article + FAQ rango dinámico
+     + CTA lead magnet/LUMAI10. Ángulo MX: "ofrenda moderna" (fotos del
+     altar impresas en casa con la térmica, luz sin flama junto al papel
+     picado, cocina de temporada) + FAQ Buen Fin (13–17 nov, después del
+     DDM → urgencia honesta).
+  2. FIX DE PRODUCCIÓN ENCONTRADO EN EL CAMINO: las FAQs dinámicas de TODAS
+     las guías renderizaban "Van de $X USD a $Y USD USD" (doble USD,
+     visible en producción en 7 URLs indexables). Corregido de raíz en los
+     6 archivos que construyen el rango; verificado en build y en vivo.
+  3. FIX TELEGRAM: `src/lib/notify-telegram.ts` (cambio pendiente sin
+     commitear de sesión previa) ahora lee ~/.config/opencode/telegram.json
+     o env TELEGRAM_* y envía texto plano. Commiteado.
+  4. BUILD/SEGURIDAD: lint OK en archivos tocados, `next build` OK (ruta
+     prerendered static), 3 commits (`f102149` fix doble USD, `6372961`
+     feat ofrenda, `2589119` fix telegram), push a origin/main, despliegue
+     Vercel VERIFICADO EN VIVO: guía 200 + JSON-LD + 6 precios vivos +
+     FAQ limpia + sitemap la lista + recíproco desde halloween vivo +
+     índice /blog la lista + PDP destino 200.
+- Benchmarking continuo (proveedores/plataformas/precios/competencia):
+  - COMPETENCIA (Amazon MX, "impresora térmica portátil fotos"): resultados
+    dominados por Epson EcoTank multifunción $3,990–$5,829 MXN (~$220–320
+    USD), 7–10x nuestro precio ($31.75 USD ≈ $585 MXN). El nicho portátil
+    de fotos está desatendido en MX → ángulo diferenciado y precio muy
+    accesible para el mercado de la guía.
+  - PROVEEDORES: CJ Dropshipping operativo (HTTP 200, 0.44s); EPROLO activo
+    (301→www, respaldo gratuito intacto). Zendrop/Spocket/AutoDS siguen
+    fuera de presupuesto ($24–40/mo).
+  - PLATAFORMA: riesgo Vercel Hobby no-comercial persiste → AQ-001 sigue
+    PENDIENTE/BLOQUEADA (no ejecutar sin aprobación del dueño).
+- Resultado: +1 URL indexable estacional de ALTA intención cultural (Día de
+  Muertos, ~10 semanas de lead time SEO) + fix de copy visible en 7 URLs +
+  fix de notificaciones Telegram. Ningún gasto.
+- PRÓXIMO PASO RECOMENDADO: landing/guía Navidad 2026 (lead time correcto);
+  disparar re-precio/sync CJ; seguir empujando gates del dueño (reels +
+  GMAIL vars en Vercel, sin costo).
+
+## Último ciclo (2026-08-24 — ciclo 8)
+- Acción de MAYOR valor ejecutada (todo $0 / cliente-paga, sin gasto):
+  1. VERIFICACIÓN del despliegue del ciclo 7: guía bienestar 200 en vivo +
+     JSON-LD + precios resueltos ($14.74–$53.92). Repo sincronizado con
+     origin/main (había 3 commits de otros ciclos GM C59–C61; rebase OK).
+  2. GUÍA ESTACIONAL HALLOWEEN 2026 (tráfico): nueva URL indexable
+     https://www.lumaei.com/blog/halloween-ambiente-2026 — ángulo "ambiente con
+     luz que sobrevive a la fiesta" (proyector galaxia, barra LED, sensor
+     movimiento, jabón sin contacto) + kit recuperación 1-nov (rodillo hielo,
+     parches colágeno). 6 picks enlazados a PDPs, precios VIVOS vía
+     guide-prices.ts, JSON-LD Article, FAQ rango dinámico, CTA lead magnet +
+     LUMAI10. Registrada en índice /blog y cross-link BIDIRECCIONAL desde
+     'hogar'. Publicada con lead time (~9 semanas antes del 31-oct; búsqueda
+     US/MX arranca sep–oct).
+  3. FIX SEO ESTRUCTURAL: sitemap.xml solo listaba 1 guía de 5 → ahora lista
+     las 6 (halloween incluida). Verificado en vivo.
+  4. BUILD/SEGURIDAD: rebase sobre remoto antes de tocar, `next build` OK
+     (ruta prerendered static), lint 0 errores en archivos tocados, commit
+     `55692cd`, push a origin/main, despliegue Vercel VERIFICADO EN VIVO
+     (guía 200 + JSON-LD + precios vivos $14.74–$53.92 + cross-link recíproco
+     vivo + PDP destino 200 + sitemap completo).
+- Benchmarking continuo (proveedores/plataformas/precios/competencia):
+  - COMPETENCIA (spot-check Amazon US, "halloween projector lights"): banda
+    $36.99–$49.99 para proyectores dedicados de Halloween. Nuestro proyector
+    $43.68 cae en la banda Y el ángulo "sirve todo el año" diferencia vs
+    decoración desechable. Posición de precio sana.
+  - PROVEEDORES: CJ Dropshipping operativo y ÓPTIMO a $0/mes; EPROLO sitio
+    activo como respaldo gratuito. Zendrop/Spocket/AutoDS siguen fuera de
+    presupuesto ($24–40/mo).
+  - PLATAFORMA: riesgo Vercel Hobby no-comercial persiste → AQ-001 sigue
+    PENDIENTE/BLOQUEADA (no ejecutar sin aprobación del dueño).
+- Resultado: +1 URL indexable estacional de alta intención (Halloween) con
+  lead time SEO correcto + fix estructural de sitemap (6/6 guías indexables) +
+  despliegue ciclo 7 verificado. Ningún gasto.
+- PRÓXIMO PASO RECOMENDADO: guía "Día de Muertos / Buen Fin" (nov, MX) o
+  preparar landing Navidad 2026; disparar cron de re-precio/sync; seguir
+  empujando gates del dueño (reels + GMAIL vars en Vercel, sin costo).
 
 ## Último ciclo (2026-08-24 — ciclo 7)
 - Acción de MAYOR valor ejecutada (todo $0 / cliente-paga, sin gasto):
