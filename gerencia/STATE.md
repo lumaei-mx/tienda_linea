@@ -63,8 +63,22 @@ ciclo (ver `MANDATE.md` sección 8). El loop lee esto para no empezar ciego.
   Muertos, ~10 semanas de lead time SEO) + fix de copy visible en 7 URLs +
   fix de notificaciones Telegram. Ningún gasto.
 - PRÓXIMO PASO RECOMENDADO: landing/guía Navidad 2026 (lead time correcto);
-  disparar re-precio/sync CJ; seguir empujando gates del dueño (reels +
-  GMAIL vars en Vercel, sin costo).
+  seguir empujando gates del dueño (reels + GMAIL vars en Vercel, sin costo).
+- ADDENDUM cierre de ciclo (mismo día): RE-PRECIO/SYNC EJECUTADO MANUALMENTE.
+  El scheduler externo (cron-job.org) NO está disparando: logs Vercel muestran
+  cero hits exitosos a /api/cron/* en la retención disponible (y nada en la
+  última hora pese a job horario). Los secrets locales (.env.local) tienen
+  DRIFT vs producción (CRON_SECRET y ADMIN_SECRET → 401), por lo que se
+  ejecutó el mismo código vía runner local contra Redis de producción:
+  sync-cj 11/11 actualizados (0 errores) + reprice 11/11 (0 stopped, piso
+  respetado, neto US ≥42.9% en todo el catálogo). Precios vivos cambiaron
+  (mayoría −20–45% al markup 2.6×; dispensador $56.55, especias $59.33 al alza
+  por flete US $20). CONSECUENCIA: las guías del blog quedaron desalineadas
+  → ESTE push dispara rebuild para re-hornear precios vía guide-prices.ts.
+  PENDIENTE DUEÑO/PROX CICLO: (a) revisar jobs en cron-job.org (pausados o
+  apuntando mal) y rotar CRON_SECRET en Vercel + .env.local sincronizados;
+  (b) considerar webhook/redeploy automático tras reprice para que blog y
+  tienda nunca diverjan.
 
 ## Último ciclo (2026-08-24 — ciclo 8)
 - Acción de MAYOR valor ejecutada (todo $0 / cliente-paga, sin gasto):
