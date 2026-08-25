@@ -5,6 +5,13 @@ export const dynamic = "force-static";
 
 const POSTS = [
   {
+    slug: "/blog/ofrenda-moderna-dia-de-muertos-2026",
+    title:
+      "Ofrenda moderna 2026: luz y tecnología para tu altar de Día de Muertos",
+    description:
+      "Imprime las fotos del altar en casa, ilumina cada nivel sin flama cerca del papel picado y resuelve la cocina de temporada. Precios reales y link directo al catálogo.",
+  },
+  {
     slug: "/blog/halloween-ambiente-2026",
     title:
       "Halloween 2026: iluminación y ambiente para tu casa sin gastar de más",

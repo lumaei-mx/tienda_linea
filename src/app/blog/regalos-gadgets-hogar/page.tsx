@@ -282,6 +282,16 @@ export default async function GuiaGadgetsHogar() {
           para todo el año—.
         </p>
         <Link
+          href="/blog/ofrenda-moderna-dia-de-muertos-2026"
+          className="mt-4 block font-serif text-xl text-brown transition hover:text-gold-dark"
+        >
+          Ofrenda moderna 2026: luz y tecnología para tu altar →
+        </Link>
+        <p className="mt-1 text-sm text-brown-soft">
+          Las mismas luces, ahora para el Día de Muertos: fotos impresas y
+          altar seguro.
+        </p>
+        <Link
           href="/blog/regreso-a-clases-2026"
           className="mt-4 block font-serif text-xl text-brown transition hover:text-gold-dark"
         >

@@ -21,6 +21,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     { url: `${SITE}/blog`, changeFrequency: "weekly", priority: 0.6 },
     // Guías del blog (todas las rutas estáticas publicadas)
     ...[
+      "/blog/ofrenda-moderna-dia-de-muertos-2026",
       "/blog/halloween-ambiente-2026",
       "/blog/regalos-para-ella-2026",
       "/blog/regalos-para-el-2026",
