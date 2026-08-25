@@ -15,3 +15,8 @@ export async function POST(req: Request) {
     return NextResponse.json({ ok: false, error: msg }, { status: 500 });
   }
 }
+
+// Vercel Cron dispara con GET; delega al mismo handler protegido.
+export async function GET(req: Request) {
+  return POST(req);
+}
