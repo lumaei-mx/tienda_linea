@@ -120,7 +120,7 @@ export default async function RegalosParaElla() {
   );
   const range = await guidePriceRange(picks.map((p) => p.slug));
   const priceRangeText = range
-    ? `Van de ${range.min} a ${range.max} USD`
+    ? `Van de ${range.min} a ${range.max}`
     : "Van de $14.74 a $53.92 USD";
   return (
     <article className="mx-auto max-w-3xl px-4 py-12">

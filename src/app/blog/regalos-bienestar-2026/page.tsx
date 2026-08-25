@@ -120,7 +120,7 @@ export default async function RegalosBienestar() {
   );
   const range = await guidePriceRange(picks.map((p) => p.slug));
   const priceRangeText = range
-    ? `Van de ${range.min} a ${range.max} USD`
+    ? `Van de ${range.min} a ${range.max}`
     : "Van de $14.74 a $53.92 USD";
   return (
     <article className="mx-auto max-w-3xl px-4 py-12">
@@ -298,6 +298,18 @@ export default async function RegalosBienestar() {
           <p className="mt-1 text-sm text-brown-soft">
             Impresora térmica, cargador de auto, luces LED y más para el
             semestre, sin romper el presupuesto.
+          </p>
+        </div>
+        <div className="rounded-2xl border border-gold/15 bg-ivory p-6">
+          <Link
+            href="/blog/ofrenda-moderna-dia-de-muertos-2026"
+            className="block font-serif text-xl text-brown transition hover:text-gold-dark"
+          >
+            Ofrenda moderna 2026: luz y tecnología para tu altar →
+          </Link>
+          <p className="mt-1 text-sm text-brown-soft">
+            Para la temporada que viene: fotos del altar impresas en casa y
+            luz segura para cada nivel de la ofrenda.
           </p>
         </div>
       </section>

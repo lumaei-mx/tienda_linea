@@ -126,7 +126,7 @@ async function GuideBody() {
   );
   const range = await guidePriceRange(picks.map((p) => p.slug));
   const priceRangeText = range
-    ? `Van de ${range.min} a ${range.max} USD`
+    ? `Van de ${range.min} a ${range.max}`
     : "Van de $14.74 a $53.92 USD";
 
   return (
@@ -317,6 +317,18 @@ async function GuideBody() {
           </Link>
           <p className="mt-1 text-sm text-brown-soft">
             Belleza, ambiente y comodidad para novia, amiga o mamá.
+          </p>
+        </div>
+        <div className="rounded-2xl border border-gold/15 bg-ivory p-6">
+          <Link
+            href="/blog/ofrenda-moderna-dia-de-muertos-2026"
+            className="block font-serif text-xl text-brown transition hover:text-gold-dark"
+          >
+            Ofrenda moderna 2026: luz y tecnología para tu altar →
+          </Link>
+          <p className="mt-1 text-sm text-brown-soft">
+            Al día siguiente de la fiesta es Día de Muertos: las mismas luces,
+            ahora para el altar (fotos impresas en casa incluidas).
           </p>
         </div>
       </section>
