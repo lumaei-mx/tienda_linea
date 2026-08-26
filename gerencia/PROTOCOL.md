@@ -32,6 +32,14 @@ Operarios disponibles por iniciativa propia, sin pedir permiso al dueño:
 - **hermes** (CLI v0.20.5, subagente global `~/.config/opencode/agent/hermes.md`):
   misiones autónomas largas (benchmarks, investigación multi-fuente, trabajos de
   minutos-horas). One-shot `hermes chat -q "misión"` o tmux interactivo.
+- **openhands / Agent Canvas** (CLI `agent-canvas` v1.15.0): segundo banco de
+  agentes autónomos (CodeActAgent + subagentes bash-runner, code-explorer,
+  general-purpose, web-researcher; LLM ollama/gpt-oss:120b-cloud del dueño).
+  Lanzar con `agent-canvas` en background → UI http://127.0.0.1:8000, API
+  agent-server http://127.0.0.1:18000 (`/health`, `/docs`), automation :18001.
+  Log: ~/.config/opencode/logs/agent-canvas.log. Config: ~/.openhands/.
+  Usar para exploración de código paralela e investigación web mientras hermes
+  corre otra misión; validar artefacto entregado antes de dar por cerrada.
 - **codex** (CLI homebrew): tareas de código bien acotadas (refactors, scripts,
   tests) cuando conviene un segundo ejecutor independiente.
 - **opencode run** (worker interno): pasos técnicos puntuales dentro del repo.
