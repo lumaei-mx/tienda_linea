@@ -21,6 +21,31 @@ ciclo (ver `MANDATE.md` sección 8). El loop lee esto para no empezar ciego.
   hogar / regreso-a-clases / bienestar / halloween), todas con precios vivos
   vía `guide-prices.ts` y TODAS listadas en sitemap.xml.
 
+## Último ciclo (2026-08-26 — ciclo 10, en curso)
+- Disparador del dueño: "auto". ANTES de ejecutar pricing, orden directa: el
+  repo era un desmadre → REORGANIZACIÓN EJECUTADA y commiteada (`6952eb8`):
+  - Raíz limpia: solo configs + dirs. `biblioteca/` = corpus de libros
+    (`corpus/`), capturas de Internet Archive (`capturas/`), páginas
+    (`paginas/`), SALES_BOOKS_OPERATIONAL_KNOWLEDGE.md + knowledge-base +
+    LECTURA_LOG. `gerencia/evidencia/` = audit-*.png, evidencia-*.png,
+    analisis_visual_lumaei.json, checkout-fx-conversion.png, cj-wallet.png.
+    `gerencia/marca/` = logo + perfil TikTok. seed-order.mjs → scripts/.
+    IMPORTANTE.md (mandato) ahora versionado en git.
+  - PURGA: .playwright-mcp/ (476 logs de consola + zip de Chrome, regenerables)
+    eliminada e ignorada en .gitignore. navin_mensaje.aiff →
+    ~/.config/opencode/sounds/.
+  - BANCO DE DELEGACIÓN formalizado en PROTOCOL.md: hermes (misiones largas),
+    codex (código acotado), opencode run (worker interno) + subagentes de
+    sesión. Regla: el gerente orquesta y valida artefactos; no ejecuta solo lo
+    que puede delegar. openhands NO está instalado; se usa "lo que venga".
+- PENDIENTE DE DECISIÓN DEL DUEÑO (interrumpió con la reorganización): ciclo 10
+  pricing tiene DOS caminos sobre la mesa — (A) aplicar manualPriceUsd
+  proyector $34.99 / dispensador $39.99 según plan del ciclo 9, o (D) NO tocar
+  precio y reordenar guías hacia SKUs en banda (soporte auto, impresora). El
+  análisis favorece D por señal inmedible con tráfico ~nulo y piso fino del
+  dispensador ($4.57). Mapeo técnico completo listo (pisos $26.17/$35.42,
+  runner local TCP→Redis, hook de rebuild manual requerido).
+
 ## Último ciclo (2026-08-25 — ciclo 9)
 - Acción de MAYOR valor ejecutada (todo $0 / cliente-paga, sin gasto):
   1. PUBLICACIÓN GUÍA DÍA DE MUERTOS 2026 (siguiente paso recomendado en
