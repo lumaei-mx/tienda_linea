@@ -1,0 +1,134 @@
+{
+  "analisis_visual": {
+    "nombre_marca": {
+      "significado_visual": "LUMAEI = LUM (luz/luminosidad) + AEI (sufijo que evoca elegancia, refinamiento). Visualmente, el nombre sugiere: brillo, luminosidad, tecnología de luz aplicada a la belleza. La 'L' inicial funciona como un ancla visual fuerte — es una letra vertical que transmite estabilidad y sofisticación.",
+      "correlacion_semantica": "La correlación LUZ + BELLEZA es extraordinariamente fuerte en el nicho de dispositivos LED/terapia de luz. Sin embargo, LUMAEI NO la está explotando. El nombre contiene 'lum' (luz) pero la marca no comunica visualmente esa conexión. Es una oportunidad desperdiciada — el nombre ES el producto (dispositivos de luz para belleza) pero la ejecución visual es genérica.",
+      "evaluacion": "ALTA POTENCIA, BAJA EJECUCIÓN"
+    },
+    "dominio": {
+      "problemas": [
+        "lumaeicom.com: La terminación '.com.com' es redundancy visual y cognitiva — el usuario lee 'lumaei' + 'com' + 'com', generando fricción记忆",
+        "El dominio actual no es memorable ni limpio — compite mal con marcas como Lumnae.com, Dermalumae.com, LaLei.com.au",
+        "Ambigüedad de mercado: lumaeicom.com vende belleza, lumaei.com vende gadgets — el usuario no sabe qué es Lumaei",
+        "El dominio no refuerza la identidad de marca — es funcional, no evocador"
+      ],
+      "alternativas": [
+        "lumaei.com (limpiar la marca consolidando en UN solo dominio)",
+        "lumaei.co (moderno, minimalista)",
+        "lumaei.us / lumaei.mx (si se quiere enfocar por mercado)",
+        "getlumaei.com (acción + marca)",
+        "lumaeibeauty.com (explícito pero funcional)"
+      ],
+      "recomendacion": "Consolidar TODO en lumaei.com y eliminar lumaeicom.com. El dominio limpio es más fuerte que cualquier variación."
+    }
+  },
+  "elementos_confianza": [
+    {
+      "elemento": "FOTOGRAFÍA DE PRODUCTO",
+      "problema_actual": "Las imágenes de lumaeicom.com son genéricas de stock (beauty-minimal-3.jpg, beauty-minimal-4.jpg). Las de lumaei.com son URLs directas de CJ Dropshipping (oss-cf.cjdropshipping.com). Esto ES la definición de 'dropshipping genérico'.",
+      "solucion": "Fotografía propia o editorizada con consistencia de color, fondo y estilo. Fondo blanco neutro o lifestyle contextualizado. NUNCA URLs de proveedor visible."
+    },
+    {
+      "elemento": "CERTIFICACIONES Y PRUEBA",
+      "problema_actual": "No hay menciones de FDA, CE, certificaciones de seguridad. Las marcascompetidoras (Lumnae, LaLei, Elvorie) SÍ las muestran prominentemente.",
+      "solucion": "Badges de certificación,FDA-cleared, clinical studies, before/after results."
+    },
+    {
+      "elemento": "TESTIMONIOS Y PRUEBA SOCIAL",
+      "problema_actual": "No hay reviews, testimonios, ni user-generated content visible.",
+      "solucion": "Sección de resultados con fotos reales, ratings prominentes, UGC en Instagram/TikTok."
+    },
+    {
+      "elemento": "POLÍTICAS CLARAS",
+      "problema_actual": "Las políticas existen pero son genéricas de Shopify ('Privacy policy', 'Terms of service'). No comunican compromiso.",
+      "solucion": "Garantía extendida, devoluciones fáciles, soporte en ambos idiomas visible."
+    },
+    {
+      "elemento": "IDENTIDAD VISUAL CONSISTENTE",
+      "problema_actual": "El logo en lumaeicom.com dice 'ESEN' en el header — esto es inconsistencia de marca MÁXIMA. La marca se llama Lumaei pero el logo dice ESEN.",
+      "solucion": "Logo coherente con el nombre de marca. Consistencia en todos los puntos de contacto."
+    }
+  ],
+  "diferenciacion_visual": [
+    {
+      "estrategia": "LABORATORIO DE LUZ",
+      "descripcion": "Posicionar Lumaei como un 'laboratorio de luz para la piel' — no una tienda genérica. Visualmente: paleta de negros profundos con acentos de luz (dorados, rosas, violetas) que evocan las longitudes de onda LED. Los productos SON luz aplicada, así que la marca DEBE verse como luz.",
+      "referencia": "Estética similar a Dyson Beauty pero más accesible. Tecnología visible, no oculta."
+    },
+    {
+      "estrategia": "BEFORE/AFTER COMO HERO",
+      "descripcion": "En dispositivos de belleza, los resultados VISUALES son el producto más fuerte. Hero section con transformations reales, no fotos stock de mujeres sonrientes. La prueba visual vende más que cualquier copy.",
+      "referencia": "Elvorie.com usa resultados clínicos como prueba. Haumea muestra 'The Results' como sección principal."
+    },
+    {
+      "estrategia": "CIENCIA VISIBLE",
+      "descripcion": "Mostrar la tecnología: longitudes de onda, espectros LED, estudios clínicos. Los dispositivos de belleza premium se ven como 'instrumentos médicos elegantes', no como 'gadgets'.",
+      "referencia": "Lumnae dice 'MEDICAL-GRADE RED LIGHT THERAPY'. LaLei muestra 'FDA-Cleared' prominentemente."
+    },
+    {
+      "estrategia": "EXPERIENCIA SENSORIAL",
+      "descripcion": "El copy actual de lumaeicom.com ('A sensuous journey through textures and scents') es poético pero genérico. Debe ser sensorial Y específico: 'En 2 minutos, tu piel absorbe 3x más su suero favorito' es más potente que 'awaken the senses'.",
+      "referencia": "Combinar la elegancia del copy con especificidad técnica."
+    }
+  ],
+  "metavores_visuales": [
+    {
+      "metavora": "LUZ COMO TRANSFORMACIÓN",
+      "descripcion": "La luz no solo ilumina — transforma. En fotografía, la luz cambia cómo vemos. En terapia LED, la luz cambia cómo se ve la piel. Lumaei debería comunicar: 'No vendemos dispositivos, vendemos la luz que transforma tu piel'.",
+      "ejecucion": "Gradientes de luz, efectos de brillo sutil, transiciones de oscuridad a luminosidad en la UI."
+    },
+    {
+      "metavora": "PRECISIÓN CIENTÍFICA",
+      "descripcion": "Los dispositivos de belleza son instrumentos de precisión. La marca debe verse como un laboratorio elegante, no una tienda. Elementos visuales: líneas limpias, grid preciso, espaciados exactos, tipografía técnica.",
+      "ejecucion": "Grid asimétrico pero preciso. Numeros de especificaciones como elementos decorativos. Espectros de color como elementos visuales."
+    },
+    {
+      "metavora": "RITUAL, NO PRODUCTO",
+      "descripcion": "El skincare no es compra — es ritual. Lumaei debería comunicar experiencia, no transacción. La tienda debería sentirse como entrar a un spa tecnológico, no a una tienda de gadgets.",
+      "ejecucion": "Secciones que guían por el 'ritual' (limpieza → tratamiento → resultado). Productos mostrados en contexto de uso, no aislados."
+    }
+  ],
+  "recomendaciones_diseno": [
+    {
+      "prioridad": "CRÍTICA",
+      "recomendacion": "CONSOLIDAR MARCA: Eliminar lumaeicom.com. Mantener solo lumaei.com con contenido de dispositivos de belleza. La fractures de marca actual (belleza vs gadgets) es el problema #1.",
+      "razon": "Un usuario que busca 'Lumaei' puede encontrar cualquiera de las dos tiendas. La confusión destruye confianza."
+    },
+    {
+      "prioridad": "CRÍTICA",
+      "recomendacion": "REEMPLAZAR FOTOGRAFÍA: Todas las imágenes de CJ Dropshipping y stock genéricas deben ser reemplazadas. Inversión mínima: sesión de fotos con consistencia visual. Inversión ideal: bank de imágenes propias con estilo unificado.",
+      "razon": "Las URLs de cjdropshipping.com en el HTML son la prueba definitiva de dropshipping genérico."
+    },
+    {
+      "prioridad": "ALTA",
+      "recomendacion": "PALETA DE COLOR 'LUMAEI': Negro profundo (#0a0a0a) + dorado cálido (#c9a96e) + blanco puro. Esta paleta evoca: lujo, tecnología, luz. Alternativa: blanco + violeta (#7c3aed) + negro para un feel más tech/scientific.",
+      "razon": "El nombre 'Lumaei' (luz) requiere una paleta que COMUNIQUE luz. Los colores actuales son genéricos."
+    },
+    {
+      "prioridad": "ALTA",
+      "recomendacion": "ARQUITECTURA DE PÁGINA: Hero con video de dispositivo en uso → Certificaciones (FDA, CE) → Before/After → Especificaciones técnicas → Testimonios → CTA de compra. NO: Hero genérico → Productos grid → Footer.",
+      "razon": "El funnel visual debe comunicar: credibilidad → prueba → resultado → acción."
+    },
+    {
+      "prioridad": "MEDIA",
+      "recomendacion": "TYPOGRAFÍA: Serif elegante para headings (ej: Playfair Display, Cormorant) + Sans-serif limpia para body (Inter, DM Sans). Esto comunica: ciencia + elegancia. NO usar solo sans-serif genérico.",
+      "razon": "Los dispositivos de belleza premium usan tipografía con personalidad. Solo sans-serif se ve como 'startup genérica'."
+    },
+    {
+      "prioridad": "MEDIA",
+      "recomendacion": "SECCIÓN 'NUESTRA CIENCIA': Explicar cómo funciona la terapia LED, longitudes de onda, estudios. Posicionar Lumaei como experta, no como revendedora.",
+      "razon": "Lascompetidoras (Lumnae, Elvorie, Haumea) TODAS tienen secciones educativas. La ausencia comunica 'solo revendo'."
+    },
+    {
+      "prioridad": "BAJA",
+      "recomendacion": "MICROINTERACCIONES: Hover states que muestren el espectro de luz del dispositivo. Animaciones sutiles que evoquen 'encendido'. Scroll que simule 'iluminación progresiva'.",
+      "razon": "Las microinteracciones refuerzan la metáfora de luz + tecnología."
+    }
+  ],
+  "diagnostico_final": {
+    "problema_raiz": "Lumaei tiene un NOMBRE extraordinario para el nicho (luz + belleza) pero una EJECUCIÓN visual que comunica 'dropshipping genérico'. La fractures de marca (dos tiendas, dos mercados, dos identidades) es el síntoma de una estrategia no definida.",
+    "oportunidad": "Con una ejecución visual correcta, Lumaei puede posicionarse como 'la marca de tecnología de luz para la piel' — no como 'una tienda más de dispositivos de belleza'. El nombre YA contiene la propuesta de valor; solo necesita ser traducido visualmente.",
+    "accion_inmediata": "1) Consolidar marca en un solo dominio. 2) Reemplazar toda la fotografía. 3) Crear paleta de color que comunique 'luz'. 4) Agregar secciones de credibilidad (certificaciones, ciencia, testimonios).",
+    "nivel_confianza": "ALTO — el análisis está basado en evidencia observable de ambos dominios (HTML, estructura, imágenes, copy). Lascompetidoras fueron analizadas para benchmark."
+  }
+}

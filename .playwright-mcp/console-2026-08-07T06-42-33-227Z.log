@@ -1,8 +1,0 @@
-[   43412ms] TypeError: Failed to construct 'URL': Invalid URL
-    at onClick (https://www.lumaei.com/_next/static/chunks/03svg3p88d1jc.js:1:546)
-    at sJ (https://www.lumaei.com/_next/static/chunks/1v3egol4ebp52.js:1:161791)
-    at https://www.lumaei.com/_next/static/chunks/1v3egol4ebp52.js:1:167687
-    at tI (https://www.lumaei.com/_next/static/chunks/1v3egol4ebp52.js:1:29721)
-    at s4 (https://www.lumaei.com/_next/static/chunks/1v3egol4ebp52.js:1:163024)
-    at fz (https://www.lumaei.com/_next/static/chunks/1v3egol4ebp52.js:1:199760)
-    at fT (https://www.lumaei.com/_next/static/chunks/1v3egol4ebp52.js:1:199582)

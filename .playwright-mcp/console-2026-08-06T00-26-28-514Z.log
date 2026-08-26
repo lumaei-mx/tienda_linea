@@ -1,2 +1,0 @@
-[    1521ms] [ERROR] The Content Security Policy directive 'upgrade-insecure-requests' is ignored when delivered in a report-only policy. @ https://accounts.shopify.com/select?rid=997dbdab-d158-489f-8c6a-057d14c8c6d6:0
-[   18705ms] [WARNING] using deprecated parameters for the initialization function; pass a single object instead @ https://cdn.shopify.com/shopifycloud/web/assets/v1/vite/client/en/assets/main-c542adc4ae10.js:1

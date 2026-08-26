@@ -1,8 +1,0 @@
-[     158ms] Error: Minified React error #418; visit https://react.dev/errors/418?args[]=HTML&args[]= for the full message or use the non-minified dev environment for full errors and additional helpful warnings.
-    at rX (https://www.lumaei.com/_next/static/chunks/1v3egol4ebp52.js:1:46255)
-    at iu (https://www.lumaei.com/_next/static/chunks/1v3egol4ebp52.js:1:97296)
-    at sd (https://www.lumaei.com/_next/static/chunks/1v3egol4ebp52.js:1:137986)
-    at https://www.lumaei.com/_next/static/chunks/1v3egol4ebp52.js:1:132872
-    at se (https://www.lumaei.com/_next/static/chunks/1v3egol4ebp52.js:1:132973)
-    at s$ (https://www.lumaei.com/_next/static/chunks/1v3egol4ebp52.js:1:159537)
-    at MessagePort.O (https://www.lumaei.com/_next/static/chunks/1v3egol4ebp52.js:1:7702)

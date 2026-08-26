@@ -1,9 +1,0 @@
-[     418ms] [INFO] . @ https://lf16-tiktok-web.tiktokcdn-us.com/obj/tiktok-web-tx/webmssdk/2.0.0.412/webmssdk.js:0
-[     684ms] [WARNING] [DEPRECATED] Default export is deprecated. Instead use `import { create } from 'zustand'`. @ https://lf16-tiktok-web.tiktokcdn-us.com/obj/tiktok-web-tx/ies/creator-center-web/static/js/3261.230490cc.js:1
-[     687ms] [WARNING] [DEPRECATED] Default export is deprecated. Instead use `import { create } from 'zustand'`. @ https://lf16-tiktok-web.tiktokcdn-us.com/obj/tiktok-web-tx/ies/creator-center-web/static/js/3261.230490cc.js:1
-[     724ms] [WARNING] [DEPRECATED] Default export is deprecated. Instead use `import { create } from 'zustand'`. @ https://lf16-tiktok-web.tiktokcdn-us.com/obj/tiktok-web-tx/ies/creator-center-web/static/js/3261.230490cc.js:1
-[     804ms] [WARNING] <meta name="apple-mobile-web-app-capable" content="yes"> is deprecated. Please include <meta name="mobile-web-app-capable" content="yes"> @ https://www.tiktok.com/tiktokstudio?lang=es:0
-[    1141ms] [LOG] [useSWAPIResultSync] start listen: L2S_PROJECT_LIST @ https://lf16-tiktok-web.tiktokcdn-us.com/obj/tiktok-web-tx/ies/creator-center-web/static/js/main.5b757742.js:133
-[    1141ms] [LOG] [useSWAPIResultSync] start listen: L2S_ICON_INFO @ https://lf16-tiktok-web.tiktokcdn-us.com/obj/tiktok-web-tx/ies/creator-center-web/static/js/main.5b757742.js:133
-[    1546ms] [WARNING] [ttastra-runtime][warning]: importing getVGeo from '@ttastra/core/runtime' is deprecated, please update import path to '@ttastra/core/regions'. for example: import { getVGeo } from '@ttastra/core/runtime/regions';
- @ https://lf16-tiktok-web.tiktokcdn-us.com/obj/tiktok-web-tx/ies/creator-center-web/static/js/3261.230490cc.js:1
