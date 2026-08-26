@@ -79,6 +79,16 @@ ciclo (ver `MANDATE.md` sección 8). El loop lee esto para no empezar ciego.
   apuntando mal) y rotar CRON_SECRET en Vercel + .env.local sincronizados;
   (b) considerar webhook/redeploy automático tras reprice para que blog y
   tienda nunca diverjan.
+- BENCHMARK POST-REPRECIO (delegado a Hermes Agent, informe en
+  `gerencia/BENCHMARK_REPRICE_2026-08-25.md`): bandas Amazon US/MX vía
+  búsqueda web (Amazon bloqueó scraping directo; bandas desde snippets
+  indexados + asinsight/Walmart/Claroshop). HALLAZGO PRIORITARIO: proyector
+  ($41.78 vs banda US $17–36) y dispensador ($56.55 vs $15–40) quedaron
+  ARRIBA del mercado tras el re-precio → conversión en riesgo; soporte auto
+  ($43.08) e impresora ($21.63) DENTRO de banda. ACCIÓN CICLO 10: validar con
+  segunda fuente y aplicar `manualPriceUsd` (proyector ≤$34.99, dispensador
+  ≤$39.99, ambos sobre el piso calculado) + redeploy para re-hornear guías;
+  evaluar alerta quincenal de banda por SKU.
 
 ## Último ciclo (2026-08-24 — ciclo 8)
 - Acción de MAYOR valor ejecutada (todo $0 / cliente-paga, sin gasto):
