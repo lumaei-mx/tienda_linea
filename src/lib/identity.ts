@@ -3,7 +3,7 @@
 // RFC personal: aún sin régimen de actividades empresariales dado de alta;
 // la regularización ante el SAT (régimen 612/626) es acción humana pendiente.
 export const STORE_IDENTITY = {
-  responsibleName: "Sergio Alberto Sánchez Echeverría",
+  responsibleName: "Lumaei",
   rfc: "SAES910620RC4",
   entityTypeEs: "Persona física",
   entityTypeEn: "Sole proprietor (individual)",
