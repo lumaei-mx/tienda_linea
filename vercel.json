@@ -7,6 +7,30 @@
     {
       "path": "/api/cron/reprice",
       "schedule": "30 13 * * *"
+    },
+    {
+      "path": "/api/cron/retry-fulfill",
+      "schedule": "*/15 * * * *"
+    },
+    {
+      "path": "/api/cron/trends",
+      "schedule": "0 */6 * * *"
+    },
+    {
+      "path": "/api/cron/hunter",
+      "schedule": "30 */6 * * *"
+    },
+    {
+      "path": "/api/cron/catalog",
+      "schedule": "0 12 * * *"
+    },
+    {
+      "path": "/api/cron/digest",
+      "schedule": "0 1 * * *"
+    },
+    {
+      "path": "/api/cron/support",
+      "schedule": "*/30 * * * *"
     }
   ]
 }

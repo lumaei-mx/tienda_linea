@@ -133,6 +133,18 @@ export async function createPendingOrder(input: CheckoutInput): Promise<Order> {
 /**
  * Fase 2 — pago verificado (webhook Stripe / pago demo).
  * Aquí sí se dispara el auto-fulfill a CJ.
+ *
+ * Modo autónomo (env `AUTO_APPROVE_ORDERS`):
+ * - `AUTO_APPROVE_ORDERS=false` (por defecto): el pedido pagado queda en
+ *   `awaiting_owner_approval` y el dueño lo autoriza desde /admin. No gasta
+ *   saldo CJ hasta la aprobación manual.
+ * - `AUTO_APPROVE_ORDERS=true`: tras el pago se marca `fulfillment_queued` y
+ *   se llama a `fulfillOrder()` de inmediato (100% autónomo). Requiere
+ *   `CJ_AUTO_PAY_BALANCE=true` + `CJ_SANDBOX=false` para cumplimiento real;
+ *   si el fulfill falla, el pedido queda en `fulfillment_queued` con nota y
+ *   se alerta al dueño (`auto_fulfill_failed`) para reintento manual o
+ *   automático vía cron retry-fulfill. La lógica de negocio por defecto no
+ *   cambia: sin la env var todo sigue igual (aprobación manual).
  */
 export async function confirmPaidOrder(
   orderId: string,
@@ -266,8 +278,9 @@ export async function confirmPaidOrder(
     ).catch(() => {});
   }
 
-  // Auto-aprobación opcional: si AUTO_APPROVE_ORDERS=true, se salta la espera
-  // de autorización del dueño y se envía a cumplimiento inmediatamente.
+  // Auto-aprobación opcional vía env (ver docblock superior).
+  // Si AUTO_APPROVE_ORDERS=true, se salta la espera de autorización del dueño
+  // y se envía a cumplimiento inmediatamente. Por defecto (unset/false) no hace nada.
   if (process.env.AUTO_APPROVE_ORDERS === "true") {
     try {
       await updateOrder(orderId, {

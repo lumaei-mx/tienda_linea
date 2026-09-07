@@ -1,18 +1,35 @@
 // src/app/api/cron/support/route.ts
 // Cron de soporte autónomo: procesa el inbox de AgentMail, responde dentro de
-// política y escala a el dueño lo que no puede resolverse solo.
-import { NextRequest, NextResponse } from "next/server";
+// política y escala al dueño lo que no puede resolverse solo.
+import { NextResponse } from "next/server";
+import { authorizeCron } from "@/lib/cron-auth";
 import { processInbound } from "@/lib/automation/support";
 
 export const dynamic = "force-dynamic";
 
-export async function GET(req: NextRequest) {
-  const secret =
-    req.nextUrl.searchParams.get("secret") || req.headers.get("x-cron-secret");
-  if (process.env.CRON_SECRET && secret !== process.env.CRON_SECRET) {
-    return NextResponse.json({ error: "unauthorized" }, { status: 401 });
+async function handleSupport(req: Request) {
+  const denied = authorizeCron(req);
+  if (denied) return denied;
+  try {
+    let since: string | undefined;
+    try {
+      since = new URL(req.url).searchParams.get("since") || undefined;
+    } catch {
+      since = undefined;
+    }
+    const result = await processInbound(since);
+    return NextResponse.json({ ok: true, ...result });
+  } catch (err) {
+    const msg = err instanceof Error ? err.message : "error";
+    return NextResponse.json({ ok: false, error: msg }, { status: 500 });
   }
-  const since = req.nextUrl.searchParams.get("since") || undefined;
-  const result = await processInbound(since);
-  return NextResponse.json(result);
+}
+
+export async function GET(req: Request) {
+  return handleSupport(req);
+}
+
+// cron-job.org puede usar GET o POST; ambos usan la misma auth.
+export async function POST(req: Request) {
+  return handleSupport(req);
 }

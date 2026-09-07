@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# setup-crons.sh — Crea los 7 jobs de Lumaei en cron-job.org (foco i1).
+# setup-crons.sh — Crea los 8 jobs de Lumaei en cron-job.org (operación autónoma).
 # Reversible: los jobs se pueden borrar desde el dashboard o via API.
 # Requiere: CRONJOB_API_KEY (API key de cron-job.org) y CRON_SECRET (header x-cron-secret).
 # Uso:
@@ -16,16 +16,19 @@ AUTH="$(printf '%s:' "$CRONJOB_API_KEY" | base64)"
 HOURS_ALL=$(seq -s, 0 23 | tr -d '\n')
 
 # Cada job: [nombre, path, horas, minutos, metodo]
-# metodo: 0 = GET (cron-job.org), 1 = POST. Debe coincidir con el handler de la ruta.
-# Rutas GET: hunter, digest. Rutas POST: sync-cj, reprice, retry-fulfill, trends, catalog.
+# Todas las rutas /api/cron/* aceptan GET y POST con la misma auth
+# (header x-cron-secret, Bearer o ?secret). Por defecto usamos POST,
+# salvo hunter/digest/support que también funcionan con GET (Vercel Cron usa GET).
+# metodo: 0 = GET (cron-job.org), 1 = POST.
 JOBS=(
   "sync-cj|/api/cron/sync-cj|0|30|1"
   "reprice|/api/cron/reprice|1|0|1"
   "retry-fulfill|/api/cron/retry-fulfill|$HOURS_ALL|0,15,30,45|1"
   "trends|/api/cron/trends|0,6,12,18|0|1"
-  "hunter|/api/cron/hunter|0,6,12,18|0|0"
+  "hunter|/api/cron/hunter|0,6,12,18|30|1"
   "catalog|/api/cron/catalog|0|0|1"
-  "digest|/api/cron/digest|19|0|0"
+  "digest|/api/cron/digest|19|0|1"
+  "support|/api/cron/support|$HOURS_ALL|0,30|1"
 )
 
 echo "== Creando jobs en $BASE_URL ($TZ) =="
@@ -53,6 +56,6 @@ JSON
 done
 
 echo "== Contrato de verificación =="
-echo "Por cada job en cron-job.org -> 'Run job' debe devolver HTTP 200 y JSON con {\"checked\":N,...}."
-echo "Sin el header x-cron-secret devuelve 401 (auth correcta)."
-echo "Monitoreo: $BASE_URL/api/health"
+echo "Por cada job en cron-job.org -> 'Run job' debe devolver HTTP 200 y JSON con {\"ok\":true,...}."
+echo "Sin el header x-cron-secret (ni ?secret=) devuelve 401 (auth correcta)."
+echo "Monitoreo: $BASE_URL/api/health (status ok/degraded/down por servicio)."

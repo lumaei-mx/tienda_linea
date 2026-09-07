@@ -1,8 +1,6 @@
 // src/lib/automation/support.ts
 // Soporte autónomo: clasifica correos entrantes, responde dentro de política,
-// y escala a el dueño (WhatsApp) lo que no puede resolver solo.
-import { existsSync } from "node:fs";
-import { execFile } from "node:child_process";
+// y escala al dueño (Telegram + /admin) lo que no puede resolver solo.
 import {
   isAgentMailConfigured,
   listThreads,
@@ -11,10 +9,9 @@ import {
   type AgentMailMessage,
 } from "../agentmail";
 import { getOrder } from "../orders-db";
+import { notifyOwner } from "./alert";
 
 const INBOX = process.env.AGENTMAIL_INBOX || "";
-const ALERT_SCRIPT =
-  "/Users/sdesilencio/_MOD_Negocios/lumaei__/operations/alert_owner.sh";
 
 export type Intent = "order_status" | "return_refund" | "complaint" | "other";
 
@@ -36,14 +33,20 @@ function extractOrderId(text: string): string | null {
   return m ? m[0] : null;
 }
 
-export function escalateToOwner(message: string): void {
+/**
+ * Escala un caso al dueño vía Telegram (+ registro en /admin).
+ * Async-safe: nunca lanza. Sin credenciales (Telegram/Redis no
+ * configurados) hace fallback a console.error y resuelve ok.
+ */
+export async function escalateToOwner(message: string): Promise<void> {
   console.error("[SUPPORT-ESCALATION]", message);
   try {
-    if (existsSync(ALERT_SCRIPT)) {
-      execFile("bash", [ALERT_SCRIPT, message], { timeout: 20000 }, () => {});
-    }
-  } catch {
-    /* no-op */
+    await notifyOwner("support_escalation", message, "warn");
+  } catch (err) {
+    console.error(
+      "[SUPPORT-ESCALATION-FAILED]",
+      err instanceof Error ? err.message : err
+    );
   }
 }
 
@@ -132,7 +135,7 @@ export async function processInbound(sinceISO?: string): Promise<{
         replied++;
       }
       if (escalate) {
-        escalateToOwner(
+        await escalateToOwner(
           `[SOPORTE] ${th.subject || "(sin asunto)"} de ${from}: ${body.slice(0, 200)}`
         );
         escalated++;

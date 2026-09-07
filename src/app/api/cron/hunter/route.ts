@@ -8,6 +8,16 @@ export const maxDuration = 300;
 export async function GET(req: Request) {
   const denied = authorizeCron(req);
   if (denied) return denied;
-  const result = await runHunter();
-  return NextResponse.json(result);
+  try {
+    const result = await runHunter();
+    return NextResponse.json(result);
+  } catch (err) {
+    const msg = err instanceof Error ? err.message : "error";
+    return NextResponse.json({ ok: false, error: msg }, { status: 500 });
+  }
+}
+
+// cron-job.org puede usar GET o POST; ambos usan la misma auth.
+export async function POST(req: Request) {
+  return GET(req);
 }

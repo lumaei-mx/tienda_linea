@@ -13,6 +13,7 @@ import { AlertsPanel } from "@/components/AlertsPanel";
 import { OpportunitiesPanel } from "@/components/OpportunitiesPanel";
 import { CatalogsPanel } from "@/components/CatalogsPanel";
 import { ProductManagerPanel } from "@/components/ProductManagerPanel";
+import { AdminSupportPanel } from "@/components/AdminSupportPanel";
 
 export const dynamic = "force-dynamic";
 
@@ -143,6 +144,10 @@ export default async function AdminPage() {
 
       <section className="mt-10">
         <AlertsPanel />
+      </section>
+
+      <section className="mt-10">
+        <AdminSupportPanel />
       </section>
 
       <section className="mt-10">

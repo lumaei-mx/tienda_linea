@@ -6,6 +6,7 @@ import { FreeShippingBar } from "@/components/FreeShippingBar";
 import { LangHydrate } from "@/components/LangHydrate";
 import { TikTokPixel } from "@/components/TikTokPixel";
 import { EmailCapturePopup } from "@/components/EmailCapturePopup";
+import { SupportBot } from "@/components/SupportBot";
 import Script from "next/script";
 import { settings } from "@/lib/settings";
 import { STORE_IDENTITY } from "@/lib/identity";
@@ -126,6 +127,7 @@ export default async function RootLayout({
         <main className="flex-1">{children}</main>
         <Footer />
         <EmailCapturePopup />
+        <SupportBot />
       </body>
     </html>
   );

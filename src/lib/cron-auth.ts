@@ -1,8 +1,11 @@
 import { NextResponse } from "next/server";
 
 /**
- * Verifica que la llamada al cron venga de nuestro scheduler (cron-job.org)
- * vía header `x-cron-secret` o `authorization: Bearer <CRON_SECRET>`.
+ * Autorización unificada de crons.
+ * Válida para GET y POST. Acepta el secreto vía:
+ *   - header `x-cron-secret: <CRON_SECRET>`
+ *   - header `authorization: Bearer <CRON_SECRET>`
+ *   - query `?secret=<CRON_SECRET>` (útil para "Run job" manual y Vercel Cron)
  */
 export function authorizeCron(req: Request): NextResponse | null {
   const secret = process.env.CRON_SECRET;
@@ -12,8 +15,13 @@ export function authorizeCron(req: Request): NextResponse | null {
   const header =
     req.headers.get("x-cron-secret") ||
     req.headers.get("authorization")?.replace(/^Bearer\s+/i, "");
-  if (header !== secret) {
-    return NextResponse.json({ error: "No autorizado" }, { status: 401 });
+  if (header === secret) return null;
+  try {
+    const url = new URL(req.url);
+    const qs = url.searchParams.get("secret") || url.searchParams.get("cron_secret");
+    if (qs === secret) return null;
+  } catch {
+    /* URL no parseable: se valida solo por header */
   }
-  return null;
+  return NextResponse.json({ error: "No autorizado" }, { status: 401 });
 }
