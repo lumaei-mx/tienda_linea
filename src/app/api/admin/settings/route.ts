@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { isAdminRequest } from "@/lib/admin-auth";
 import { readStoreSettings, updateStoreSettings } from "@/lib/settings-db";
+import { recordAudit, getActorFromRequest } from "@/lib/audit-log";
 
 export const dynamic = "force-dynamic";
 
@@ -15,6 +16,8 @@ const NUMERIC_KEYS = [
   "paymentFeeRate",
   "markup",
   "minMarginPct",
+  "influencerCommissionPct",
+  "usdToMxn",
 ] as const;
 
 // Umbrales que NUNCA deben ser <= 0 (pe. freeShipping=0 → envío gratis universal).
@@ -34,9 +37,18 @@ const RANGES: Record<string, [number, number]> = {
   paymentFeeRate: [0, 0.2],
   markup: [1, 10],
   minMarginPct: [0, 90],
+  influencerCommissionPct: [0, 100],
+  usdToMxn: [10, 30],
 };
 
-const BOOL_KEYS = ["autoFulfill"] as const;
+const BOOL_KEYS = [
+  "autoFulfill",
+  "pauseHunter",
+  "pauseReprice",
+  "pauseFulfill",
+  "pauseSyncCj",
+  "pauseBot",
+] as const;
 
 const STRING_KEYS = ["brandName", "primaryMarket", "secondaryMarket"] as const;
 
@@ -57,7 +69,11 @@ export async function PATCH(req: Request) {
     return NextResponse.json({ error: "Body inválido" }, { status: 400 });
   }
 
+  const actor = getActorFromRequest(req);
+  const current = await readStoreSettings();
+  const before: Record<string, unknown> = {};
   const patch: Record<string, unknown> = {};
+
   for (const k of NUMERIC_KEYS) {
     if (k in body) {
       const v = Number(body[k]);
@@ -80,11 +96,15 @@ export async function PATCH(req: Request) {
           { status: 400 }
         );
       }
+      before[k] = (current as unknown as Record<string, unknown>)[k];
       patch[k] = v;
     }
   }
   for (const k of BOOL_KEYS) {
-    if (k in body) patch[k] = Boolean(body[k]);
+    if (k in body) {
+      before[k] = (current as unknown as Record<string, unknown>)[k];
+      patch[k] = Boolean(body[k]);
+    }
   }
   for (const k of STRING_KEYS) {
     if (k in body && typeof body[k] === "string") {
@@ -97,10 +117,45 @@ export async function PATCH(req: Request) {
           );
         }
       }
+      before[k] = (current as unknown as Record<string, unknown>)[k];
       patch[k] = body[k] as string;
     }
   }
 
+  // Detectar kill-switch toggles para audit crítico
+  const killSwitches = ["pauseHunter", "pauseReprice", "pauseFulfill", "pauseSyncCj", "pauseBot"];
+  for (const ks of killSwitches) {
+    if (ks in body) {
+      const beforeVal = Boolean((current as unknown as Record<string, unknown>)[ks]);
+      const afterVal = Boolean(body[ks]);
+      if (beforeVal !== afterVal) {
+        await recordAudit({
+          actor,
+          action: "kill_switch.toggle",
+          target: `kill_switch:${ks}`,
+          before: { enabled: beforeVal },
+          after: { enabled: afterVal },
+          meta: { ip: req.headers.get("x-forwarded-for") || "unknown" },
+          severity: "critical",
+        });
+      }
+    }
+  }
+
   const next = await updateStoreSettings(patch);
+
+  // Audit log general si hubo cambios
+  if (Object.keys(patch).length > 0) {
+    await recordAudit({
+      actor,
+      action: "settings.update",
+      target: "settings",
+      before,
+      after: patch,
+      meta: { ip: req.headers.get("x-forwarded-for") || "unknown" },
+      severity: "warn",
+    });
+  }
+
   return NextResponse.json({ settings: next });
 }

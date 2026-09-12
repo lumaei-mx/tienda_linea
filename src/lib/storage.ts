@@ -1,14 +1,20 @@
-import { readFileSync } from "fs";
+import { isSupabaseAvailable, storageGetSupabase, storageSetSupabase, storageListSupabase, storageDeleteSupabase } from "./storage-supabase";
+import { readFileSync, writeFileSync, existsSync } from "fs";
+import { join } from "path";
 import { createClient, type RedisClientType } from "redis";
 
 /**
  * Capa de almacenamiento para producción (Vercel serverless):
- * 1. Redis (`REDIS_URL`) — preferido, persistente
- * 2. Firestore (`FIREBASE_SERVICE_ACCOUNT` / `GOOGLE_APPLICATION_CREDENTIALS`)
- * 3. Filesystem (dev local)
+ * 1. Supabase (`SUPABASE_URL` + `SUPABASE_SERVICE_ROLE_KEY`) — preferido, gratuito, persistente
+ * 2. Redis (`REDIS_URL`) — fallback, persistente
+ * 3. Firestore (`FIREBASE_SERVICE_ACCOUNT` / `GOOGLE_APPLICATION_CREDENTIALS`) — fallback legacy
+ * 4. Filesystem (dev local)
  */
 
 const REDIS_URL = process.env.REDIS_URL;
+const DATA_DIR = join(process.cwd(), "data");
+
+export { isSupabaseAvailable };
 
 export function isRedisAvailable(): boolean {
   return Boolean(REDIS_URL);
@@ -22,6 +28,65 @@ export function isFirestoreAvailable(): boolean {
         process.env.FIREBASE_CLIENT_EMAIL &&
         process.env.FIREBASE_PRIVATE_KEY)
   );
+}
+
+// ==== Filesystem fallback (dev local) ====
+
+const fsCache = new Map<string, unknown>();
+const fsFileCache = new Map<string, string>();
+
+function fsKey(collection: string, id: string) {
+  return join(DATA_DIR, collection, `${id}.json`);
+}
+
+function fsRead<T>(collection: string, id: string): T | null {
+  const key = `${collection}:${id}`;
+  if (fsCache.has(key)) {
+    return fsCache.get(key) as T;
+  }
+  const file = fsKey(collection, id);
+  if (!existsSync(file)) return null;
+  try {
+    const raw = readFileSync(file, "utf-8");
+    fsFileCache.set(file, raw);
+    const parsed = JSON.parse(raw) as T;
+    fsCache.set(key, parsed);
+    return parsed;
+  } catch {
+    return null;
+  }
+}
+
+function fsWrite(collection: string, id: string, data: unknown) {
+  const key = `${collection}:${id}`;
+  fsCache.set(key, data);
+  // En Vercel serverless no podemos escribir filesystem, pero en dev sí
+  try {
+    const file = fsKey(collection, id);
+    writeFileSync(file, JSON.stringify(data, null, 2), "utf-8");
+    fsFileCache.set(file, JSON.stringify(data));
+  } catch {
+    /* serverless — solo cache en memoria */
+  }
+}
+
+function fsList<T>(collection: string): T[] {
+  // Fallback: leer data/products.json or data/orders.json etc.
+  const fallbackFile = join(DATA_DIR, `${collection}.json`);
+  if (existsSync(fallbackFile)) {
+    try {
+      const raw = readFileSync(fallbackFile, "utf-8");
+      return JSON.parse(raw) as T[];
+    } catch {
+      return [];
+    }
+  }
+  return [];
+}
+
+function fsDelete(collection: string, id: string) {
+  const key = `${collection}:${id}`;
+  fsCache.delete(key);
 }
 
 // ==== Redis (cliente TCP con singleton global) ====
@@ -41,8 +106,6 @@ function getRedis(): Promise<RedisClientType> {
     try {
       await client.connect();
     } catch (err) {
-      // Limpia la promesa cacheada: el próximo llamado reintenta la conexión
-      // en vez de quedar rechazada para siempre.
       _redisPromise = null;
       try {
         await client.quit();
@@ -64,60 +127,143 @@ function collectionKey(collection: string, id: string) {
 
 // ==== API pública unificada ====
 
-export async function storageGet<T>(
-  collection: string,
-  id: string
-): Promise<T | null> {
+export async function storageGet<T>(collection: string, id: string): Promise<T | null> {
+  // 1. Supabase (preferido)
+  if (isSupabaseAvailable()) {
+    try {
+      return storageGetSupabase<T>(collection, id);
+    } catch (err) {
+      // Fallar gracefully al siguiente backend
+    }
+  }
+  // 2. Redis
   if (isRedisAvailable()) {
-    const raw = await (await getRedis()).get(collectionKey(collection, id));
-    return raw ? (JSON.parse(raw) as T) : null;
+    try {
+      const raw = await (await getRedis()).get(collectionKey(collection, id));
+      return raw ? (JSON.parse(raw) as T) : null;
+    } catch {
+      /* Redis down — fall through */
+    }
   }
+  // 3. Firestore
   if (isFirestoreAvailable()) {
-    const { storageGet: fsGet } = await import("./firestore");
-    return fsGet<T>(collection, id);
+    try {
+      const { storageGet: fsGet } = await import("./firestore");
+      return fsGet<T>(collection, id);
+    } catch {
+      /* Firestore down — fall through */
+    }
   }
-  throw new Error("Sin backend de almacenamiento configurado");
+  // 4. Filesystem (dev)
+  return fsRead<T>(collection, id);
 }
 
 export async function storageList<T>(collection: string): Promise<T[]> {
-  if (isRedisAvailable()) {
-    const client = await getRedis();
-    const keys = await client.keys(`${collection}:*`);
-    if (!keys.length) return [];
-    const out: T[] = [];
-    for (const k of keys) {
-      const raw = await client.get(k);
-      if (raw) out.push(JSON.parse(raw) as T);
+  // 1. Supabase (preferido)
+  if (isSupabaseAvailable()) {
+    try {
+      const result = await storageListSupabase<T>(collection);
+      if (result.length > 0) return result;
+      // Si está vacío, probar filesystem como fallback de seed
+    } catch {
+      /* Supabase down — fall through */
     }
-    return out;
   }
+  // 2. Redis
+  if (isRedisAvailable()) {
+    try {
+      const client = await getRedis();
+      const keys = await client.keys(`${collection}:*`);
+      if (!keys.length) return [];
+      const out: T[] = [];
+      for (const k of keys) {
+        const raw = await client.get(k);
+        if (raw) out.push(JSON.parse(raw) as T);
+      }
+      return out;
+    } catch {
+      /* Redis down — fall through */
+    }
+  }
+  // 3. Firestore
   if (isFirestoreAvailable()) {
-    const { storageList: fsList } = await import("./firestore");
-    return fsList<T>(collection);
+    try {
+      const { storageList: fsList } = await import("./firestore");
+      return fsList<T>(collection);
+    } catch {
+      /* Firestore down — fall through */
+    }
   }
-  throw new Error("Sin backend de almacenamiento configurado");
+  // 4. Filesystem (dev)
+  return fsList<T>(collection);
 }
 
 export async function storageSet(collection: string, id: string, data: unknown) {
+  let success = false;
+  // 1. Supabase (preferido)
+  if (isSupabaseAvailable()) {
+    try {
+      await storageSetSupabase(collection, id, data);
+      success = true;
+    } catch {
+      /* Supabase down — fall through */
+    }
+  }
+  // 2. Redis
   if (isRedisAvailable()) {
-    await (await getRedis()).set(collectionKey(collection, id), JSON.stringify(data));
-    return;
+    try {
+      await (await getRedis()).set(collectionKey(collection, id), JSON.stringify(data));
+      success = true;
+    } catch {
+      /* Redis down — fall through */
+    }
   }
+  // 3. Firestore
   if (isFirestoreAvailable()) {
-    const { storageSet: fsSet } = await import("./firestore");
-    return fsSet(collection, id, data);
+    try {
+      const { storageSet: fsSet } = await import("./firestore");
+      await fsSet(collection, id, data);
+      success = true;
+    } catch {
+      /* Firestore down — fall through */
+    }
   }
-  throw new Error("Sin backend de almacenamiento configurado");
+  // 4. Filesystem (dev)
+  if (!success) {
+    fsWrite(collection, id, data);
+  } else {
+    // También escribir en filesystem para dev consistency
+    fsWrite(collection, id, data);
+  }
+  return;
 }
 
 export async function storageDelete(collection: string, id: string) {
+  // 1. Supabase
+  if (isSupabaseAvailable()) {
+    try {
+      await storageDeleteSupabase(collection, id);
+    } catch {
+      /* fall through */
+    }
+  }
+  // 2. Redis
   if (isRedisAvailable()) {
-    await (await getRedis()).del(collectionKey(collection, id));
-    return;
+    try {
+      await (await getRedis()).del(collectionKey(collection, id));
+    } catch {
+      /* fall through */
+    }
   }
+  // 3. Firestore
   if (isFirestoreAvailable()) {
-    const { storageDelete: fsDel } = await import("./firestore");
-    return fsDel(collection, id);
+    try {
+      const { storageDelete: fsDel } = await import("./firestore");
+      await fsDel(collection, id);
+    } catch {
+      /* fall through */
+    }
   }
-  throw new Error("Sin backend de almacenamiento configurado");
+  // 4. Filesystem
+  fsDelete(collection, id);
 }

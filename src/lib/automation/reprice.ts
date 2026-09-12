@@ -5,10 +5,13 @@ import { notifyOwner } from "./alert";
 
 /**
  * Repricing automático del precio de venta USD.
- * Piso = landed_max / (1 − fee − comisión afiliado − margen mínimo).
- * Markup estándar = landed_max × markup (si supera el piso, gana).
- * No toca productos con manualPriceUsd ni sin costo/stock.
- * Corre en cron y puede dispararse a mano.
+ * Modelo cobro único de envío: el precio NO incluye envío (se cobra aparte
+ * en checkout). Por eso:
+ *   Base = costUsd × markup (estratégico, sin inflar con flete).
+ *   Piso = costUsd / (1 − fee − comisión afiliado − margen mínimo).
+ * La rentabilidad total (precio + envío checkout − landed − fees) se evalúa
+ * con el envío flat esperado a 1ud. No toca productos con manualPriceUsd
+ * ni sin costo/stock. Corre en cron y puede dispararse a mano.
  */
 export async function runReprice(): Promise<{
   checked: number;
@@ -17,6 +20,12 @@ export async function runReprice(): Promise<{
   details: Array<{ id: string; note: string }>;
 }> {
   const s = await readStoreSettings();
+  
+  // KILL-SWITCH: si pauseReprice está activo, salir silenciosamente
+  if (s.pauseReprice) {
+    return { checked: 0, repriced: 0, stopped: 0, details: [] };
+  }
+  
   const markup = s.markup ?? 2.6;
   const minMargin = s.minMarginPct ?? 12;
   const feeRate = s.paymentFeeRate ?? 0.036;
@@ -26,21 +35,25 @@ export async function runReprice(): Promise<{
   let stopped = 0;
   const details: Array<{ id: string; note: string }> = [];
 
+  // Envío que el cliente paga aparte en checkout (1ud). Solo para evaluar
+  // margen total, nunca se suma al precio.
+  const shipExpected = Math.max(
+    s.shippingFlatMxUsd ?? 9.99,
+    s.shippingFlatUsd ?? 9.99
+  );
+
   for (const p of products) {
     if (!p.costUsd || p.costUsd <= 0) continue;
 
-    const landedMx = p.costUsd + (p.shippingMxUsd || 0);
-    const landedUs = p.costUsd + (p.shippingUsUsd || 0);
-    const landedMax = Math.max(landedMx, landedUs);
-
-    // Piso que cubre COGS + fee + comisión afiliado + margen mínimo.
+    // Piso que cubre COSTO producto + fee + comisión afiliado + margen mínimo.
+    // El flete real se cubre con el envío cobrado en checkout, no con el precio.
     const reserved = feeRate + inflPct + minMargin / 100;
     const floor =
       reserved >= 0.95
-        ? Number((landedMax * 3).toFixed(2))
-        : Number((landedMax / (1 - reserved)).toFixed(2));
+        ? Number((p.costUsd * 3).toFixed(2))
+        : Number((p.costUsd / (1 - reserved)).toFixed(2));
     const formulaTarget = Number(
-      Math.max(landedMax * markup, floor).toFixed(2)
+      Math.max(p.costUsd * markup, floor).toFixed(2)
     );
 
     // Respetar precio manual fijado en admin.
@@ -55,9 +68,10 @@ export async function runReprice(): Promise<{
       next.priceUsd = target;
     }
 
-    // Margen neto tras fee + comisión (peor mercado).
-    const netMx = netMarginPct(next, "MX", next.priceUsd, feeRate, inflPct);
-    const netUs = netMarginPct(next, "US", next.priceUsd, feeRate, inflPct);
+    // Margen neto TOTAL (precio + envío checkout − landed − fees − comisión).
+    // Cobro único: el envío no va en el precio, se evalúa aparte.
+    const netMx = netMarginPct(next, "MX", next.priceUsd, feeRate, inflPct, s.shippingFlatMxUsd ?? 9.99);
+    const netUs = netMarginPct(next, "US", next.priceUsd, feeRate, inflPct, s.shippingFlatUsd ?? 9.99);
     const worst = Math.min(netMx, netUs);
 
     if (worst < minMargin) {
@@ -77,8 +91,8 @@ export async function runReprice(): Promise<{
       }
       // Forzar al piso y re-evaluar.
       next.priceUsd = floor;
-      const netMx2 = netMarginPct(next, "MX", next.priceUsd, feeRate, inflPct);
-      const netUs2 = netMarginPct(next, "US", next.priceUsd, feeRate, inflPct);
+      const netMx2 = netMarginPct(next, "MX", next.priceUsd, feeRate, inflPct, s.shippingFlatMxUsd ?? 9.99);
+      const netUs2 = netMarginPct(next, "US", next.priceUsd, feeRate, inflPct, s.shippingFlatUsd ?? 9.99);
       if (Math.min(netMx2, netUs2) < minMargin) {
         if (next.active) {
           next.active = false;
@@ -111,7 +125,7 @@ export async function runReprice(): Promise<{
         repriced++;
         details.push({
           id: p.id,
-          note: `USD $${p.priceUsd} → $${next.priceUsd} (neto MX ${netMarginPct(next, "MX", next.priceUsd, feeRate, inflPct).toFixed(1)}% / US ${netMarginPct(next, "US", next.priceUsd, feeRate, inflPct).toFixed(1)}%)`,
+          note: `USD $${p.priceUsd} → $${next.priceUsd} (neto total MX ${netMarginPct(next, "MX", next.priceUsd, feeRate, inflPct, s.shippingFlatMxUsd ?? 9.99).toFixed(1)}% / US ${netMarginPct(next, "US", next.priceUsd, feeRate, inflPct, s.shippingFlatUsd ?? 9.99).toFixed(1)}%)`,
         });
       }
     }
@@ -128,19 +142,25 @@ export async function runReprice(): Promise<{
   return { checked: products.length, repriced, stopped, details };
 }
 
-/** Margen neto % tras COGS (cost+ship), fee de pago y comisión de afiliado. */
+/**
+ * Margen neto TOTAL % con cobro único de envío.
+ * income = precio + envío cobrado en checkout (1ud).
+ * profit = income − landed − fee×income − comisión×precio.
+ */
 function netMarginPct(
   p: Product,
   market: Market,
   price: number,
   feeRate: number,
-  inflPct: number
+  inflPct: number,
+  shipCheckout: number
 ) {
-  if (price <= 0) return 0;
-  const ship = market === "MX" ? p.shippingMxUsd : p.shippingUsUsd;
-  const cogs = p.costUsd + (ship || 0);
-  const fee = price * feeRate;
+  const income = price + (shipCheckout || 0);
+  if (income <= 0) return 0;
+  const shipReal = market === "MX" ? p.shippingMxUsd : p.shippingUsUsd;
+  const landed = p.costUsd + (shipReal || 0);
+  const fee = income * feeRate;
   const commission = price * inflPct;
-  const profit = price - cogs - fee - commission;
-  return (profit / price) * 100;
+  const profit = income - landed - fee - commission;
+  return (profit / income) * 100;
 }

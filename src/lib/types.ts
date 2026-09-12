@@ -1,5 +1,5 @@
 export type Market = "MX" | "US";
-export type Currency = "USD";
+export type Currency = "USD" | "MXN";
 export type OrderStatus =
   | "pending_payment"
   | "paid"
@@ -185,6 +185,7 @@ export interface Order {
   cjAmountUsd?: number;
   trackingNumber?: string;
   trackingCarrier?: string;
+  trackingUrl?: string;
   notes?: string;
   autoFulfilled: boolean;
   /** Stripe */
@@ -226,4 +227,28 @@ export interface StoreSettings {
   influencerCommissionPct?: number;
   /** Tipo de cambio USD→MXN para cobrar en pesos en México (OXXO/SPEI) */
   usdToMxn?: number;
+
+  // === 2FA TOTP ===
+  /** Secret base32 para TOTP (admin lo escanea con Authy/Google Authenticator) */
+  twoFactorSecret?: string;
+  /** Recovery code (8 chars hex) para emergencias si pierde el teléfono */
+  twoFactorRecoveryCode?: string;
+  /** Si 2FA está activado para el admin */
+  twoFactorEnabled?: boolean;
+
+  // === Roles ===
+  /** Rol del usuario admin actual: owner | admin | viewer */
+  adminRole?: "owner" | "admin" | "viewer";
+
+  // === KILL-SWITCHES (1-click pause desde admin) ===
+  /** Pausa hunter (descubrimiento productos nuevos) */
+  pauseHunter?: boolean;
+  /** Pausa reprice nocturno (precios se congelan) */
+  pauseReprice?: boolean;
+  /** Pausa fulfillment automático (pedidos pagados quedan en awaiting_owner_approval) */
+  pauseFulfill?: boolean;
+  /** Pausa sync CJ (stock/precios no se actualizan) */
+  pauseSyncCj?: boolean;
+  /** Pausa bot soporte (escala todo a humano) */
+  pauseBot?: boolean;
 }

@@ -56,8 +56,9 @@ export function calcShipping(
   market: Market,
   qty = 0
 ) {
-  // Envío gratis por cantidad (documentado: "compra 2, envío gratis" sube el
-  // ticket promedio y el margen neto sin tocar el precio unitario).
+  // Envío gratis por cantidad SOLO si freeShippingMinQty > 0.
+  // 2026-09-08: desactivado por default (0=off) — gratis solo por monto>=49.
+  // Con precio=cost*markup, "compra 2, envío gratis" generaba pérdida y se apaga.
   if (s.freeShippingMinQty > 0 && qty >= s.freeShippingMinQty) return 0;
   if (market === "MX") {
     return subtotal >= s.freeShippingMxUsd ? 0 : s.shippingFlatMxUsd;
@@ -80,17 +81,22 @@ export function marginForProduct(
   product: Product,
   market: Market
 ) {
+  // Cobro único de envío: el cliente paga precio + envío checkout una vez.
+  // El margen real es sobre el ingreso total, no solo el precio.
   const priceUsd = product.priceUsd;
-  const ship = market === "MX" ? product.shippingMxUsd : product.shippingUsUsd;
-  const cogs = product.costUsd + ship;
-  const fee = priceUsd * s.paymentFeeRate;
-  const profit = priceUsd - cogs - fee;
-  const marginPct = priceUsd > 0 ? (profit / priceUsd) * 100 : 0;
+  const shipReal = market === "MX" ? product.shippingMxUsd : product.shippingUsUsd;
+  const shipCheckout =
+    market === "MX" ? s.shippingFlatMxUsd : s.shippingFlatUsd;
+  const income = priceUsd + (shipCheckout || 0);
+  const cogs = product.costUsd + (shipReal || 0);
+  const fee = income * s.paymentFeeRate;
+  const profit = income - cogs - fee;
+  const marginPct = income > 0 ? (profit / income) * 100 : 0;
   return {
     priceUsd,
     cogs,
     fee,
-    profit,
+    profit: Number(profit.toFixed(2)),
     marginPct: Number(marginPct.toFixed(1)),
   };
 }

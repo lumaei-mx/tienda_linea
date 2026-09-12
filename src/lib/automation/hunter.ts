@@ -14,9 +14,11 @@ import { notifyOwner } from "./alert";
  * baratos con buen margen. Para cada candidato:
  *   landedUs  = costUsd  + freight real CJ → US
  *   landedMx  = costUsd  + freight real CJ → MX
- *   priceUsd  = max(landed) × markup  (precio de venta sugerido)
- *   profit    = priceUsd − COGS − fee de pago
- *   marginPct = profit / priceUsd
+ *   priceUsd  = costUsd × markup  (precio de venta sugerido, SIN envío)
+ *   El envío se cobra UNA sola vez en checkout (flat 9.99 / gratis según
+ *   promo). El precio NO embebe envío para permitir pricing estratégico.
+ *   profit total 1ud = (priceUsd + shipCheckout) − landed − fee×(price+ship)
+ *   marginPct = profit total / (priceUsd + shipCheckout)
  *
  * Guarda oportunidades rankeadas (score) en Redis para aprobación en admin.
  * Corre en cron (diario). Respeta QPS de CJ (~1 req/s).
@@ -51,10 +53,25 @@ export async function runHunter(opts?: {
   top: Array<{ pid: string; name: string; priceUsd: number; profitUsd: number; marginPct: number }>;
 }> {
   const s = await readStoreSettings();
-  const feeRate = s.paymentFeeRate;
+  
+  // KILL-SWITCH: si pauseHunter está activo, salir silenciosamente
+  if (s.pauseHunter) {
+    return { scanned: 0, opportunities: 0, new: 0, top: [] };
+  }
+  
+  const feeRate = s.paymentFeeRate ?? 0.036;
+  // Envío que el cliente paga UNA vez en checkout (1ud, sin promo).
+  // Se usa solo para evaluar rentabilidad total, no se suma al precio.
+  const shipExpected = Math.max(
+    s.shippingFlatMxUsd ?? 9.99,
+    s.shippingFlatUsd ?? 9.99
+  );
   const maxPrice = opts?.maxPrice ?? 5;
-  const minProfit = opts?.minProfit ?? 4;
-  const minMarginPct = opts?.minMarginPct ?? 45;
+  const minProfit = opts?.minProfit ?? 3;
+  // 30% total (precio+envío) equivale al guardrail sano >25% en docs.
+  // Antes era 45% porque el precio embebía envío ×2.6; con cobro único
+  // el margen total baja pero el precio al cliente es mucho más competitivo.
+  const minMarginPct = opts?.minMarginPct ?? 30;
   const maxCandidates = opts?.maxCandidates ?? 30;
   const keywords = opts?.keywords ?? DEFAULT_KEYWORDS;
 
@@ -129,10 +146,15 @@ export async function runHunter(opts?: {
       const shippingUsUsd = pickCheapest(us)?.logisticPrice ?? 5;
       const landedMx = costUsd + shippingMxUsd;
       const landedUs = costUsd + shippingUsUsd;
-      const priceBase = Number((Math.max(landedMx, landedUs) * markupDefault).toFixed(2));
-      const cogs = landedUs;
-      const profit = Number((priceBase - cogs - priceBase * feeRate).toFixed(2));
-      const margin = priceBase > 0 ? (profit / priceBase) * 100 : 0;
+      // Precio estratégico: solo costo × markup, SIN envío embebido.
+      const priceBase = Number((costUsd * markupDefault).toFixed(2));
+      // Rentabilidad total 1ud con cobro único de envío en checkout.
+      const landedWorst = Math.max(landedMx, landedUs);
+      const incomeTotal = priceBase + shipExpected;
+      const profit = Number(
+        (incomeTotal - landedWorst - incomeTotal * feeRate).toFixed(2)
+      );
+      const margin = incomeTotal > 0 ? (profit / incomeTotal) * 100 : 0;
       // filtro base: al menos ganancia mínima con markup estándar
       if (profit >= minProfit && margin >= minMarginPct) {
         viable.push({

@@ -230,10 +230,11 @@ async function convertToUsd(amount: number, from: string): Promise<number | null
 }
 
 /**
- * Calcula el precio de venta considerando la competencia:
- * - Si la competencia vende más barato que nuestro costo+ship: NO importarlo (precio no rentable).
- * - Si la competencia vende más caro: fijar precio ligeramente por debajo + pequeño margen.
- * - Si no hay competencia: usar markup estándar.
+ * Calcula el precio de venta considerando la competencia (cobro único envío).
+ * Precio base = cost × markup (SIN envío; el envío se cobra en checkout).
+ * - Si la competencia vende más barato que nuestro piso: NO importarlo.
+ * - Si la competencia vende más caro: fijar precio ligeramente por debajo.
+ * - Si no hay competencia: usar markup sobre costo.
  */
 export async function computeCompetitivePrice(
   product: Product,
@@ -252,24 +253,30 @@ export async function computeCompetitivePrice(
     ? competitors.reduce((a, b) => (a.priceUsd < b.priceUsd ? a : b))
     : null;
 
-  const landedMax = Math.max(landedMxUsd, landedUsUsd);
-  const basePrice = Number((landedMax * markup).toFixed(2));
+  // Cobro único: base sobre COSTO producto, no landed. El landed se usa
+  // solo como referencia de COGS (el envío lo paga el cliente en checkout).
+  const baseCost =
+    (product as unknown as { costUsd?: number }).costUsd &&
+    Number((product as unknown as { costUsd?: number }).costUsd) > 0
+      ? Number((product as unknown as { costUsd?: number }).costUsd)
+      : Math.max(landedMxUsd, landedUsUsd) - 9.99;
+  const basePrice = Number((baseCost * markup).toFixed(2));
 
   if (!minComp) {
-    // sin competencia → markup estándar (el piso ya reserva influencer + margen)
-    return { priceUsd: Math.max(basePrice, priceFloor(landedMax)), competitor: null, reason: "markup_default" };
+    // sin competencia → markup sobre costo (el piso reserva influencer + margen)
+    return { priceUsd: Math.max(basePrice, priceFloor(baseCost)), competitor: null, reason: "markup_default" };
   }
 
   // costo con fees aproximado (Stripe ~3.6% + fijos)
-  const ourFloor = basePrice; // precio con markup
+  const ourFloor = basePrice; // precio con markup sobre costo
   const compPrice = minComp.priceUsd;
 
   // 1) si competencia vende más barato que nosotros: posiciónarse bajo con margen mínimo
   if (compPrice < ourFloor) {
     // target = comp - pequeño discount (1-2%)
     const target = Math.min(ourFloor, Number((compPrice * 0.98).toFixed(2)));
-    // validar margen mínimo vs costo máximo (piso con influencer + margen)
-    const minAcceptable = priceFloor(landedMax);
+    // validar margen mínimo vs costo (piso con influencer + margen)
+    const minAcceptable = priceFloor(baseCost);
     if (target >= minAcceptable) {
       return { priceUsd: Math.max(target, minAcceptable), competitor: minComp, reason: "below_competitor" };
     }
@@ -289,26 +296,30 @@ export async function computeCompetitivePrice(
   }
   return { priceUsd: target, competitor: minComp, reason: "below_competitor" };
 
-  /** Precio mínimo que cubre costo+envío, fee de pago, comisión del influencer
-   *  y nuestro margen mínimo. Garantiza que al pagar la comisión del creador
-   *  (estrategia TikTok) no vendemos pérdida. */
-  function priceFloor(landed: number): number {
+  /** Precio mínimo que cubre COSTO producto, fee, comisión influencer
+   *  y margen mínimo. El flete se cubre con el envío de checkout,
+   *  no con el precio (cobro único). */
+  function priceFloor(cost: number): number {
     const reserved = feeRate + inflPct + minMarginPct / 100;
-    if (reserved >= 1) return Number((landed * 3).toFixed(2));
-    return Number((landed / (1 - reserved)).toFixed(2));
+    if (reserved >= 1) return Number((cost * 3).toFixed(2));
+    return Number((cost / (1 - reserved)).toFixed(2));
   }
 }
 
 export function computePriceSimple(
   landedMxUsd: number,
   landedUsUsd: number,
-  opts?: { markup?: number; minMarginPct?: number; feeRate?: number; influencerCommissionPct?: number }
+  opts?: { markup?: number; minMarginPct?: number; feeRate?: number; influencerCommissionPct?: number; costUsd?: number }
 ): number {
   const s = { markup: 2.6, minMarginPct: 12, feeRate: 0.036, influencerCommissionPct: 15, ...opts };
-  const landedMax = Math.max(landedMxUsd, landedUsUsd);
-  const price = Number((landedMax * s.markup).toFixed(2));
+  // Cobro único: base sobre costo, no landed. Si no se pasa costUsd se
+  // estima como landed − 9.99 para no romper callers antiguos.
+  const cost = s.costUsd && s.costUsd > 0
+    ? s.costUsd
+    : Math.max(landedMxUsd, landedUsUsd) - 9.99;
+  const price = Number((cost * s.markup).toFixed(2));
   const reserved = s.feeRate + s.influencerCommissionPct / 100 + s.minMarginPct / 100;
-  const floor = reserved >= 1 ? landedMax * 3 : Number((landedMax / (1 - reserved)).toFixed(2));
+  const floor = reserved >= 1 ? cost * 3 : Number((cost / (1 - reserved)).toFixed(2));
   return Math.max(price, floor);
 }
 
@@ -321,9 +332,12 @@ export async function shouldIncludeProduct(product: Product): Promise<{ include:
   if (Number.isNaN(priceUsd)) {
     return { include: false, priceUsd: 0, reason };
   }
-  // margen mínimo global
+  // margen total con cobro único (precio + envío checkout − landed).
+  const shipExpected = Math.max(s.shippingFlatMxUsd ?? 9.99, s.shippingFlatUsd ?? 9.99);
   const landedMax = Math.max(landedMx, landedUs);
-  const marginPct = ((priceUsd - landedMax) / priceUsd) * 100;
+  const income = priceUsd + shipExpected;
+  const fee = income * (s.paymentFeeRate ?? 0.036);
+  const marginPct = ((income - landedMax - fee) / income) * 100;
   if (marginPct < (s.minMarginPct ?? 20)) {
     return { include: false, priceUsd, reason: "below_min_margin" };
   }

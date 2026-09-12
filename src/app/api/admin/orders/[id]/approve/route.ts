@@ -4,6 +4,7 @@ import { getOrder, saveOrder, updateOrder } from "@/lib/orders-db";
 import { fulfillOrder } from "@/lib/cj";
 import { sendOrderConfirmation } from "@/lib/email";
 import { notifyOwner } from "@/lib/automation/alert";
+import { readStoreSettings } from "@/lib/settings-db";
 
 export const dynamic = "force-dynamic";
 
@@ -30,6 +31,15 @@ export async function POST(
       {
         error: `El pedido no está en espera de autorización (estado actual: ${order.status}).`,
       },
+      { status: 409 }
+    );
+  }
+
+  // KILL-SWITCH: si pauseFulfill está activo, rechazar la aprobación
+  const settings = await readStoreSettings();
+  if (settings.pauseFulfill) {
+    return NextResponse.json(
+      { error: "Fulfill pausado globalmente (pauseFulfill=true). No se puede aprobar." },
       { status: 409 }
     );
   }

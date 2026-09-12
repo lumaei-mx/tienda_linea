@@ -57,7 +57,9 @@ export async function POST(
       return NextResponse.json({ error: "Ya importada" }, { status: 400 });
     }
 
-    const landedMax = Math.max(opp.landedMx, opp.landedUs);
+    // Cobro único de envío: el piso manual es sobre COSTO (no landed).
+    // El flete se cubre con el envío de checkout, no con el precio.
+    const costBase = opp.costUsd > 0 ? opp.costUsd : Math.max(opp.landedMx, opp.landedUs) - 9.99;
 
     // si el admin fijó precio manual → validar que cubra costo mínimo
     if (manualPrice !== null) {
@@ -65,9 +67,13 @@ export async function POST(
         return NextResponse.json({ error: "Precio manual inválido" }, { status: 400 });
       }
       const s = await readStoreSettings();
-      const minMargin = s.minMarginPct ?? 20;
+      const minMargin = s.minMarginPct ?? 12;
       const feeRate = s.paymentFeeRate ?? 0.036;
-      const minAcceptable = Number((landedMax * (1 + minMargin / 100) / (1 - feeRate)).toFixed(2));
+      const inflPct = (s.influencerCommissionPct ?? 15) / 100;
+      const reserved = feeRate + inflPct + minMargin / 100;
+      const minAcceptable = Number(
+        (reserved >= 1 ? costBase * 3 : costBase / (1 - reserved)).toFixed(2)
+      );
       if (manualPrice < minAcceptable) {
         return NextResponse.json(
           {
@@ -185,9 +191,14 @@ export async function GET(
     });
   }
 
+  // Ganancia total con cobro único: (precio + envío checkout) − landed − fee.
+  const { readStoreSettings: readSettings } = await import("@/lib/settings-db");
+  const st = await readSettings().catch(() => null);
+  const shipExp = Math.max(st?.shippingFlatMxUsd ?? 9.99, st?.shippingFlatUsd ?? 9.99);
   const landedMax = Math.max(opp.landedMx, opp.landedUs);
-  const feeRate = 0.036;
-  const profit = adjustedPrice - landedMax - adjustedPrice * feeRate;
+  const feeRate = st?.paymentFeeRate ?? 0.036;
+  const incomeExp = adjustedPrice + shipExp;
+  const profit = incomeExp - landedMax - incomeExp * feeRate;
 
   return NextResponse.json({
     opportunity: opp,
@@ -196,7 +207,7 @@ export async function GET(
     recommendedPriceUsd: Number.isNaN(adjustedPrice) ? null : Number(adjustedPrice.toFixed(2)),
     suggestedPriceUsd: opp.suggestedPriceUsd,
     profitUsd: Number(profit.toFixed(2)),
-    marginPct: Number(((profit / adjustedPrice) * 100).toFixed(1)),
+    marginPct: Number(((profit / incomeExp) * 100).toFixed(1)),
     reason,
   });
 }

@@ -25,6 +25,13 @@ export async function runRetryFulfill(): Promise<{
   fulfilled: number;
   failed: number;
 }> {
+  const s = await readStoreSettings();
+  
+  // KILL-SWITCH: si pauseFulfill está activo, NO procesar retries ni huérfanos
+  if (s.pauseFulfill) {
+    return { attempted: 0, fulfilled: 0, failed: 0 };
+  }
+
   const retries = await listRetries();
   let fulfilled = 0;
   let failed = 0;

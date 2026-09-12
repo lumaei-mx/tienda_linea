@@ -37,7 +37,7 @@ export interface CheckoutInput {
  */
 export async function createPendingOrder(input: CheckoutInput): Promise<Order> {
   const { market, customer } = input;
-  const currency = "USD";
+  const currency = market === "MX" ? "MXN" : "USD";
   const s = await readStoreSettings();
   const orderItems: OrderItem[] = [];
 
@@ -282,6 +282,16 @@ export async function confirmPaidOrder(
   // Si AUTO_APPROVE_ORDERS=true, se salta la espera de autorización del dueño
   // y se envía a cumplimiento inmediatamente. Por defecto (unset/false) no hace nada.
   if (process.env.AUTO_APPROVE_ORDERS === "true") {
+    const settings = await readStoreSettings();
+    // KILL-SWITCH: si pauseFulfill está activo, no auto-aprobar
+    if (settings.pauseFulfill) {
+      await notifyOwner(
+        "auto_fulfill_paused",
+        `Pedido ${orderId}: AUTO_APPROVE_ORDERS=true pero pauseFulfill=true. Pedido queda en awaiting_owner_approval.`,
+        "warn"
+      ).catch(() => {});
+      return updated;
+    }
     try {
       await updateOrder(orderId, {
         status: "fulfillment_queued",

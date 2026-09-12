@@ -1,6 +1,7 @@
 import { getCjProductDetail } from "@/lib/cj";
 import { readProducts, upsertProduct } from "@/lib/products-db";
 import { calculateFreight } from "@/lib/cj";
+import { readStoreSettings } from "@/lib/settings-db";
 import { notifyOwner } from "./alert";
 
 function num(v: unknown, fallback = 0) {
@@ -18,6 +19,13 @@ export async function runCjSync(): Promise<{
   errors: number;
   details: Array<{ id: string; note: string }>;
 }> {
+  const s = await readStoreSettings();
+  
+  // KILL-SWITCH: si pauseSyncCj está activo, salir silenciosamente
+  if (s.pauseSyncCj) {
+    return { checked: 0, updated: 0, errors: 0, details: [] };
+  }
+
   const products = await readProducts();
   const withCj = products.filter((p) => p.cjProductId && p.cjVariantId);
   let updated = 0;

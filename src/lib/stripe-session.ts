@@ -8,11 +8,20 @@ import type { Order } from "./types";
  * cobrar exactamente el total del pedido, o el guardrail del webhook
  * (amount_mismatch) bloquea el fulfillment.
  * Labels localizados por mercado (MX→ES, US→EN).
+ * Moneda: MXN para México (con OXXO/SPEI), USD para US.
  */
 export async function buildOrderLineItems(order: Order) {
   const s = await readStoreSettings();
-  const currency = "usd";
-  const conv = (usd: number) => toStripeAmount(usd);
+  const currency = order.market === "MX" ? "mxn" : "usd";
+  // Para MXN: redondeo a centavos (Stripe usa amount en centavos)
+  // Para USD: toStripeAmount ya maneja centavos
+  const conv = (usd: number) => {
+    if (currency === "mxn") {
+      const rate = s.usdToMxn ?? 17.36;
+      return Math.round(usd * rate * 100); // MXN centavos
+    }
+    return toStripeAmount(usd);
+  };
   const es = order.market === "MX";
 
   return [
@@ -57,12 +66,20 @@ export async function buildOrderLineItems(order: Order) {
 
 /** Opción de envío de la sesión, localizada por mercado. */
 export async function buildShippingOption(order: Order) {
-  const currency = "usd";
+  const currency = order.market === "MX" ? "mxn" : "usd";
+  const s = await readStoreSettings();
+  const conv = (usd: number) => {
+    if (currency === "mxn") {
+      const rate = s.usdToMxn ?? 17.36;
+      return Math.round(usd * rate * 100);
+    }
+    return toStripeAmount(usd);
+  };
   return {
     shipping_rate_data: {
       type: "fixed_amount" as const,
       fixed_amount: {
-        amount: toStripeAmount(order.shipping),
+        amount: conv(order.shipping),
         currency,
       },
       display_name: order.market === "MX" ? "Envío" : "Shipping",
@@ -80,14 +97,16 @@ export async function createOrderCheckoutSession(
   origin: string
 ): Promise<{ url: string | null; id: string }> {
   const stripe = getStripe();
+  const isMX = order.market === "MX";
+
   const session = await stripe.checkout.sessions.create({
     mode: "payment",
-    payment_method_types: ["card"],
+    payment_method_types: isMX ? ["card", "oxxo", "spei"] : ["card"],
     line_items: await buildOrderLineItems(order),
     metadata: { orderId: order.id },
     customer_email: order.customer.email,
     shipping_address_collection: {
-      allowed_countries: order.market === "MX" ? ["MX"] : ["US"],
+      allowed_countries: isMX ? ["MX"] : ["US"],
     },
     shipping_options: [await buildShippingOption(order)],
     tax_id_collection: { enabled: false },

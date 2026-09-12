@@ -1,0 +1,1 @@
+You can upload this repo to Cloudflare Pages without paying. The free plan includes unlimited sites, requests, and bandwidth, with 500 builds/month, 5,000 files, and 20,000 requests per month. Private repositories are supported, and static asset requests are free and unlimited.
