@@ -59,9 +59,11 @@ export function isSupabaseAvailable(): boolean {
  */
 export async function ensureKvTable(): Promise<void> {
   const client = getClient();
-  await client.rpc("ensure_kv_store_table").catch(() => {
+  try {
+    await client.rpc("ensure_kv_store_table");
+  } catch {
     /* la tabla puede no existir todavía — se crea manualmente vía SQL */
-  });
+  }
 }
 
 export async function storageGetSupabase<T>(

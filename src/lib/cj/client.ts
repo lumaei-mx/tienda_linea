@@ -68,8 +68,11 @@ async function storeToken(data: CjTokenData) {
       /* ignora */
     }
   }
-  await fs.mkdir(path.dirname(TOKEN_FILE), { recursive: true });
-  await fs.writeFile(TOKEN_FILE, JSON.stringify(data, null, 2), "utf8");
+  // Skip filesystem in production (Cloudflare Workers / serverless)
+  if (process.env.NODE_ENV !== "production") {
+    await fs.mkdir(path.dirname(TOKEN_FILE), { recursive: true });
+    await fs.writeFile(TOKEN_FILE, JSON.stringify(data, null, 2), "utf8");
+  }
 }
 
 export function isCjConfigured() {

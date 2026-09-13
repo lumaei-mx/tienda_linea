@@ -63,3 +63,11 @@ next-env.d.ts
 
 # artefactos del navegador de auditoria (regenerables)
 .playwright-mcp/
+
+# OpenNext
+.open-next
+
+# wrangler files
+.wrangler
+.dev.vars*
+!.dev.vars.example

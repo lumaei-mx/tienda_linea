@@ -1,7 +1,8 @@
 import { promises as fs } from "fs";
 import path from "path";
 import type { Product } from "./types";
-import { products as seedProducts } from "@/data/products";
+// Import seed data as fallback for Edge Runtime (static import)
+import { products as seedProductsData } from "@/data/products";
 import {
   isRedisAvailable,
   storageList,
@@ -12,8 +13,11 @@ import {
 const DATA_DIR = path.join(process.cwd(), "data");
 const PRODUCTS_FILE = path.join(DATA_DIR, "products.json");
 const COLLECTION = "products";
+const seedProducts: Product[] = seedProductsData;
 
 async function ensureLocal() {
+  // Skip filesystem in production (Cloudflare Workers / serverless)
+  if (process.env.NODE_ENV === "production") return;
   await fs.mkdir(DATA_DIR, { recursive: true });
   try {
     await fs.access(PRODUCTS_FILE);
@@ -35,9 +39,18 @@ export async function readProducts(): Promise<Product[]> {
     for (const p of seeds) await storageSet(COLLECTION, p.id, p);
     return seeds;
   }
-  await ensureLocal();
-  const raw = await fs.readFile(PRODUCTS_FILE, "utf8");
-  return JSON.parse(raw) as Product[];
+  // Fallback: use imported seed data (works in Edge Runtime / Cloudflare Workers)
+  if (process.env.NODE_ENV === "production") {
+    return seedProducts;
+  }
+  try {
+    await ensureLocal();
+    const raw = await fs.readFile(PRODUCTS_FILE, "utf8");
+    return JSON.parse(raw) as Product[];
+  } catch {
+    // Fall back to imported seed data
+    return seedProducts;
+  }
 }
 
 export async function writeProducts(products: Product[]) {
