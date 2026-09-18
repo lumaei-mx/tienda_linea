@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { isAdminRequest } from "@/lib/admin-auth";
+import { isOwner } from "@/lib/admin-auth";
 import { getOrder, saveOrder, updateOrder } from "@/lib/orders-db";
 import { fulfillOrder } from "@/lib/cj";
 import { sendOrderConfirmation } from "@/lib/email";
@@ -18,7 +18,7 @@ export async function POST(
   req: Request,
   { params }: { params: Promise<{ id: string }> }
 ) {
-  if (!(await isAdminRequest(req))) {
+  if (!(await isOwner(req))) {
     return NextResponse.json({ error: "No autorizado" }, { status: 401 });
   }
   const { id } = await params;

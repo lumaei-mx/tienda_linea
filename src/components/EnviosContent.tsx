@@ -83,10 +83,10 @@ export function EnviosContent({
                   ) : (
                     <a
                       key="whatsapp"
-                      href="https://wa.me/14084223904"
+                      href="/contacto"
                       className="text-gold-dark underline"
                     >
-                      WhatsApp
+                      {lang === "es" ? "chat de soporte" : "support chat"}
                     </a>
                   )
                 );

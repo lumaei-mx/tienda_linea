@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { isAdminRequest } from "@/lib/admin-auth";
+import { isOwner } from "@/lib/admin-auth";
 import {
   addProductToSeason,
   removeProductFromSeason,
@@ -11,7 +11,7 @@ export async function POST(
   req: Request,
   { params }: { params: Promise<{ season: string }> }
 ) {
-  if (!(await isAdminRequest(req))) {
+  if (!(await isOwner(req))) {
     return NextResponse.json({ error: "No autorizado" }, { status: 401 });
   }
   const { season } = await params;
@@ -28,7 +28,7 @@ export async function DELETE(
   req: Request,
   { params }: { params: Promise<{ season: string }> }
 ) {
-  if (!(await isAdminRequest(req))) {
+  if (!(await isOwner(req))) {
     return NextResponse.json({ error: "No autorizado" }, { status: 401 });
   }
   const { season } = await params;

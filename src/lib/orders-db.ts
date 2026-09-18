@@ -2,7 +2,7 @@ import { promises as fs } from "fs";
 import path from "path";
 import type { Order } from "./types";
 import {
-  isRedisAvailable,
+  isPersistentStorageAvailable,
   storageGet,
   storageList,
   storageSet,
@@ -24,7 +24,7 @@ async function ensureLocal() {
 }
 
 export async function readOrders(): Promise<Order[]> {
-  if (isRedisAvailable()) {
+  if (isPersistentStorageAvailable()) {
     const docs = await storageList<Order>(COLLECTION);
     return docs.sort((a, b) =>
       (b.createdAt || "").localeCompare(a.createdAt || "")
@@ -44,7 +44,7 @@ export async function readOrders(): Promise<Order[]> {
 }
 
 export async function writeOrders(orders: Order[]) {
-  if (isRedisAvailable()) {
+  if (isPersistentStorageAvailable()) {
     for (const o of orders) await storageSet(COLLECTION, o.id, o);
     return;
   }
@@ -53,7 +53,7 @@ export async function writeOrders(orders: Order[]) {
 }
 
 export async function getOrder(id: string): Promise<Order | null> {
-  if (isRedisAvailable()) {
+  if (isPersistentStorageAvailable()) {
     return storageGet<Order>(COLLECTION, id);
   }
   const orders = await readOrders();
@@ -61,7 +61,7 @@ export async function getOrder(id: string): Promise<Order | null> {
 }
 
 export async function saveOrder(order: Order) {
-  if (isRedisAvailable()) {
+  if (isPersistentStorageAvailable()) {
     await storageSet(COLLECTION, order.id, order);
     return order;
   }

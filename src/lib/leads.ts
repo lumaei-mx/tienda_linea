@@ -4,7 +4,7 @@ import {
   storageSet as firestoreSet,
 } from "./firestore";
 import {
-  isRedisAvailable,
+  isPersistentStorageAvailable,
   storageGet as redisGet,
   storageSet as redisSet,
 } from "./storage";
@@ -53,7 +53,7 @@ async function readLead(id: string): Promise<LeadRecord | null> {
       console.error("[leads] error leyendo Firestore:", err);
     }
   }
-  if (isRedisAvailable()) {
+  if (isPersistentStorageAvailable()) {
     try {
       return await redisGet<LeadRecord>("leads", id);
     } catch (err) {
@@ -90,7 +90,7 @@ export async function saveLead(
       console.error("[leads] fallback a Redis:", err);
     }
   }
-  if (isRedisAvailable()) {
+  if (isPersistentStorageAvailable()) {
     try {
       await redisSet("leads", id, record);
       return { backend: "redis" };
@@ -120,7 +120,7 @@ export async function consumeLeadRate(email: string): Promise<boolean> {
   const id = leadId(email);
   const today = dayKey();
 
-  if (isRedisAvailable()) {
+  if (isPersistentStorageAvailable()) {
     try {
       const rec = await redisGet<{ date: string; count: number }>("leads-rl", id);
       if (!rec || rec.date !== today) {

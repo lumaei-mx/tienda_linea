@@ -58,7 +58,7 @@ export function Footer() {
           </p>
           <ul className="mt-3 space-y-2 text-sm text-ivory/75">
             <li><a href="mailto:lumaeiMX@gmail.com" className="transition hover:text-gold-light">lumaeiMX@gmail.com</a></li>
-            <li><a href="https://wa.me/14084223904" target="_blank" rel="noopener" className="transition hover:text-gold-light">{t("footerWhatsApp", lang)} +1 408 422 3904</a></li>
+            <li><a href="/contacto" className="transition hover:text-gold-light">{t("footerSupport", lang)}</a></li>
             <li>{t("footerTracked", lang)}</li>
           </ul>
         </div>

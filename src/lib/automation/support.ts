@@ -10,6 +10,9 @@ import {
 } from "../agentmail";
 import { getOrder } from "../orders-db";
 import { notifyOwner } from "./alert";
+import { readStoreSettings } from "../settings-db";
+import { createEscalation, expireStaleEscalations } from "../support-escalations";
+import { answerBotMessage } from "../support-kb";
 
 const INBOX = process.env.AGENTMAIL_INBOX || "";
 
@@ -32,6 +35,7 @@ function extractOrderId(text: string): string | null {
   );
   return m ? m[0] : null;
 }
+
 
 /**
  * Escala un caso al dueño vía Telegram (+ registro en /admin).
@@ -112,6 +116,13 @@ export async function processInbound(sinceISO?: string): Promise<{
   if (!isAgentMailConfigured()) {
     return { replied: 0, escalated: 0, errors: ["AgentMail no configurado"] };
   }
+
+  // Barrido: lo que pasó el plazo sin decisión humana se aborta (fail-safe).
+  await expireStaleEscalations().catch(() => 0);
+
+  const settings = await readStoreSettings().catch(() => null);
+  const botPaused = Boolean(settings?.pauseBot);
+
   const threads = await listThreads({ after: sinceISO, limit: 25 });
   let replied = 0;
   let escalated = 0;
@@ -124,21 +135,42 @@ export async function processInbound(sinceISO?: string): Promise<{
       const from = last.from_ || (last as any).from || "";
       if (!from || from.includes(INBOX)) continue; // el último mensaje ya es nuestro
       const body = last.text || (last as any).body || "";
-      const intent = classifyIntent(`${th.subject || ""} ${body}`);
+      const subject = th.subject || "";
+      const intent = classifyIntent(`${subject} ${body}`);
       const oid = extractOrderId(body);
       let order: any = null;
       if (oid) order = await getOrder(oid).catch(() => null);
-      const { text, escalate } = draftReply(intent, order, Boolean(oid));
+
+      // Respuesta con la política de riesgo del KB (ES por defecto en correo).
+      const bot = answerBotMessage(`${subject} ${body}`, "es");
+      const needsApproval = botPaused || bot.requiresApproval;
+
+      // Caso con compromiso de dinero/promesas (o bot pausado): NO se responde
+      // solo. Se encola para que un humano APRUEBE o ABORTE antes del envío.
+      if (needsApproval) {
+        const { text } = draftReply(intent, order, Boolean(oid));
+        await createEscalation({
+          channel: "email",
+          customerRef: from,
+          orderId: oid || undefined,
+          customerMessage: body.slice(0, 2000),
+          proposedReply: bot.requiresApproval ? bot.reply : text,
+          intent: botPaused ? "paused" : bot.intent,
+          reason: botPaused
+            ? "Bot de soporte pausado (pauseBot activo)"
+            : bot.reason || "Respuesta con compromiso (requiere autorización)",
+          risk: "high",
+          proposedAction: bot.proposedAction,
+        });
+        escalated++;
+        continue;
+      }
+
+      // Bajo riesgo: el bot responde solo (operación autónoma).
       const msgId = last.message_id || (last as any).id;
       if (msgId) {
-        await replyToMessage(msgId, text);
+        await replyToMessage(msgId, bot.reply);
         replied++;
-      }
-      if (escalate) {
-        await escalateToOwner(
-          `[SOPORTE] ${th.subject || "(sin asunto)"} de ${from}: ${body.slice(0, 200)}`
-        );
-        escalated++;
       }
     } catch (e: any) {
       errors.push(`${th.thread_id}: ${e?.message || e}`);

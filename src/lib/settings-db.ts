@@ -1,19 +1,23 @@
 import { settings as staticSettings } from "./settings";
-import { storageGet, storageSet, isRedisAvailable } from "./storage";
+import { storageGet, storageSet } from "./storage";
 import type { StoreSettings } from "./types";
 
 const COLLECTION = "meta";
 const DOC = "settings_store";
 
 /**
- * Settings de negocio en Redis (editables desde admin, sin tocar código).
+ * Settings de negocio persistidos (editables desde admin, sin tocar código).
  * Cae al objeto estático si no hay override almacenado.
+ *
+ * Sin puerta por backend: `storageGet` ya resuelve Supabase → Redis →
+ * Firestore → filesystem. Gatear aquí por Redis hacía que en Cloudflare
+ * (backend Supabase) los cambios del admin se escribieran pero nunca se
+ * leyeran, así que los interruptores de seguridad no surtían efecto.
  */
 export async function readStoreSettings(): Promise<StoreSettings> {
-  if (!isRedisAvailable()) return staticSettings;
   try {
     const stored = await storageGet<Partial<StoreSettings>>(COLLECTION, DOC);
-    return { ...staticSettings, ...stored };
+    return { ...staticSettings, ...(stored || {}) };
   } catch {
     return staticSettings;
   }

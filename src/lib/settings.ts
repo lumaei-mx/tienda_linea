@@ -35,4 +35,6 @@ export const settings: StoreSettings = {
   pauseSyncCj: false,
   /** Pausa bot soporte (escala todo a humano) */
   pauseBot: false,
+  /** Declarar que el soporte es IA (transparencia con el cliente) */
+  discloseAi: true,
 };

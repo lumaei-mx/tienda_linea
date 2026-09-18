@@ -272,6 +272,7 @@ const dict = {
   },
   footerRights: { es: "TIENDA ONLINE", en: "ONLINE STORE" },
   footerWhatsApp: { es: "WhatsApp:", en: "WhatsApp:" },
+  footerSupport: { es: "Soporte 24/7 por chat", en: "24/7 chat support" },
 
   // PDP
   productTrust: {
@@ -404,7 +405,7 @@ const dict = {
     es: "Escríbenos a {email}",
     en: "Write to us at {email}",
   },
-  retHow2: { es: "O por {whatsapp}", en: "Or via {whatsapp}" },
+  retHow2: { es: "O desde el {whatsapp}", en: "Or via the {whatsapp}" },
   retHow3: {
     es: "Incluye tu número de pedido y una foto del producto. Te decimos los siguientes pasos en menos de 24 horas.",
     en: "Include your order number and a photo of the product. We'll tell you the next steps within 24 hours.",
@@ -422,10 +423,10 @@ const dict = {
     en: "We're here to help you before, during and after your purchase.",
   },
   contEmail: { es: "Correo", en: "Email" },
-  contWhatsapp: { es: "WhatsApp", en: "WhatsApp" },
+  contWhatsapp: { es: "Asistente 24/7", en: "24/7 assistant" },
   contWhatsappNote: {
-    es: "Respondemos en horario México. Para pedidos, incluye tu número de orden.",
-    en: "We reply during Mexico business hours. For orders, include your order number.",
+    es: "Respuesta inmediata por chat, todos los días. Para pedidos, incluye tu número de orden.",
+    en: "Instant reply by chat, every day. For orders, include your order number.",
   },
   contHours: {
     es: "Horario de atención: lunes a sábado. Tiempo de respuesta típico: menos de 24 horas.",

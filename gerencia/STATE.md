@@ -385,7 +385,7 @@ ciclo (ver `MANDATE.md` sección 8). El loop lee esto para no empezar ciego.
           existentes + la nueva. Riesgo CRO de desalineo cerrado de raíz.
 - [ ] Continuar benchmarking: monitorear precios CJ vs competencia y vigilar
      plataformas alternativas cada ciclo (indefinido).
-- [ ] Detectar clientes/ventas y arrancar mensajería (WA tienda +1 408 422 3904).
+- [ ] Detectar clientes/ventas y arrancar mensajería (WA tienda: usar número público de tienda, nunca el personal).
 - [ ] VERIFICAR plan Vercel: confirmar que cubre uso comercial (Hobby es
      no-comercial) y configurar spend cap; si requiere Pro ($20/mo) → ir a
      AUTHORIZATION_QUEUE como solicitud económica (no ejecutar sin aprobación).
