@@ -23,6 +23,16 @@ export { isSupabaseAvailable };
  */
 const BACKEND_TIMEOUT_MS = Number(process.env.STORAGE_TIMEOUT_MS || 8000);
 
+/**
+ * Timeout de conexión a Redis. `withTimeout` no cubre el `connect()`, así que
+ * sin este límite un Redis inalcanzable (URL inválida, host caído, TLS
+ * incorrecto) deja la request colgada para siempre en vez de degradar al
+ * siguiente backend.
+ */
+const REDIS_CONNECT_TIMEOUT_MS = Number(
+  process.env.REDIS_CONNECT_TIMEOUT_MS || 3000
+);
+
 export class StorageTimeoutError extends Error {
   constructor(op: string, ms: number) {
     super(`${op} excedió ${ms}ms`);
@@ -176,12 +186,25 @@ function getRedis(): Promise<RedisClientType> {
   if (_redisPromise) return _redisPromise;
 
   _redisPromise = (async () => {
-    const client = createClient({ url: REDIS_URL });
+    const client = createClient({
+      url: REDIS_URL,
+      socket: {
+        connectTimeout: REDIS_CONNECT_TIMEOUT_MS,
+        // Sin esto el cliente reintenta en bucle y cada request se queda
+        // esperando indefinidamente: preferimos fallar rápido y caer al
+        // siguiente backend (Supabase/Firestore/filesystem).
+        reconnectStrategy: false,
+      },
+    });
     client.on("error", () => {
       /* errores en background no tumban el proceso */
     });
     try {
-      await client.connect();
+      // El `connectTimeout` del socket cubre TCP/TLS, pero no todos los modos
+      // de fallo (DNS colgado, proxy que acepta y no responde), así que la
+      // conexión se acota también aquí. Sin esto, `_redisPromise` quedaba
+      // pendiente para siempre y cada request posterior pagaba el timeout.
+      await withTimeout(client.connect(), "redis.connect", REDIS_CONNECT_TIMEOUT_MS);
     } catch (err) {
       _redisPromise = null;
       try {
@@ -243,7 +266,7 @@ export async function storageGet<T>(collection: string, id: string): Promise<T |
   if (isRedisAvailable()) {
     try {
       const raw = await withTimeout(
-        (await getRedis()).get(collectionKey(collection, id)),
+        getRedis().then((c) => c.get(collectionKey(collection, id))),
         "redis.get"
       );
       return raw ? (JSON.parse(raw) as T) : null;
@@ -280,7 +303,7 @@ export async function storageList<T>(collection: string): Promise<T[]> {
   // 2. Redis
   if (isRedisAvailable()) {
     try {
-      const client = await getRedis();
+      const client = await withTimeout(getRedis(), "redis.connect");
       const keys = await withTimeout(
         redisScanKeys(client, `${collection}:*`),
         "redis.scan"
@@ -324,7 +347,9 @@ export async function storageSet(collection: string, id: string, data: unknown) 
   if (isRedisAvailable()) {
     try {
       await withTimeout(
-        (await getRedis()).set(collectionKey(collection, id), JSON.stringify(data)),
+        getRedis().then((c) =>
+          c.set(collectionKey(collection, id), JSON.stringify(data))
+        ),
         "redis.set"
       );
       success = true;
@@ -364,7 +389,10 @@ export async function storageDelete(collection: string, id: string) {
   // 2. Redis
   if (isRedisAvailable()) {
     try {
-      await withTimeout((await getRedis()).del(collectionKey(collection, id)), "redis.del");
+      await withTimeout(
+        getRedis().then((c) => c.del(collectionKey(collection, id))),
+        "redis.del"
+      );
     } catch {
       /* fall through */
     }
