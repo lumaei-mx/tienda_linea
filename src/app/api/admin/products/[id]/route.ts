@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { isAdminRequest } from "@/lib/admin-auth";
+import { isAdminRequest, isOwner } from "@/lib/admin-auth";
 import {
   getProductByIdAsync,
   upsertProduct,
@@ -13,7 +13,7 @@ export async function PATCH(
   req: Request,
   { params }: { params: Promise<{ id: string }> }
 ) {
-  if (!(await isAdminRequest(req))) {
+  if (!(await isOwner(req))) {
     return NextResponse.json({ error: "No autorizado" }, { status: 401 });
   }
   const { id } = await params;

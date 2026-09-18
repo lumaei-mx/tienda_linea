@@ -251,4 +251,6 @@ export interface StoreSettings {
   pauseSyncCj?: boolean;
   /** Pausa bot soporte (escala todo a humano) */
   pauseBot?: boolean;
+  /** Declarar que el soporte es IA (transparencia con el cliente) */
+  discloseAi?: boolean;
 }

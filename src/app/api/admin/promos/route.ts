@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { isAdminRequest } from "@/lib/admin-auth";
+import { isAdminRequest, isOwner } from "@/lib/admin-auth";
 import { deletePromo, listPromos, upsertPromo } from "@/lib/promo-db";
 import type { Market } from "@/lib/types";
 
@@ -13,7 +13,7 @@ export async function GET(req: Request) {
 }
 
 export async function POST(req: Request) {
-  if (!(await isAdminRequest(req))) {
+  if (!(await isOwner(req))) {
     return NextResponse.json({ error: "No autorizado" }, { status: 401 });
   }
   const body = await req.json().catch(() => null);
@@ -58,7 +58,7 @@ export async function POST(req: Request) {
 }
 
 export async function DELETE(req: Request) {
-  if (!(await isAdminRequest(req))) {
+  if (!(await isOwner(req))) {
     return NextResponse.json({ error: "No autorizado" }, { status: 401 });
   }
   const url = new URL(req.url);

@@ -1,9 +1,12 @@
 import Link from "next/link";
+import { headers } from "next/headers";
+import { redirect } from "next/navigation";
 import { readProducts } from "@/lib/products-db";
 import { readOrders } from "@/lib/orders-db";
 import { formatMoney, marginForProduct } from "@/lib/money";
 import { readStoreSettings } from "@/lib/settings-db";
 import { listAffiliates } from "@/lib/affiliates";
+import { isAdminRequest, getAdminClaims } from "@/lib/admin-auth";
 import AffiliatesCommissions, { type AffRow } from "@/components/AffiliatesCommissions";
 import { AdminOrders } from "@/components/AdminOrders";
 import { CjImportPanel } from "@/components/CjImportPanel";
@@ -14,16 +17,32 @@ import { OpportunitiesPanel } from "@/components/OpportunitiesPanel";
 import { CatalogsPanel } from "@/components/CatalogsPanel";
 import { ProductManagerPanel } from "@/components/ProductManagerPanel";
 import { AdminSupportPanel } from "@/components/AdminSupportPanel";
+import { AdminUsersPanel } from "@/components/AdminUsersPanel";
+import { EscalationsPanel } from "@/components/EscalationsPanel";
 
 export const dynamic = "force-dynamic";
 
 export default async function AdminPage() {
+  // Defensa en profundidad: el proxy ya redirige, pero la página vuelve a
+  // verificar la sesión (por si el matcher cambia o se sirve por otra vía).
+  const h = await headers();
+  const cookie = h.get("cookie") || "";
+  if (!(await isAdminRequest(new Request("https://local/admin", { headers: { cookie } })))) {
+    redirect("/admin/login");
+  }
+  const claims = await getAdminClaims(
+    new Request("https://local/admin", { headers: { cookie } })
+  );
+
+  // Lecturas independientes y tolerantes a fallos: un backend lento ya no
+  // tumba el panel completo (antes colgaba >150s sin responder).
   const [orders, products, storeSettings, affiliates] = await Promise.all([
-    readOrders(),
-    readProducts(),
-    readStoreSettings(),
-    listAffiliates(),
+    readOrders().catch(() => [] as never[]),
+    readProducts().catch(() => [] as never[]),
+    readStoreSettings().catch(() => null),
+    listAffiliates().catch(() => [] as never[]),
   ]);
+  const s = storeSettings ?? (await import("@/lib/settings")).settings;
   const active = products.filter((p) => p.active);
   // Solo pedidos REALMENTE pagados cuentan para revenue/profit.
   // (Antes sumaba pending_payment y cancelled → profit ficticio.)
@@ -73,11 +92,11 @@ export default async function AdminPage() {
             Panel
           </p>
           <h1 className="mt-1 font-serif text-3xl font-semibold text-brown">
-            Admin · {storeSettings.brandName}
+            Admin · {s.brandName}
           </h1>
           <p className="mt-1 text-sm text-brown-soft">
             Automatización CJ · MX primario · US secundario · auto-fulfill:{" "}
-            {storeSettings.autoFulfill ? "ON" : "OFF"}
+            {s.autoFulfill ? "ON" : "OFF"}
           </p>
         </div>
         <Link
@@ -202,19 +221,19 @@ export default async function AdminPage() {
       )}
 
       {/* Kill-switch status bar */}
-      {storeSettings.pauseHunter ||
-        storeSettings.pauseReprice ||
-        storeSettings.pauseFulfill ||
-        storeSettings.pauseSyncCj ||
-        storeSettings.pauseBot ? (
+      {s.pauseHunter ||
+        s.pauseReprice ||
+        s.pauseFulfill ||
+        s.pauseSyncCj ||
+        s.pauseBot ? (
         <div className="mt-4 rounded-xl border border-amber-200 bg-amber-50 p-3 text-xs text-amber-800">
           <span className="font-semibold">Kill-switches activos:</span>{" "}
           {[
-            storeSettings.pauseHunter && "Hunter",
-            storeSettings.pauseReprice && "Reprice",
-            storeSettings.pauseFulfill && "Fulfill",
-            storeSettings.pauseSyncCj && "Sync CJ",
-            storeSettings.pauseBot && "Bot",
+            s.pauseHunter && "Hunter",
+            s.pauseReprice && "Reprice",
+            s.pauseFulfill && "Fulfill",
+            s.pauseSyncCj && "Sync CJ",
+            s.pauseBot && "Bot",
           ]
             .filter(Boolean)
             .join(", ") || "ninguno"}
@@ -254,6 +273,16 @@ export default async function AdminPage() {
       </section>
 
       <section className="mt-10">
+        <EscalationsPanel />
+      </section>
+
+      {claims?.role === "owner" && (
+        <section className="mt-10">
+          <AdminUsersPanel />
+        </section>
+      )}
+
+      <section className="mt-10">
         <CjImportPanel />
       </section>
 
@@ -279,7 +308,7 @@ export default async function AdminPage() {
             </thead>
             <tbody>
               {active.map((p) => {
-                const m = marginForProduct(storeSettings, p, "US");
+                const m = marginForProduct(s, p, "US");
                 return (
                   <tr key={p.id} className="border-b border-gold/10">
                     <td className="px-4 py-3 font-medium text-brown">{p.name}</td>

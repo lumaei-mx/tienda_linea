@@ -35,6 +35,7 @@ const FIELDS: Array<{
   { key: "pauseFulfill", label: "⏸ PAUSAR Fulfill (pedidos en awaiting)", type: "boolean", danger: true, help: "Pedidos pagados NO se envían a CJ, quedan en awaiting_owner_approval" },
   { key: "pauseSyncCj", label: "⏸ PAUSAR Sync CJ (stock/precios)", type: "boolean", danger: true, help: "No actualiza stock ni precios desde CJ" },
   { key: "pauseBot", label: "⏸ PAUSAR Bot Soporte (todo a humano)", type: "boolean", danger: true, help: "Escala todas las conversaciones a humano inmediato" },
+  { key: "discloseAi", label: "🤖 Declarar soporte IA", type: "boolean", help: "Avisa al cliente (primer mensaje) que es asistente de IA" },
 ];
 
 export function SettingsEditor() {
@@ -384,7 +385,7 @@ export function SettingsEditor() {
         )}
       </div>
 
-      {/* === Role selector === */}
+      {/* === Roles: ahora son cuentas reales (ver panel «Acceso y roles») === */}
       <div className="rounded-2xl border border-gold/20 bg-ivory p-6">
         <div className="flex items-center gap-2">
           <Shield size={20} className="text-brown" />
@@ -393,28 +394,19 @@ export function SettingsEditor() {
           </h2>
         </div>
         <p className="mt-1 text-sm text-brown-soft">
-          Define el rol del usuario administrador actual.
-          <span className="font-medium text-brown"> owner</span> = acceso total,{" "}
+          El rol ya no es un ajuste global: cada persona tiene su propia cuenta
+          y su propio rol.{" "}
+          <span className="font-medium text-brown">owner</span> = acceso total,{" "}
           <span className="font-medium text-brown">admin</span> = todo excepto
-          gestión de admins/2FA,{" "}
+          gestión de cuentas/2FA,{" "}
           <span className="font-medium text-brown">viewer</span> = solo lectura.
         </p>
-        <div className="mt-4">
-          <select
-            value={s.adminRole || "owner"}
-            onChange={(e) =>
-              setS({
-                ...s,
-                adminRole: e.target.value as "owner" | "admin" | "viewer",
-              } as StoreSettings)
-            }
-            className="w-full max-w-xs rounded-xl border border-gold/30 bg-white px-3 py-2 text-sm text-brown outline-none focus:ring-2 focus:ring-gold"
-          >
-            <option value="owner">Owner (acceso total)</option>
-            <option value="admin">Admin (todo excepto 2FA/admins)</option>
-            <option value="viewer">Viewer (solo lectura)</option>
-          </select>
-        </div>
+        <p className="mt-2 text-sm text-brown-soft">
+          Crea, cambia el rol o revoca el acceso desde el panel{" "}
+          <span className="font-semibold text-brown">Acceso y roles</span> más
+          abajo. Cada cuenta entra con su correo en{" "}
+          <span className="font-mono text-xs">/admin/login</span>.
+        </p>
       </div>
     </div>
   );

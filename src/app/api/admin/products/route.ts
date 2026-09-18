@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { isAdminRequest } from "@/lib/admin-auth";
+import { isAdminRequest, isOwner } from "@/lib/admin-auth";
 import {
   readProducts,
   getProductByIdAsync,
@@ -90,7 +90,7 @@ export async function GET(req: Request) {
 }
 
 export async function POST(req: Request) {
-  if (!(await isAdminRequest(req))) {
+  if (!(await isOwner(req))) {
     return NextResponse.json({ error: "No autorizado" }, { status: 401 });
   }
 

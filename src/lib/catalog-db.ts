@@ -1,4 +1,4 @@
-import { storageGet, storageList, storageSet, storageDelete, isRedisAvailable } from "./storage";
+import { storageGet, storageList, storageSet, storageDelete, isPersistentStorageAvailable } from "./storage";
 
 const COLLECTION = "catalogs";
 
@@ -128,7 +128,7 @@ export async function getCatalog(season: string): Promise<Catalog | null> {
 }
 
 export async function listCatalogs(): Promise<Catalog[]> {
-  if (!isRedisAvailable()) return [];
+  if (!isPersistentStorageAvailable()) return [];
   return storageList<Catalog>(COLLECTION);
 }
 

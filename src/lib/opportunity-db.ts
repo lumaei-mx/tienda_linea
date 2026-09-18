@@ -3,7 +3,7 @@ import {
   storageList,
   storageSet,
   storageDelete,
-  isRedisAvailable,
+  isPersistentStorageAvailable,
 } from "./storage";
 
 const COLLECTION = "opportunities";
@@ -49,7 +49,7 @@ export interface Opportunity {
 }
 
 export async function listOpportunities(status?: OpportunityStatus) {
-  if (!isRedisAvailable()) return [];
+  if (!isPersistentStorageAvailable()) return [];
   const all = await storageList<Opportunity>(COLLECTION);
   return status ? all.filter((o) => o.status === status) : all;
 }

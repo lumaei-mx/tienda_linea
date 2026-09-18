@@ -71,3 +71,8 @@ next-env.d.ts
 .wrangler
 .dev.vars*
 !.dev.vars.example
+
+# datos runtime locales (creados en dev; contienen hashes de contraseña)
+/data/meta/
+/data/admin_users/
+/data/support_escalations/

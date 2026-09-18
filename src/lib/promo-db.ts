@@ -1,4 +1,4 @@
-import { storageGet, storageList, storageSet, storageDelete, isRedisAvailable } from "./storage";
+import { storageGet, storageList, storageSet, storageDelete, isPersistentStorageAvailable } from "./storage";
 import type { Market } from "./types";
 
 const COLLECTION = "promos";
@@ -33,7 +33,7 @@ export async function getPromo(code: string): Promise<Promo | null> {
 }
 
 export async function listPromos(): Promise<Promo[]> {
-  if (!isRedisAvailable()) return [];
+  if (!isPersistentStorageAvailable()) return [];
   return storageList<Promo>(COLLECTION);
 }
 

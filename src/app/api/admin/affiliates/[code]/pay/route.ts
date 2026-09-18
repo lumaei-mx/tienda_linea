@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { isAdminRequest } from "@/lib/admin-auth";
+import { isOwner } from "@/lib/admin-auth";
 import { getAffiliate, markCommissionPaid } from "@/lib/affiliates";
 
 export const dynamic = "force-dynamic";
@@ -14,7 +14,7 @@ export async function POST(
   req: Request,
   { params }: { params: Promise<{ code: string }> }
 ) {
-  if (!(await isAdminRequest(req))) {
+  if (!(await isOwner(req))) {
     return NextResponse.json({ error: "No autorizado" }, { status: 401 });
   }
   const { code } = await params;

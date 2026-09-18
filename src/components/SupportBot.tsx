@@ -102,7 +102,7 @@ export function SupportBot() {
       const res = await fetch("/api/support/chat", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ message, lang }),
+        body: JSON.stringify({ message, lang, turn: msgs.length }),
       });
       const d = await res.json();
       const reply = typeof d.reply === "string" ? d.reply : s.chatErr;

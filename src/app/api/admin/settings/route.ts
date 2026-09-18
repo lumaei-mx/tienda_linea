@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { isAdminRequest } from "@/lib/admin-auth";
+import { isAdminRequest, isOwner } from "@/lib/admin-auth";
 import { readStoreSettings, updateStoreSettings } from "@/lib/settings-db";
 import { recordAudit, getActorFromRequest } from "@/lib/audit-log";
 
@@ -48,6 +48,7 @@ const BOOL_KEYS = [
   "pauseFulfill",
   "pauseSyncCj",
   "pauseBot",
+  "discloseAi",
 ] as const;
 
 const STRING_KEYS = ["brandName", "primaryMarket", "secondaryMarket"] as const;
@@ -61,7 +62,7 @@ export async function GET(req: Request) {
 }
 
 export async function PATCH(req: Request) {
-  if (!(await isAdminRequest(req))) {
+  if (!(await isOwner(req))) {
     return NextResponse.json({ error: "No autorizado" }, { status: 401 });
   }
   const body = await req.json().catch(() => null);

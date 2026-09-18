@@ -4,7 +4,7 @@ import type { Product } from "./types";
 // Import seed data as fallback for Edge Runtime (static import)
 import { products as seedProductsData } from "@/data/products";
 import {
-  isRedisAvailable,
+  isPersistentStorageAvailable,
   storageList,
   storageSet,
   storageDelete,
@@ -31,7 +31,7 @@ async function ensureLocal() {
 }
 
 export async function readProducts(): Promise<Product[]> {
-  if (isRedisAvailable()) {
+  if (isPersistentStorageAvailable()) {
     const docs = await storageList<Product>(COLLECTION);
     if (docs.length) return docs;
     // sembrar catálogo inicial
@@ -54,7 +54,7 @@ export async function readProducts(): Promise<Product[]> {
 }
 
 export async function writeProducts(products: Product[]) {
-  if (isRedisAvailable()) {
+  if (isPersistentStorageAvailable()) {
     for (const p of products) await storageSet(COLLECTION, p.id, p);
     return;
   }
@@ -103,7 +103,7 @@ export async function setProductActive(id: string, active: boolean) {
 }
 
 export async function deleteProduct(id: string): Promise<boolean> {
-  if (isRedisAvailable()) {
+  if (isPersistentStorageAvailable()) {
     const all = await readProducts();
     if (!all.some((p) => p.id === id)) return false;
     await storageDelete(COLLECTION, id);

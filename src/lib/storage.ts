@@ -1,5 +1,5 @@
 import { isSupabaseAvailable, storageGetSupabase, storageSetSupabase, storageListSupabase, storageDeleteSupabase } from "./storage-supabase";
-import { readFileSync, writeFileSync, existsSync } from "fs";
+import { readFileSync, writeFileSync, existsSync, readdirSync, mkdirSync } from "fs";
 import { join } from "path";
 import { createClient, type RedisClientType } from "redis";
 
@@ -16,8 +16,50 @@ const DATA_DIR = join(process.cwd(), "data");
 
 export { isSupabaseAvailable };
 
+/**
+ * Presupuesto de tiempo por operación de backend. Sin esto, un backend lento
+ * (p.ej. `KEYS` sobre un Redis grande) bloquea la request completa: el panel
+ * /admin llegó a colgarse >150s sin devolver un solo byte.
+ */
+const BACKEND_TIMEOUT_MS = Number(process.env.STORAGE_TIMEOUT_MS || 8000);
+
+export class StorageTimeoutError extends Error {
+  constructor(op: string, ms: number) {
+    super(`${op} excedió ${ms}ms`);
+    this.name = "StorageTimeoutError";
+  }
+}
+
+function withTimeout<T>(promise: Promise<T>, op: string, ms = BACKEND_TIMEOUT_MS): Promise<T> {
+  return new Promise<T>((resolve, reject) => {
+    const timer = setTimeout(() => reject(new StorageTimeoutError(op, ms)), ms);
+    promise.then(
+      (v) => {
+        clearTimeout(timer);
+        resolve(v);
+      },
+      (e) => {
+        clearTimeout(timer);
+        reject(e);
+      }
+    );
+  });
+}
+
 export function isRedisAvailable(): boolean {
   return Boolean(REDIS_URL);
+}
+
+/**
+ * ¿Hay algún backend persistente disponible?
+ *
+ * Los módulos de datos usaban `isRedisAvailable()` como puerta, lo que los
+ * dejaba en modo degradado silencioso (settings estáticos, listas vacías) si
+ * el único backend configurado era Supabase. La capa `storage*` ya elige el
+ * backend, así que la puerta correcta es "hay alguno", no "hay Redis".
+ */
+export function isPersistentStorageAvailable(): boolean {
+  return isSupabaseAvailable() || isRedisAvailable() || isFirestoreAvailable();
 }
 
 export function isFirestoreAvailable(): boolean {
@@ -60,9 +102,10 @@ function fsRead<T>(collection: string, id: string): T | null {
 function fsWrite(collection: string, id: string, data: unknown) {
   const key = `${collection}:${id}`;
   fsCache.set(key, data);
-  // En Vercel serverless no podemos escribir filesystem, pero en dev sí
+  // En serverless no hay filesystem escribible, pero en dev sí.
   try {
     const file = fsKey(collection, id);
+    mkdirSync(join(DATA_DIR, collection), { recursive: true });
     writeFileSync(file, JSON.stringify(data, null, 2), "utf-8");
     fsFileCache.set(file, JSON.stringify(data));
   } catch {
@@ -71,17 +114,51 @@ function fsWrite(collection: string, id: string, data: unknown) {
 }
 
 function fsList<T>(collection: string): T[] {
-  // Fallback: leer data/products.json or data/orders.json etc.
+  const out: T[] = [];
+  const seen = new Set<string>();
+
+  // 1. Archivos por-id (lo que escribe storageSet en dev).
+  // Antes se ignoraban: se escribía data/<collection>/<id>.json pero el listado
+  // solo miraba data/<collection>.json, así que en dev todo listado salía vacío.
+  const dir = join(DATA_DIR, collection);
+  if (existsSync(dir)) {
+    try {
+      for (const name of readdirSync(dir)) {
+        if (!name.endsWith(".json")) continue;
+        const id = name.slice(0, -5);
+        const item = fsRead<T>(collection, id);
+        if (item) {
+          out.push(item);
+          seen.add(id);
+        }
+      }
+    } catch {
+      /* directorio ilegible */
+    }
+  }
+
+  // 2. Objetos aún solo en memoria (serverless sin filesystem).
+  for (const [key, value] of fsCache) {
+    const prefix = `${collection}:`;
+    if (!key.startsWith(prefix)) continue;
+    const id = key.slice(prefix.length);
+    if (seen.has(id)) continue;
+    out.push(value as T);
+  }
+
+  // 3. Fallback: data/<collection>.json (seed / datos versionados).
   const fallbackFile = join(DATA_DIR, `${collection}.json`);
   if (existsSync(fallbackFile)) {
     try {
       const raw = readFileSync(fallbackFile, "utf-8");
-      return JSON.parse(raw) as T[];
+      const arr = JSON.parse(raw) as T[];
+      if (Array.isArray(arr)) out.push(...arr);
     } catch {
-      return [];
+      /* json inválido */
     }
   }
-  return [];
+
+  return out;
 }
 
 function fsDelete(collection: string, id: string) {
@@ -125,21 +202,50 @@ function collectionKey(collection: string, id: string) {
   return `${collection}:${id}`;
 }
 
+/**
+ * Lista las keys de una colección con `SCAN` acotado.
+ * `KEYS` es O(N) sobre TODA la base y es lo que colgaba /admin; `SCAN` es
+ * incremental y aquí se limita por iteraciones y por tiempo para que una
+ * colección grande jamás bloquee una request.
+ */
+async function redisScanKeys(
+  client: RedisClientType,
+  pattern: string,
+  maxIterations = 50,
+  count = 200
+): Promise<string[]> {
+  const found: string[] = [];
+  let cursor = "0";
+  for (let i = 0; i < maxIterations; i++) {
+    const res = await client.scan(cursor, { MATCH: pattern, COUNT: count });
+    for (const k of res.keys ?? []) found.push(k);
+    cursor = String(res.cursor ?? "0");
+    if (cursor === "0") break;
+  }
+  return found;
+}
+
 // ==== API pública unificada ====
 
 export async function storageGet<T>(collection: string, id: string): Promise<T | null> {
   // 1. Supabase (preferido)
   if (isSupabaseAvailable()) {
     try {
-      return storageGetSupabase<T>(collection, id);
-    } catch (err) {
+      return await withTimeout(
+        storageGetSupabase<T>(collection, id),
+        "supabase.get"
+      );
+    } catch {
       // Fallar gracefully al siguiente backend
     }
   }
   // 2. Redis
   if (isRedisAvailable()) {
     try {
-      const raw = await (await getRedis()).get(collectionKey(collection, id));
+      const raw = await withTimeout(
+        (await getRedis()).get(collectionKey(collection, id)),
+        "redis.get"
+      );
       return raw ? (JSON.parse(raw) as T) : null;
     } catch {
       /* Redis down — fall through */
@@ -149,7 +255,7 @@ export async function storageGet<T>(collection: string, id: string): Promise<T |
   if (isFirestoreAvailable()) {
     try {
       const { storageGet: fsGet } = await import("./firestore");
-      return fsGet<T>(collection, id);
+      return await withTimeout(fsGet<T>(collection, id), "firestore.get");
     } catch {
       /* Firestore down — fall through */
     }
@@ -159,12 +265,14 @@ export async function storageGet<T>(collection: string, id: string): Promise<T |
 }
 
 export async function storageList<T>(collection: string): Promise<T[]> {
-  // 1. Supabase (preferido)
+  // 1. Supabase (preferido). Si responde, es autoritativo: no se cae a Redis
+  // (el fallthrough convertía una colección vacía en un `KEYS` costoso).
   if (isSupabaseAvailable()) {
     try {
-      const result = await storageListSupabase<T>(collection);
-      if (result.length > 0) return result;
-      // Si está vacío, probar filesystem como fallback de seed
+      return await withTimeout(
+        storageListSupabase<T>(collection),
+        "supabase.list"
+      );
     } catch {
       /* Supabase down — fall through */
     }
@@ -173,11 +281,14 @@ export async function storageList<T>(collection: string): Promise<T[]> {
   if (isRedisAvailable()) {
     try {
       const client = await getRedis();
-      const keys = await client.keys(`${collection}:*`);
+      const keys = await withTimeout(
+        redisScanKeys(client, `${collection}:*`),
+        "redis.scan"
+      );
       if (!keys.length) return [];
       const out: T[] = [];
       for (const k of keys) {
-        const raw = await client.get(k);
+        const raw = await withTimeout(client.get(k), "redis.get");
         if (raw) out.push(JSON.parse(raw) as T);
       }
       return out;
@@ -189,7 +300,7 @@ export async function storageList<T>(collection: string): Promise<T[]> {
   if (isFirestoreAvailable()) {
     try {
       const { storageList: fsList } = await import("./firestore");
-      return fsList<T>(collection);
+      return await withTimeout(fsList<T>(collection), "firestore.list");
     } catch {
       /* Firestore down — fall through */
     }
@@ -203,7 +314,7 @@ export async function storageSet(collection: string, id: string, data: unknown) 
   // 1. Supabase (preferido)
   if (isSupabaseAvailable()) {
     try {
-      await storageSetSupabase(collection, id, data);
+      await withTimeout(storageSetSupabase(collection, id, data), "supabase.set");
       success = true;
     } catch {
       /* Supabase down — fall through */
@@ -212,7 +323,10 @@ export async function storageSet(collection: string, id: string, data: unknown) 
   // 2. Redis
   if (isRedisAvailable()) {
     try {
-      await (await getRedis()).set(collectionKey(collection, id), JSON.stringify(data));
+      await withTimeout(
+        (await getRedis()).set(collectionKey(collection, id), JSON.stringify(data)),
+        "redis.set"
+      );
       success = true;
     } catch {
       /* Redis down — fall through */
@@ -222,7 +336,7 @@ export async function storageSet(collection: string, id: string, data: unknown) 
   if (isFirestoreAvailable()) {
     try {
       const { storageSet: fsSet } = await import("./firestore");
-      await fsSet(collection, id, data);
+      await withTimeout(fsSet(collection, id, data), "firestore.set");
       success = true;
     } catch {
       /* Firestore down — fall through */
@@ -242,7 +356,7 @@ export async function storageDelete(collection: string, id: string) {
   // 1. Supabase
   if (isSupabaseAvailable()) {
     try {
-      await storageDeleteSupabase(collection, id);
+      await withTimeout(storageDeleteSupabase(collection, id), "supabase.del");
     } catch {
       /* fall through */
     }
@@ -250,7 +364,7 @@ export async function storageDelete(collection: string, id: string) {
   // 2. Redis
   if (isRedisAvailable()) {
     try {
-      await (await getRedis()).del(collectionKey(collection, id));
+      await withTimeout((await getRedis()).del(collectionKey(collection, id)), "redis.del");
     } catch {
       /* fall through */
     }
@@ -259,7 +373,7 @@ export async function storageDelete(collection: string, id: string) {
   if (isFirestoreAvailable()) {
     try {
       const { storageDelete: fsDel } = await import("./firestore");
-      await fsDel(collection, id);
+      await withTimeout(fsDel(collection, id), "firestore.del");
     } catch {
       /* fall through */
     }

@@ -1,4 +1,4 @@
-import { storageGet, storageList, storageSet, isRedisAvailable } from "./storage";
+import { storageGet, storageList, storageSet, isPersistentStorageAvailable } from "./storage";
 import type { StoreSettings } from "./types";
 
 const COLLECTION = "audit";
@@ -45,7 +45,7 @@ export async function recordAudit(entry: Omit<AuditEntry, "id" | "timestamp">): 
     timestamp: new Date().toISOString(),
   };
 
-  if (!isRedisAvailable()) {
+  if (!isPersistentStorageAvailable()) {
     // Fallback: solo console en dev
     console.log("[AUDIT]", JSON.stringify(fullEntry));
     return;
@@ -175,7 +175,7 @@ export async function readAuditLog(opts?: {
   from?: string; // ISO date
   to?: string;
 }): Promise<{ entries: AuditEntry[]; total: number }> {
-  if (!isRedisAvailable()) return { entries: [], total: 0 };
+  if (!isPersistentStorageAvailable()) return { entries: [], total: 0 };
 
   try {
     const index = (await storageGet<string[]>(COLLECTION, "audit:index")) || [];
@@ -206,7 +206,7 @@ export async function readAuditLog(opts?: {
 
 /** Limpia auditoría antigua (ejecutar en cron mensual) */
 export async function pruneAuditLog(olderThanDays = 90): Promise<number> {
-  if (!isRedisAvailable()) return 0;
+  if (!isPersistentStorageAvailable()) return 0;
   const cutoff = new Date(Date.now() - olderThanDays * 24 * 60 * 60 * 1000).toISOString();
   let deleted = 0;
 

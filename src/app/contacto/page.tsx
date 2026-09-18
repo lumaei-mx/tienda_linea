@@ -26,16 +26,21 @@ export default function ContactoPage() {
         </div>
 
         <div className="rounded-2xl border border-gold/20 bg-ivory p-6">
-          <p className="text-sm font-semibold text-brown">{t("contWhatsapp", lang)}</p>
-          <a
-            href="https://wa.me/14084223904"
-            target="_blank"
-            rel="noopener"
+          <p className="text-sm font-semibold text-brown">
+            {lang === "es" ? "Asistente 24/7" : "24/7 assistant"}
+          </p>
+          <button
+            type="button"
+            onClick={() => window.dispatchEvent(new Event("lumaei:open-support"))}
             className="text-gold-dark underline"
           >
-            +1 408 422 3904
-          </a>
-          <p className="mt-1 text-xs text-brown-soft">{t("contWhatsappNote", lang)}</p>
+            {lang === "es" ? "Abrir el chat de soporte" : "Open the support chat"}
+          </button>
+          <p className="mt-1 text-xs text-brown-soft">
+            {lang === "es"
+              ? "Respuesta inmediata, a cualquier hora. Si tu caso necesita una decisión de una persona, se atiende el mismo día hábil."
+              : "Instant reply, any time. If your case needs a person's decision, it's handled the same business day."}
+          </p>
         </div>
 
         <p className="text-sm">{t("contHours", lang)}</p>
