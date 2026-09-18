@@ -1,63 +1,80 @@
-# Automatización Lumaei — Scheduler cron-job.org
+# Automatización Lumaei — Crons nativos de Cloudflare
 
 La tienda se opera 24/7 sin intervención manual. Los webhooks de Stripe, CJ y
 TikTok son push (los envían ellos solos). Los **crons** hacen mantenimiento
-periódico. Vercel Hobby limita los crons nativos, por eso usamos
-**cron-job.org** (gratis, sin límite práctico) como scheduler principal; el
-`vercel.json` mantiene los mismos 8 crons como respaldo/documentación
-(todas las rutas aceptan GET y POST).
+periódico y ahora corren **dentro del propio worker** de Cloudflare:
+
+`workers/cron-worker.js` envuelve el worker de OpenNext y añade un handler
+`scheduled`, que despacha a los endpoints `/api/cron/*` ya existentes. No hay
+scheduler de terceros ni un secreto que se pueda desincronizar: el
+`CRON_SECRET` se lee del binding del propio worker.
+
+> Historial: antes se usaba **cron-job.org** (y antes Vercel Cron). Ese diseño
+> se abandonó porque requería reconfigurar a mano el header `x-cron-secret` de
+> cada job al rotar el secreto. Cuando el secreto quedó desfasado, los 8 jobs
+> pasaron a devolver 500 en silencio y **toda la automatización se detuvo** sin
+> que nadie se enterara.
 
 ## Credenciales
 
 | Variable | Propósito | Dónde está |
 |---|---|---|
-| `CRON_SECRET` | Header de autorización de los crons | Vercel (production) + header de cada job en cron-job.org |
-| `ADMIN_PASSWORD` | Login /admin | Vercel (production) |
-| `ADMIN_SECRET` | Firma de cookie admin | Vercel (production) |
+| `CRON_SECRET` | Header de autorización de los crons | Binding del worker (`wrangler secret put CRON_SECRET`) |
+| `ADMIN_PASSWORD` | Login de respaldo /admin (bootstrap owner) | Binding del worker |
+| `ADMIN_SECRET` | Firma de cookie admin | Binding del worker |
 
-**NUNCA escribas valores reales en este documento.** Si rotas `CRON_SECRET`,
-actualiza el header `x-cron-secret` de los 8 jobs en cron-job.org en el mismo
-momento (si no, los crons fallan con 401).
+**NUNCA escribas valores reales en este documento.**
+
+## Reparto de triggers (UTC)
+
+Los tres triggers declarados en `wrangler.jsonc` (el plan Free permite 5) se
+reparten el trabajo según la hora. MX es UTC-6 todo el año (sin DST).
+
+| Trigger | Job(s) | Por qué |
+|---|---|---|
+| `*/15 * * * *` | `retry-fulfill` | Lo más sensible al tiempo: hay stock reservado esperando. |
+| `30 * * * *` | `support` | Respuesta autónoma a correos de clientes. |
+| `0 * * * *` | `strategic` + diarios | `strategic` decide solo si MX/US están en ventana pico (hunter/trends). |
+
+Jobs diarios, según la hora UTC en que corre el trigger horario:
+
+| Hora UTC | Hora MX | Job |
+|---|---|---|
+| 01:00 | 19:00 | `digest` (resumen del día) |
+| 06:00 | 00:00 | `catalog` (catálogos por temporada) |
+| 07:00 | 01:00 | `sync-cj` y luego `reprice` (en ese orden) |
+
+Se agrupan a propósito para no gastar triggers: el plan Free solo permite 5 y
+un trigger puede despachar varios jobs.
 
 ## Auth de crons (única fuente de verdad: `src/lib/cron-auth.ts`)
 
 `authorizeCron(req)` acepta el secreto por cualquiera de estas vías
-(sirve para GET y POST en las 8 rutas):
+(sirve para GET y POST en todas las rutas):
 
-- header `x-cron-secret: <CRON_SECRET>` (recomendado, lo usa `setup-crons.sh`)
+- header `x-cron-secret: <CRON_SECRET>` (lo usa el handler `scheduled`)
 - header `authorization: Bearer <CRON_SECRET>`
-- query `?secret=<CRON_SECRET>` (útil para "Run job" manual o Vercel Cron)
+- query `?secret=<CRON_SECRET>` (útil para "Run job" manual)
 
 Sin secreto válido → **401**. Sin `CRON_SECRET` en el servidor → **500**.
 
-## Jobs a crear en cron-job.org
-
-Para cada job:
-
-1. En **Request**: URL + método indicado (todas las rutas aceptan GET y POST).
-2. En **Request → Custom Headers**: añadir header `x-cron-secret` con el valor
-   de `CRON_SECRET` (cópialo desde Vercel → Settings → Environment Variables;
-   no lo guardes en este documento).
-3. En **Schedule**: frecuencia indicada.
-4. En **Advanced → Timezone**: `America/Mexico_City` para los horarios.
-
-| Job | URL | Frecuencia | Método |
-|---|---|---|---|
-| Sync CJ (stock/costo/freight) | `/api/cron/sync-cj` | Diario 00:30 | GET o POST |
-| Repricing automático | `/api/cron/reprice` | Diario 01:00 | GET o POST |
-| Retry fulfill (colas CJ) | `/api/cron/retry-fulfill` | Cada 15 min | GET o POST |
-| Tendencias / stock bajo | `/api/cron/trends` | Cada 6 h | GET o POST |
-| Hunter de oportunidades | `/api/cron/hunter` | Cada 6 h | GET o POST |
-| Catálogos por temporada | `/api/cron/catalog` | Diario 00:00 | GET o POST |
-| Resumen diario (digest) | `/api/cron/digest` | Diario 19:00 | GET o POST |
-| Soporte autónomo (AgentMail) | `/api/cron/support` | Cada 30 min | GET o POST |
-
-Crear los 8 con `bash scripts/setup-crons.sh` (usa POST + header `x-cron-secret`).
-
 ## Validación
 
-Probar cada job manualmente desde cron-job.org ("Run job"). Debe devolver JSON
-con `{"ok":true,...}` y código 200. Sin el header (ni `?secret=`) da **401**.
+Disparar un trigger en local:
+
+```bash
+npx wrangler dev --test-scheduled
+curl "http://localhost:8787/__scheduled?cron=*/15+*+*+*+*"
+```
+
+En producción, forzar un job a mano sin esperar la ventana:
+
+```bash
+curl -H "x-cron-secret: $CRON_SECRET" "https://www.lumaei.com/api/cron/strategic?force=1"
+```
+
+Debe devolver JSON con `{"ok":true,...}` y código 200. Sin el header (ni
+`?secret=`) da **401**.
 
 ## Monitoreo
 
@@ -68,17 +85,13 @@ con `{"ok":true,...}` y código 200. Sin el header (ni `?secret=`) da **401**.
   `cj.fulfillmentReady` se reportan aparte y NO fuerzan `ok:false`.
 - Alertas de fallos de fulfill quedan en Redis (visibles en `/admin`) + push a
   Telegram si está configurado.
-- cron-job.org manda email si un job falla (activar notificaciones por job).
+- El handler `scheduled` registra `cron ok` / `cron con fallos` (con el
+  resultado de cada job) en los logs del worker: **Cloudflare → Workers →
+  tienda-linea → Logs**. Un trigger que no corresponda a ningún job se registra
+  como `trigger sin job asociado` para detectar configs desalineadas.
 
-## Reintentos (último intento, asegurar)
+## Reintentos (los hace el propio endpoint)
 
-| Job | Reintentos | Intervalo |
-|---|---|---|
-| sync-cj | 3 | 10 min |
-| reprice | 2 | 15 min |
-| retry-fulfill | 5 | 5 min |
-| trends | 3 | 10 min |
-| hunter | 3 | 10 min |
-| catalog | 2 | 15 min |
-| digest | 2 | 15 min |
-| support | 3 | 10 min |
+`retry-fulfill` corre cada 15 min y es quien reintenta los fulfillments que
+fallaron, así que el reintento vive en el endpoint (no en el scheduler). El
+resto de jobs son idempotentes: si uno falla, el siguiente ciclo lo reintenta.

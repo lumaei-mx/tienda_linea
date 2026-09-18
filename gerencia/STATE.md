@@ -21,6 +21,41 @@ ciclo (ver `MANDATE.md` sección 8). El loop lee esto para no empezar ciego.
   hogar / regreso-a-clases / bienestar / halloween), todas con precios vivos
   vía `guide-prices.ts` y TODAS listadas en sitemap.xml.
 
+## Último ciclo (2026-09-18 — ciclo admin/auth + crons nativos)
+- DISPARADOR: auditoría del dueño. Hallazgos y cierre (todo $0):
+  - `/admin` colgaba en producción (HTTP 000 tras 25 s). Causa raíz: el
+    redirect apex→www en `next.config.ts` usaba `has:[{type:"host"}]`, que
+    OpenNext emitía con `:path*` literal y además matcheaba `www` → bucle 308
+    en toda la tienda. Se eliminó el redirect (la zona de Cloudflare se encarga
+    de apex→www). Además los 6 crons nativos declarados en `wrangler.jsonc`
+    bloqueaban el deploy en el plan Free sin handler `scheduled`.
+  - El deploy borraba `ADMIN_PASSWORD` (binding `plain_text`): restaurado como
+    secreto. Login: incorrecta 401, correcta 200.
+  - Soporte/escalaciones colgaban >90 s en producción: en `src/lib/storage.ts`
+    el `await getRedis()` se evaluaba como argumento DENTRO de `withTimeout`,
+    así que un Redis inalcanzable bloqueaba para siempre. Se acotaron todas las
+    rutas get/set/list/del y `getRedis()` se auto-limita. Medido: 0.37 s (antes
+    >90 s).
+  - **CRONS MUERTOS**: los 8 jobs de cron-job.org apuntaban a un `CRON_SECRET`
+    desfasado → todas las rutas `/api/cron/*` devolvían 500
+    (`CRON_SECRET no configurado`) en silencio. Se migró a **crons nativos de
+    Cloudflare**: `workers/cron-worker.js` envuelve el worker de OpenNext y
+    añade `scheduled`, que despacha a los mismos endpoints `/api/cron/*`. 3
+    triggers (`*/15` fulfillment, `:30` soporte, `:00` estratégico + diarios).
+    Sin terceros, sin coste y sin drift de credenciales. Se eliminó
+    `scripts/setup-crons.sh` (habría creado jobs externos duplicados).
+  - Verificado en workerd (`--test-scheduled`) y en producción: los 3 triggers
+    despachan y reciben 200; `/` 200, `/admin` 307→login, `/admin/login` 200,
+    cookie admin obligatoria (401 sin ella), rol `viewer` bloqueado al escribir
+    users/settings (403), aborto humano de escalación funciona
+    (`status:aborted`, `decidedBy:admin:owner@lumaei.com`).
+  - Regresión: 28 PASS / 0 FAIL. Versión desplegada:
+    `906980b0-f50d-4b3d-ad62-5eff82cab20b`.
+- PENDIENTE: apex `lumaei.com` responde 404 (falta redirect apex→www en la zona
+  de Cloudflare; requiere acceso al dashboard). `AQ-001` (riesgo Vercel Hobby
+  no-comercial) sigue BLOQUEADA sin aprobación del dueño. AgentMail sin
+  configurar → `support` corre pero no responde correos aún.
+
 ## Último ciclo (2026-08-26 — ciclo 10, en curso)
 - Disparador del dueño: "auto". ANTES de ejecutar pricing, orden directa: el
   repo era un desmadre → REORGANIZACIÓN EJECUTADA y commiteada (`6952eb8`):
