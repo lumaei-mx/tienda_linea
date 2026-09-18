@@ -59,7 +59,7 @@ export interface BotAnswer {
 export const SUPPORT_CONTACT = {
   email: "lumaeiMX@gmail.com",
   /**
-   * El teléfono +1 408 422 3904 es personal del dueño y NO se publica:
+   * El teléfono personal del dueño NO se publica:
    * todo el contacto lo cubre la IA por este chat y por correo.
    */
   whatsappDisplay: "",
