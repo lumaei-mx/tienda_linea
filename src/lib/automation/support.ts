@@ -12,7 +12,7 @@ import { getOrder } from "../orders-db";
 import { notifyOwner } from "./alert";
 import { readStoreSettings } from "../settings-db";
 import { createEscalation, expireStaleEscalations } from "../support-escalations";
-import { answerBotMessage } from "../support-kb";
+import { answerBotMessage, detectTextLang, type SupportLang } from "../support-kb";
 
 const INBOX = process.env.AGENTMAIL_INBOX || "";
 
@@ -57,53 +57,72 @@ export async function escalateToOwner(message: string): Promise<void> {
 export function draftReply(
   intent: Intent,
   order: { status?: string; id?: string; accessToken?: string } | null,
-  foundId: boolean
+  foundId: boolean,
+  lang: SupportLang = "es"
 ): { text: string; escalate: boolean } {
   const site = process.env.NEXT_PUBLIC_SITE_URL || "https://www.lumaei.com";
+  const en = lang === "en";
   if (intent === "order_status") {
     if (order && order.id) {
       const track = `${site}/pedido/${order.id}?key=${order.accessToken || ""}`;
       return {
-        text:
-          `¡Hola! Tu pedido (#${order.id.slice(-6)}) está en estado: ${order.status}.\n\n` +
-          `Síguelo en tiempo real aquí:\n${track}\n\n` +
-          `Cualquier duda, responde este correo. — Lumaei`,
+        text: en
+          ? `Hi! Your order (#${order.id.slice(-6)}) is currently: ${order.status}.\n\n` +
+            `Track it live here:\n${track}\n\n` +
+            `Any questions, just reply to this email. — Lumaei`
+          : `¡Hola! Tu pedido (#${order.id.slice(-6)}) está en estado: ${order.status}.\n\n` +
+            `Síguelo en tiempo real aquí:\n${track}\n\n` +
+            `Cualquier duda, responde este correo. — Lumaei`,
         escalate: false,
       };
     }
     return {
-      text:
-        "¡Hola! Con gusto te ayudo con el estado de tu pedido. Por favor envíame tu " +
-        "número de pedido (el que recibiste por correo, formato #XXXXXX) o el correo con el " +
-        "que compraste y lo reviso de inmediato. — Lumaei",
+      text: en
+        ? "Hi! Happy to help with your order status. Please send me your order number " +
+          "(from your confirmation email, format #XXXXXX) or the email you used to buy, " +
+          "and I'll look it up right away. — Lumaei"
+        : "¡Hola! Con gusto te ayudo con el estado de tu pedido. Por favor envíame tu " +
+          "número de pedido (el que recibiste por correo, formato #XXXXXX) o el correo con el " +
+          "que compraste y lo reviso de inmediato. — Lumaei",
       escalate: false,
     };
   }
   if (intent === "return_refund") {
     return {
-      text:
-        "¡Hola! Gracias por escribirnos. Nuestra política es sencilla: si tu producto llega " +
-        "dañado o no funciona, lo reponemos sin costo dentro de los 25 días posteriores a la " +
-        "entrega (solo necesitamos una foto o video del problema).\n\n" +
-        "Responde con tu número de pedido y una imagen del inconveniente, y agendamos la " +
-        "reposición de inmediato. — Lumaei",
+      text: en
+        ? "Hi! Thanks for reaching out. Our policy is simple: if your product arrives " +
+          "damaged or doesn't work, we replace it at no cost within 25 days of delivery " +
+          "(we just need a photo or video of the issue).\n\n" +
+          "Reply with your order number and an image of the problem and we'll schedule the " +
+          "replacement right away. — Lumaei"
+        : "¡Hola! Gracias por escribirnos. Nuestra política es sencilla: si tu producto llega " +
+          "dañado o no funciona, lo reponemos sin costo dentro de los 25 días posteriores a la " +
+          "entrega (solo necesitamos una foto o video del problema).\n\n" +
+          "Responde con tu número de pedido y una imagen del inconveniente, y agendamos la " +
+          "reposición de inmediato. — Lumaei",
       escalate: true,
     };
   }
   if (intent === "complaint") {
     return {
-      text:
-        "Lamentamos mucho tu experiencia. Queremos resolverlo ya: responde con tu número de " +
-        "pedido y cuéntanos qué pasó, y un humano de Lumaei se encarga personalmente de " +
-        "solucionarlo (reposición o reembolso según corresponda). — Lumaei",
+      text: en
+        ? "We're sorry about your experience. We want to fix it now: reply with your order " +
+          "number and tell us what happened, and a Lumaei human will personally take care of " +
+          "it (replacement or refund as applicable). — Lumaei"
+        : "Lamentamos mucho tu experiencia. Queremos resolverlo ya: responde con tu número de " +
+          "pedido y cuéntanos qué pasó, y un humano de Lumaei se encarga personalmente de " +
+          "solucionarlo (reposición o reembolso según corresponda). — Lumaei",
       escalate: true,
     };
   }
   return {
-    text:
-      "¡Hola! Gracias por contactar a Lumaei. Nuestro equipo responde en menos de 24h. " +
-      "Mientras tanto: envíos a MX (14-16 días) y US (4-7 días), garantía de reposición 25 días, " +
-      "y puedes ver el estado de tu pedido en el link que recibiste por correo. — Lumaei",
+    text: en
+      ? "Hi! Thanks for contacting Lumaei. Our team replies within 24h. " +
+        "Meanwhile: shipping to MX (14-16 days) and US (4-7 days), 25-day replacement " +
+        "warranty, and you can see your order status at the link in your email. — Lumaei"
+      : "¡Hola! Gracias por contactar a Lumaei. Nuestro equipo responde en menos de 24h. " +
+        "Mientras tanto: envíos a MX (14-16 días) y US (4-7 días), garantía de reposición 25 días, " +
+        "y puedes ver el estado de tu pedido en el link que recibiste por correo. — Lumaei",
     escalate: false,
   };
 }
@@ -141,14 +160,16 @@ export async function processInbound(sinceISO?: string): Promise<{
       let order: any = null;
       if (oid) order = await getOrder(oid).catch(() => null);
 
-      // Respuesta con la política de riesgo del KB (ES por defecto en correo).
-      const bot = answerBotMessage(`${subject} ${body}`, "es");
+      // El correo no trae `lang` (a diferencia del widget), así que se detecta
+      // del propio texto: sin esto, un cliente de EE.UU. recibía español.
+      const lang = detectTextLang(`${subject} ${body}`);
+      const bot = answerBotMessage(`${subject} ${body}`, lang);
       const needsApproval = botPaused || bot.requiresApproval;
 
       // Caso con compromiso de dinero/promesas (o bot pausado): NO se responde
       // solo. Se encola para que un humano APRUEBE o ABORTE antes del envío.
       if (needsApproval) {
-        const { text } = draftReply(intent, order, Boolean(oid));
+        const { text } = draftReply(intent, order, Boolean(oid), lang);
         await createEscalation({
           channel: "email",
           customerRef: from,

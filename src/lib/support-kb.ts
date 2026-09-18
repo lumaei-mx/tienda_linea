@@ -74,6 +74,34 @@ export function normalizeLang(raw: unknown): SupportLang {
   return "es";
 }
 
+/**
+ * Marcadores que distinguen inglés de español sin librerías.
+ *
+ * Por qué existe: el widget del sitio manda `lang`, pero el correo no tiene ese
+ * dato. El bot de correo asumía español siempre, así que a un cliente de
+ * Estados Unidos le respondía en español (y el correo es justo el canal de los
+ * clientes US). Se detecta con palabras función, que son las que más se
+ * repiten y menos se parecen entre idiomas.
+ */
+const EN_MARKERS =
+  /\b(the|where|when|what|how|why|is|are|was|my|your|i|you|do|does|did|can|could|would|please|thanks|thank|hello|hi|order|refund|return|shipping|delivery|address|change|cancel|track|package|item|not|received|still|need|want|help|problem|wrong|damaged)\b/i;
+const ES_MARKERS =
+  /\b(el|la|los|las|dónde|donde|cuándo|cuando|qué|que|como|cómo|por|mi|mis|tu|tus|yo|usted|hacer|puedo|podría|por favor|gracias|hola|pedido|reembolso|devolución|devolucion|envío|envio|entrega|dirección|direccion|cambiar|cancelar|rastrear|paquete|artículo|articulo|no|recibí|recibi|todavía|todavia|necesito|quiero|ayuda|problema|equivocado|dañado|danado)\b/i;
+/** Caracteres que solo existen en español. */
+const ES_ONLY = /[¿¡ñáéíóú]/i;
+
+/** Idioma probable de un texto libre (correo o chat sin `lang` explícito). */
+export function detectTextLang(text: string): SupportLang {
+  const t = (text || "").slice(0, 1500);
+  if (!t.trim()) return "es";
+  // Una sola letra acentuada o "¿" ya descarta el inglés.
+  if (ES_ONLY.test(t)) return "es";
+  const en = (t.match(EN_MARKERS) || []).length;
+  const es = (t.match(ES_MARKERS) || []).length;
+  if (en === es) return "es"; // empate → mercado principal
+  return en > es ? "en" : "es";
+}
+
 export function extractOrderId(text: string): string | null {
   if (!text) return null;
   const m = text.match(UUID_RE);
