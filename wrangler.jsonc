@@ -1,6 +1,6 @@
 {
 	"$schema": "node_modules/wrangler/config-schema.json",
-	"main": ".open-next/worker.js",
+	"main": "workers/cron-worker.js",
 	"name": "tienda-linea",
 	"compatibility_date": "2026-09-11",
 	"compatibility_flags": [
@@ -23,5 +23,17 @@
 		// Enable image optimization
 		// see https://opennext.js.org/cloudflare/howtos/image
 		"binding": "IMAGES"
+	},
+	// Crons nativos (UTC). Los evalúa el handler `scheduled` de
+	// workers/cron-worker.js, que reenvía a los endpoints /api/cron/* ya
+	// existentes: no hay tercera parte ni secreto que se pueda desincronizar.
+	// Son 3 (el plan Free permite 5) y cada uno despacha varios jobs según la
+	// hora: 15 min = fulfillment, 30 min = soporte, 1 h = estratégico + diarios.
+	"triggers": {
+		"crons": [
+			"*/15 * * * *",
+			"30 * * * *",
+			"0 * * * *"
+		]
 	}
 }
