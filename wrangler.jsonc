@@ -23,19 +23,5 @@
 		// Enable image optimization
 		// see https://opennext.js.org/cloudflare/howtos/image
 		"binding": "IMAGES"
-	},
-	// Crons nativos de Cloudflare (UTC) como respaldo del scheduler externo.
-	// El worker generado por OpenNext no expone un handler "scheduled", así que
-	// el scheduler externo (scripts/setup-crons.sh) sigue siendo el mecanismo
-	// principal; estos triggers quedan declarados para cuando se añada el handler.
-	"triggers": {
-		"crons": [
-			"*/30 * * * *",
-			"0 * * * *",
-			"15 13 * * *",
-			"45 13 * * *",
-			"0 12 * * *",
-			"0 1 * * *"
-		]
 	}
 }

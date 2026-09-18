@@ -52,7 +52,7 @@ async function tokenIsValid(token: string | undefined): Promise<boolean> {
   return true;
 }
 
-export async function proxy(req: NextRequest) {
+export async function middleware(req: NextRequest) {
   const { pathname } = req.nextUrl;
 
   if (pathname === "/admin/login" || pathname.startsWith("/admin/login/")) {

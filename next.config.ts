@@ -4,17 +4,13 @@ const nextConfig: NextConfig = {
   typescript: {
     ignoreBuildErrors: true,
   },
-  async redirects() {
-    return [
-      {
-        // apex lumaei.com -> www.lumaei.com (solo cuando el request llega al apex)
-        source: "/:path*",
-        has: [{ type: "host", value: "lumaei.com" }],
-        destination: "https://www.lumaei.com/:path*",
-        permanent: true,
-      },
-    ];
-  },
+  // El redirect apex -> www vive en la zona de Cloudflare, NO aquí.
+  // Declararlo con `has: [{ type: "host" }]` producía un bucle infinito en
+  // producción: OpenNext emitía el destino con el placeholder literal
+  // (`https://www.lumaei.com/:path*`) y además la condición de host también
+  // casaba con `www`, así que TODA la tienda respondía 308 hacia sí misma.
+  // El apex ni siquiera está enrutado a este worker (responde 404), de modo
+  // que el redirect era código muerto con capacidad de tumbar el sitio.
   images: {
     remotePatterns: [
       { protocol: "https", hostname: "images.unsplash.com" },
