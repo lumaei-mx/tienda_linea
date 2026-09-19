@@ -3,7 +3,7 @@
 //
 // Por qué: OpenNext no genera un `scheduled`, así que los triggers nativos se
 // declaraban sin ejecutar nada y la automatización dependía de un scheduler
-// externo (cron-job.org) que hay que reconfigurar a mano cada vez que se rota
+// externo que hay que reconfigurar a mano cada vez que se rota
 // CRON_SECRET. Resultado real: los jobs se quedaron con un secreto viejo y TODA
 // la automatización (sync de stock, repricing, fulfillment, soporte, hunter) se
 // detuvo en silencio y sin aviso.

@@ -32,6 +32,10 @@ export function getActorFromRequest(req: Request): string {
   if (adminEmail) return `admin:${decodeURIComponent(adminEmail)}`;
 
   const ua = req.headers.get("user-agent") || "";
+  // Los crons nativos de Cloudflare no envían un user-agent reconocible, así
+  // que la marca real es el header con el que se autorizan. Sin esto, cada
+  // corrida automática quedaba como "system:unknown" en la auditoría.
+  if (req.headers.get("x-cron-secret")) return "system:cron";
   if (ua.includes("vercel-cron") || ua.includes("cron-job")) return "system:cron";
   if (ua.includes("stripe")) return "system:webhook";
   return "system:unknown";

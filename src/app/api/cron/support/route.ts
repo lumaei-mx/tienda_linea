@@ -29,7 +29,7 @@ export async function GET(req: Request) {
   return handleSupport(req);
 }
 
-// cron-job.org puede usar GET o POST; ambos usan la misma auth.
+// Puede llegar por GET o POST; ambos usan la misma auth.
 export async function POST(req: Request) {
   return handleSupport(req);
 }

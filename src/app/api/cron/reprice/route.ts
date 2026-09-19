@@ -33,7 +33,7 @@ export async function POST(req: Request) {
   }
 }
 
-// Vercel Cron dispara con GET; delega al mismo handler protegido.
+// Puede llegar por GET; delega al mismo handler protegido.
 export async function GET(req: Request) {
   return POST(req);
 }

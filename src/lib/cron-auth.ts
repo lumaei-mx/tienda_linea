@@ -5,7 +5,7 @@ import { NextResponse } from "next/server";
  * Válida para GET y POST. Acepta el secreto vía:
  *   - header `x-cron-secret: <CRON_SECRET>`
  *   - header `authorization: Bearer <CRON_SECRET>`
- *   - query `?secret=<CRON_SECRET>` (útil para "Run job" manual y Vercel Cron)
+ *   - query `?secret=<CRON_SECRET>` (útil para lanzar un job a mano)
  */
 export function authorizeCron(req: Request): NextResponse | null {
   const secret = process.env.CRON_SECRET;

@@ -16,7 +16,7 @@ export async function POST(req: Request) {
   }
 }
 
-// Vercel Cron dispara con GET; cron-job.org puede usar GET o POST.
+// Los crons nativos de Cloudflare pueden disparar con GET o POST.
 export async function GET(req: Request) {
   return POST(req);
 }
