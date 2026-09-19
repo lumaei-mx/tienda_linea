@@ -56,6 +56,39 @@ ciclo (ver `MANDATE.md` sección 8). El loop lee esto para no empezar ciego.
   no-comercial) sigue BLOQUEADA sin aprobación del dueño. AgentMail sin
   configurar → `support` corre pero no responde correos aún.
 
+## Addendum (2026-09-19 — verificación en vivo de los crons)
+- **Los crons nativos SÍ disparan en producción** (probado con `wrangler tail`
+  en vivo: `*/15` → retry-fulfill 200 OK; `:30` → support 500). Ya no hace falta
+  ninguna dependencia externa ni el `CRON_SECRET` viejo.
+- **HALLAZGO CRÍTICO — AgentMail responde 403.** El cron de soporte falla
+  completo: no responde correos de clientes. Se arregla solo con una API key
+  nueva de AgentMail (la actual está vencida/revocada). OJO: `/api/health`
+  reporta `agentmail: true` porque solo comprueba que las variables EXISTAN, no
+  que el proveedor responda → falso verde.
+- **HALLAZGO CRÍTICO — CJ está en SANDBOX.** `health` devuelve
+  `cj.sandbox: true` y `cj.fulfillmentReady: false`. Con `isSandbox: 1` las
+  órdenes no llegan al fulfilment real de CJ, así que **los pedidos no se
+  enviarían** aunque el cobro sí se haga. Además `CJ_AUTO_PAY_BALANCE` no está
+  en `true`, así que ni siquiera se paga la orden al proveedor. Se corrige
+  cambiando `CJ_SANDBOX=false` y `CJ_AUTO_PAY_BALANCE=true` (mueve dinero real,
+  requiere decisión del dueño). NO se tocó.
+- **Fallo silencioso corregido**: un cron puede responder 200 con
+  `errors:[...]`; mirar solo el status dejaba el 403 de AgentMail invisible
+  durante días. Ahora `scheduled` clasifica esos casos como fallo y manda push
+  a Telegram al dueño. Verificado en workerd y con `jobFailed` 8/8.
+- **Auditoría corregida**: los crons nativos no mandan user-agent reconocible,
+  así que cada corrida se registraba como `system:unknown`. Ahora se detecta por
+  el header `x-cron-secret` → `system:cron`.
+- **Correo bilingüe corregido**: el bot de correo asumía español siempre.
+  Como el correo es el canal de los clientes de EE.UU., un angloparlante recibía
+  respuesta en español. Nuevo `detectTextLang()` (sin dependencias) detecta el
+  idioma de asunto+cuerpo y `draftReply` redacta en EN/ES. Verificado 11/11 +
+  los 4 borradores.
+- Limpieza: comentarios de `cron-job.org` / Vercel Cron retirados de las rutas
+  de cron, `cron-auth.ts` y el worker.
+- Deploy: `660fee27-6127-4562-bf1c-844fe44eb4af`. Producción: `/` 200,
+  `/admin` 307→login, login malo 401 / bueno 200, escalations sin cookie 401.
+
 ## Último ciclo (2026-08-26 — ciclo 10, en curso)
 - Disparador del dueño: "auto". ANTES de ejecutar pricing, orden directa: el
   repo era un desmadre → REORGANIZACIÓN EJECUTADA y commiteada (`6952eb8`):

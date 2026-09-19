@@ -84,11 +84,19 @@ Debe devolver JSON con `{"ok":true,...}` y código 200. Sin el header (ni
   algún auxiliar (p.ej. email o Telegram sin configurar). `cj.sandbox` y
   `cj.fulfillmentReady` se reportan aparte y NO fuerzan `ok:false`.
 - Alertas de fallos de fulfill quedan en Redis (visibles en `/admin`) + push a
-  Telegram si está configurado.
+  Telegram si está configurado. OJO: `agentmail` en health solo dice que las
+  variables existen, no que el proveedor responda. Un 403 de AgentMail se ve en
+  el body del cron, no en health.
 - El handler `scheduled` registra `cron ok` / `cron con fallos` (con el
   resultado de cada job) en los logs del worker: **Cloudflare → Workers →
   tienda-linea → Logs**. Un trigger que no corresponda a ningún job se registra
   como `trigger sin job asociado` para detectar configs desalineadas.
+- **Aviso al dueño por Telegram**: si un job falla, `scheduled` manda un push
+  con el detalle. Se considera fallo no solo el status HTTP ≥400, también un
+  200 con `ok:false` o con `errors:[...]` en el cuerpo, que es como reportan los
+  endpoints los errores internos (p.ej. proveedor caído). Sin esto, esos fallos
+  quedan invisibles: en una tienda desatendida el fallo silencioso es el más
+  caro.
 
 ## Reintentos (los hace el propio endpoint)
 
